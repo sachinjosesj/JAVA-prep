@@ -187,6 +187,38 @@
     .main{padding:14px;}
     .tools-grid,.concept-grid,.split-grid{grid-template-columns:1fr;}
   }
+
+/* === 4K / Large Screen Enhancements === */
+.layout{width:100%;max-width:none;margin:0;}
+.main{
+  max-width:none !important;
+  width:100%;
+  padding:32px 48px;
+}
+.topic-body,.qa-answer,.topic-intro,.code-body,.schedule-table td,.tool-desc,.tool-why{
+  font-size:clamp(14px,0.7vw,18px);
+}
+.day-title{font-size:clamp(28px,1.8vw,42px);}
+.day-desc{font-size:clamp(15px,0.8vw,20px);}
+.topic-title{font-size:clamp(14px,0.75vw,18px);}
+.q-text{font-size:clamp(13px,0.7vw,16px);}
+.code-body{line-height:1.8;}
+.sidebar{
+  width:300px;
+  min-width:300px;
+}
+.day-btn{
+  font-size:14px;
+  padding:10px 16px;
+}
+header{
+  padding:18px 28px;
+}
+@media (min-width: 2560px){
+  .main{padding:40px 80px;}
+  .sidebar{width:340px;min-width:340px;}
+}
+
 </style>
 </head>
 <body>
