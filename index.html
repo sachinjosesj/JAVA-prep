@@ -3,259 +3,644 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Java Interview Prep</title>
+<title>Java Interview Prep — Enhanced</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap');
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
   :root{
-    --bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;
-    --accent:#58a6ff;--accent2:#3fb950;--warn:#d29922;--danger:#f85149;
-    --text:#e6edf3;--muted:#8b949e;--tag-bg:#1f3d6e;--purple:#bc8cff;
+    --bg:#0a0c10;--surface:#11141a;--surface2:#181b23;--surface3:#1e2230;--border:#252a3a;
+    --accent:#60a5fa;--accent2:#4ade80;--accent3:#f472b6;--warn:#fbbf24;--danger:#f87171;
+    --text:#f1f5f9;--text2:#cbd5e1;--muted:#64748b;--tag-bg:#1e3a5f;
+    --success-bg:#0f2e1e;--success-text:#86efac;--warning-bg:#2a2000;--warning-text:#fde047;
+    --error-bg:#2a1215;--error-text:#fca5a5;--info-bg:#0f2544;--info-text:#93c5fd;
+    --shadow:0 4px 6px -1px rgba(0,0,0,0.3),0 2px 4px -2px rgba(0,0,0,0.3);
+    --shadow-lg:0 10px 15px -3px rgba(0,0,0,0.4),0 4px 6px -4px rgba(0,0,0,0.4);
+    --radius:10px;--radius-sm:6px;
   }
-  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden}
+
   /* HEADER */
-  header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-height:54px;}
-  .logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);background:var(--tag-bg);padding:3px 9px;border-radius:4px;}
-  .header-title{font-size:14px;font-weight:600;}
-  .header-sub{font-size:11px;color:var(--muted);margin-left:auto;}
+  header{
+    height:60px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:16px;padding:0 24px;
+    background:linear-gradient(180deg,var(--surface) 0%,var(--bg) 100%);
+    position:relative;z-index:100;
+  }
+  .logo{
+    font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;
+    color:var(--accent);background:var(--tag-bg);padding:5px 12px;border-radius:var(--radius-sm);
+    border:1px solid rgba(96,165,250,0.2);display:flex;align-items:center;gap:6px;
+  }
+  .logo::before{content:'◆';font-size:10px;opacity:0.7}
+  .header-title{font-size:15px;font-weight:700;letter-spacing:-0.3px}
+  .header-sub{font-size:12px;color:var(--muted);margin-left:auto;display:flex;align-items:center;gap:8px}
+  .header-sub .dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite}
+
+  /* SEARCH BAR */
+  .search-wrap{
+    position:relative;margin-left:20px;flex:0 0 280px;
+  }
+  .search-input{
+    width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:7px 14px 7px 36px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;
+    outline:none;transition:all .2s;
+  }
+  .search-input:focus{border-color:var(--accent);background:var(--surface3);box-shadow:0 0 0 3px rgba(96,165,250,0.1)}
+  .search-wrap::before{content:'🔍';position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:12px;opacity:0.5}
+  .search-results{
+    position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface2);
+    border:1px solid var(--border);border-radius:var(--radius-sm);max-height:320px;overflow-y:auto;
+    display:none;z-index:200;box-shadow:var(--shadow-lg);
+  }
+  .search-results.active{display:block}
+  .search-item{padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+  .search-item:hover{background:var(--surface3)}
+  .search-item:last-child{border-bottom:none}
+  .search-item-day{font-size:10px;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:2px}
+  .search-item-text{font-size:12px;color:var(--text2);line-height:1.4}
+  .search-item-type{font-size:10px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px}
+
   /* LAYOUT */
-  .layout{display:flex;flex:1;overflow:hidden;height:calc(100vh - 54px);}
+  .layout{display:flex;flex:1;height:calc(100vh - 60px);overflow:hidden}
+
   /* SIDEBAR */
-  .sidebar{width:220px;min-width:220px;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:10px 0;}
-  .sidebar-label{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--muted);padding:8px 14px 4px;text-transform:uppercase;}
-  .day-btn{display:flex;align-items:center;gap:8px;width:100%;padding:7px 14px;background:none;border:none;color:var(--muted);font-size:12px;font-family:'Inter',sans-serif;cursor:pointer;text-align:left;transition:all .15s;border-left:3px solid transparent;}
-  .day-btn:hover{background:var(--surface2);color:var(--text);}
-  .day-btn.active{background:var(--surface2);color:var(--accent);border-left-color:var(--accent);}
-  .day-num{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;background:var(--surface2);color:var(--muted);padding:2px 5px;border-radius:3px;min-width:26px;text-align:center;}
-  .day-btn.active .day-num{background:var(--tag-bg);color:var(--accent);}
+  .sidebar{
+    width:260px;min-width:260px;background:var(--surface);border-right:1px solid var(--border);
+    display:flex;flex-direction:column;overflow:hidden;
+  }
+  .sidebar-header{
+    padding:16px 16px 8px;display:flex;align-items:center;justify-content:space-between;
+  }
+  .sidebar-label{font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase}
+  .progress-pill{
+    font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--accent2);
+    background:var(--success-bg);padding:2px 8px;border-radius:20px;border:1px solid rgba(74,222,128,0.15);
+  }
+  .sidebar-scroll{flex:1;overflow-y:auto;padding:0 8px 12px}
+  .day-row{
+    display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:2px;
+    border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;
+    border:1px solid transparent;position:relative;
+  }
+  .day-row:hover{background:var(--surface2);border-color:rgba(255,255,255,0.04)}
+  .day-row.active{background:var(--surface3);border-color:rgba(96,165,250,0.15)}
+  .day-row.active .day-num{background:var(--tag-bg);color:var(--accent)}
+  .day-row.completed .day-check{opacity:1}
+  .day-row.completed .day-num{background:var(--success-bg);color:var(--success-text)}
+  .day-num{
+    font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
+    background:var(--surface3);color:var(--muted);padding:3px 6px;border-radius:4px;min-width:28px;text-align:center;
+    transition:all .15s;
+  }
+  .day-info{flex:1;min-width:0}
+  .day-title-row{font-size:12px;font-weight:600;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .day-row.active .day-title-row{color:var(--accent)}
+  .day-date{font-size:10px;color:var(--muted);margin-top:1px}
+  .day-check{
+    width:18px;height:18px;border-radius:50%;border:2px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--accent2);
+    opacity:0;transition:opacity .2s;flex-shrink:0;
+  }
+  .day-check.done{background:var(--success-bg);border-color:var(--accent2);opacity:1}
+  .day-progress{
+    position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:var(--radius-sm) 0 0 var(--radius-sm);
+    background:transparent;transition:background .2s;
+  }
+  .day-row.active .day-progress{background:var(--accent)}
+  .day-row.completed .day-progress{background:var(--accent2)}
+  .sidebar-footer{
+    padding:12px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);text-align:center;
+  }
+
   /* MAIN */
-  .main{flex:1;overflow-y:auto;padding:20px 24px;max-width:820px;}
+  .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+  .main-scroll{flex:1;overflow-y:auto;padding:24px 28px}
+  .main-inner{max-width:900px;margin:0 auto}
+
   /* DAY HEADER */
-  .day-tag{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--accent);font-family:'JetBrains Mono',monospace;}
-  .day-title{font-size:20px;font-weight:700;margin-top:4px;line-height:1.2;}
-  .day-desc{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5;}
-  .stats-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
-  .stat-chip{font-size:11px;font-family:'JetBrains Mono',monospace;padding:3px 9px;border-radius:20px;border:1px solid var(--border);color:var(--muted);}
-  .stat-chip.easy{border-color:#238636;color:var(--accent2);}
-  .stat-chip.medium{border-color:#bb8009;color:var(--warn);}
-  .stat-chip.hard{border-color:#da3633;color:var(--danger);}
+  .day-hero{
+    background:linear-gradient(135deg,var(--surface) 0%,var(--surface2) 100%);
+    border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;
+    margin-bottom:24px;position:relative;overflow:hidden;
+  }
+  .day-hero::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--accent),var(--accent3));
+  }
+  .day-hero-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+  .day-tag{
+    font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    color:var(--accent);font-family:'JetBrains Mono',monospace;
+    background:var(--tag-bg);padding:3px 10px;border-radius:20px;
+  }
+  .day-hero h1{font-size:26px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px}
+  .day-hero-desc{font-size:14px;color:var(--muted);line-height:1.6;max-width:600px}
+  .day-hero-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+  .hero-btn{
+    padding:7px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;
+    font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;border:none;
+    display:flex;align-items:center;gap:6px;
+  }
+  .hero-btn-primary{background:var(--accent);color:#0a0c10}
+  .hero-btn-primary:hover{opacity:0.85;transform:translateY(-1px)}
+  .hero-btn-secondary{background:var(--surface3);color:var(--text2);border:1px solid var(--border)}
+  .hero-btn-secondary:hover{background:var(--surface2)}
+  .hero-btn-success{background:var(--success-bg);color:var(--success-text);border:1px solid rgba(74,222,128,0.2)}
+  .hero-btn-success:hover{opacity:0.85}
+
+  .stats-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .stat-chip{
+    font-size:11px;font-family:'JetBrains Mono',monospace;padding:4px 10px;
+    border-radius:20px;border:1px solid var(--border);color:var(--muted);background:var(--surface2);
+    display:flex;align-items:center;gap:5px;
+  }
+  .stat-chip.easy{border-color:rgba(74,222,128,0.25);color:var(--accent2);background:rgba(74,222,128,0.05)}
+  .stat-chip.medium{border-color:rgba(251,191,36,0.25);color:var(--warn);background:rgba(251,191,36,0.05)}
+  .stat-chip.hard{border-color:rgba(248,113,113,0.25);color:var(--danger);background:rgba(248,113,113,0.05)}
+
   /* TABS */
-  .tab-bar{display:flex;gap:2px;margin:16px 0 0;border-bottom:1px solid var(--border);}
-  .tab-btn{padding:7px 14px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-size:12px;font-family:'Inter',sans-serif;font-weight:500;cursor:pointer;margin-bottom:-1px;transition:all .15s;white-space:nowrap;}
-  .tab-btn:hover{color:var(--text);}
-  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);}
-  .tab-content{padding-top:20px;}
-  /* LEARN SECTION */
-  .learn-section{display:flex;flex-direction:column;gap:16px;}
-  .topic-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
-  .topic-header{padding:12px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none;}
-  .topic-header:hover{background:var(--surface2);}
-  .topic-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);min-width:20px;}
-  .topic-title{font-size:14px;font-weight:600;flex:1;}
-  .topic-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase;letter-spacing:.5px;}
-  .tag-concept{background:#1f3d6e;color:var(--accent);}
-  .tag-code{background:#1c2d1e;color:var(--accent2);}
-  .tag-pattern{background:#2d2000;color:var(--warn);}
-  .tag-gotcha{background:#2d1318;color:var(--danger);}
-  .topic-chevron{color:var(--muted);font-size:11px;transition:transform .2s;}
-  .topic-card.open .topic-chevron{transform:rotate(90deg);}
-  .topic-body{display:none;padding:0 14px 16px 14px;border-top:1px solid var(--border);}
-  .topic-card.open .topic-body{display:block;}
-  .topic-intro{font-size:13px;color:#c9d1d9;line-height:1.75;margin-top:14px;}
-  .topic-intro p{margin-bottom:10px;}
-  .topic-intro ul{padding-left:18px;margin:8px 0;}
-  .topic-intro ul li{margin-bottom:5px;}
-  .topic-intro ol{padding-left:18px;margin:8px 0;}
-  .topic-intro ol li{margin-bottom:5px;}
+  .tab-bar{display:flex;gap:4px;margin:0 0 20px;border-bottom:1px solid var(--border);padding:0 2px}
+  .tab-btn{
+    padding:9px 18px;background:none;border:none;border-bottom:2px solid transparent;
+    color:var(--muted);font-size:13px;font-family:'Inter',sans-serif;font-weight:500;
+    cursor:pointer;margin-bottom:-1px;transition:all .15s;white-space:nowrap;
+    display:flex;align-items:center;gap:6px;border-radius:var(--radius-sm) var(--radius-sm) 0 0;
+  }
+  .tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.02)}
+  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(96,165,250,0.05)}
+  .tab-badge{
+    font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;background:var(--surface3);color:var(--muted);min-width:18px;text-align:center;
+  }
+  .tab-btn.active .tab-badge{background:var(--tag-bg);color:var(--accent)}
+
+  /* TOPIC CARDS */
+  .topic-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;margin-bottom:12px;transition:all .2s;position:relative;
+  }
+  .topic-card:hover{border-color:#2d3347}
+  .topic-card.open{border-color:rgba(96,165,250,0.2)}
+  .topic-card.open .topic-chevron{transform:rotate(90deg)}
+  .topic-header{
+    padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;user-select:none;
+  }
+  .topic-header:hover{background:var(--surface2)}
+  .topic-num{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+    min-width:22px;text-align:center;font-weight:600;
+  }
+  .topic-title{font-size:14px;font-weight:600;flex:1}
+  .topic-tag{
+    font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;
+    text-transform:uppercase;letter-spacing:0.6px;white-space:nowrap;
+  }
+  .tag-concept{background:#1a2f5c;color:#93c5fd;border:1px solid rgba(147,197,253,0.15)}
+  .tag-code{background:#1a3a2a;color:#86efac;border:1px solid rgba(134,239,172,0.15)}
+  .tag-pattern{background:#3a2a00;color:#fde047;border:1px solid rgba(253,224,71,0.15)}
+  .tag-gotcha{background:#3a1515;color:#fca5a5;border:1px solid rgba(252,165,165,0.15)}
+  .topic-chevron{color:var(--muted);font-size:11px;transition:transform .2s;flex-shrink:0}
+  .topic-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
+  .topic-card.open .topic-body{display:block}
+  .topic-body-inner{padding-top:16px}
+
+  .topic-intro{font-size:13.5px;color:var(--text2);line-height:1.85}
+  .topic-intro p{margin-bottom:12px}
+  .topic-intro ul{padding-left:20px;margin:10px 0}
+  .topic-intro ul li{margin-bottom:6px}
+  .topic-intro ol{padding-left:20px;margin:10px 0}
+  .topic-intro ol li{margin-bottom:6px}
+  .topic-intro b,.topic-intro strong{color:var(--text);font-weight:600}
+  .topic-intro code{
+    font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface3);
+    padding:2px 6px;border-radius:4px;color:var(--accent);border:1px solid var(--border);
+  }
+
   /* CODE BLOCK */
-  .code-block{background:#010409;border:1px solid var(--border);border-radius:6px;margin:12px 0;overflow:hidden;}
-  .code-label{font-size:10px;font-weight:700;color:var(--muted);padding:6px 12px;background:var(--surface2);border-bottom:1px solid var(--border);letter-spacing:.5px;font-family:'JetBrains Mono',monospace;display:flex;align-items:center;justify-content:space-between;}
-  .code-body{padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;overflow-x:auto;color:#e6edf3;}
-  .kw{color:#ff7b72;}    /* keywords */
-  .cl{color:#ffa657;}    /* class names */
-  .fn{color:#d2a8ff;}    /* function names */
-  .st{color:#a5d6ff;}    /* strings */
-  .cm{color:#8b949e;}    /* comments */
-  .an{color:#79c0ff;}    /* annotations */
-  .nm{color:#f0883e;}    /* numbers */
+  .code-block{
+    background:#07090d;border:1px solid #1a1f2e;border-radius:var(--radius-sm);
+    margin:14px 0;overflow:hidden;position:relative;
+  }
+  .code-label{
+    font-size:10px;font-weight:600;color:var(--muted);padding:8px 14px;
+    background:var(--surface2);border-bottom:1px solid #1a1f2e;
+    letter-spacing:0.5px;font-family:'JetBrains Mono',monospace;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .code-copy{
+    font-size:10px;color:var(--muted);cursor:pointer;transition:color .15s;
+    background:none;border:none;font-family:'Inter',sans-serif;
+  }
+  .code-copy:hover{color:var(--accent)}
+  .code-body{
+    padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12.5px;
+    line-height:1.8;overflow-x:auto;color:#e2e8f0;white-space:pre;
+  }
+  .kw{color:#f472b6} .cl{color:#fbbf24} .fn{color:#a78bfa}
+  .st{color:#7dd3fc} .cm{color:#475569;font-style:italic}
+  .an{color:#60a5fa} .nm{color:#fb923c}
+
   /* CALLOUTS */
-  .callout{border-radius:0 5px 5px 0;padding:10px 12px;margin:12px 0;font-size:12px;line-height:1.6;}
-  .callout-tip{background:#0d2818;border-left:3px solid var(--accent2);color:#7ee787;}
-  .callout-warn{background:#271d00;border-left:3px solid var(--warn);color:#e3b341;}
-  .callout-info{background:#0d1f3c;border-left:3px solid var(--accent);color:#79c0ff;}
-  .callout-danger{background:#2d1418;border-left:3px solid var(--danger);color:#ff7b72;}
-  .callout b{font-weight:700;}
+  .callout{
+    border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:12px 16px;
+    margin:14px 0;font-size:13px;line-height:1.7;border-left:3px solid;
+  }
+  .callout-tip{background:var(--success-bg);border-color:var(--accent2);color:var(--success-text)}
+  .callout-warn{background:var(--warning-bg);border-color:var(--warn);color:var(--warning-text)}
+  .callout-info{background:var(--info-bg);border-color:var(--accent);color:var(--info-text)}
+  .callout-danger{background:var(--error-bg);border-color:var(--danger);color:var(--error-text)}
+  .callout b{font-weight:700}
+
   /* CONCEPT GRID */
-  .concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
-  .concept-cell{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;}
-  .concept-cell-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
-  .concept-cell-val{font-size:12px;line-height:1.5;color:var(--text);}
+  .concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  .concept-cell{
+    background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;
+    transition:all .15s;
+  }
+  .concept-cell:hover{border-color:#2d3347}
+  .concept-cell-label{
+    font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;
+  }
+  .concept-cell-val{font-size:12.5px;line-height:1.6;color:var(--text2)}
+
   /* COMPARISON TABLE */
-  .cmp-table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12px;}
-  .cmp-table th{background:var(--surface2);padding:8px 10px;text-align:left;font-weight:600;font-size:11px;color:var(--muted);border-bottom:1px solid var(--border);}
-  .cmp-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5;}
-  .cmp-table tr:last-child td{border-bottom:none;}
+  .cmp-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border)}
+  .cmp-table th{
+    background:var(--surface2);padding:10px 12px;text-align:left;font-weight:600;
+    font-size:11px;color:var(--muted);border-bottom:1px solid var(--border);
+  }
+  .cmp-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6;color:var(--text2)}
+  .cmp-table tr:last-child td{border-bottom:none}
+  .cmp-table tr:hover td{background:rgba(255,255,255,0.01)}
+
   /* Q&A */
-  .qa-list{display:flex;flex-direction:column;gap:10px;}
-  .qa-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color .2s;}
-  .qa-card:hover{border-color:#444c56;}
-  .qa-question{padding:12px 14px;cursor:pointer;display:flex;align-items:flex-start;gap:10px;user-select:none;}
-  .q-number{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);min-width:22px;padding-top:1px;}
-  .q-text{font-size:13px;font-weight:500;flex:1;line-height:1.4;}
-  .q-chevron{color:var(--muted);font-size:11px;margin-top:2px;transition:transform .2s;}
-  .qa-card.open .q-chevron{transform:rotate(90deg);}
-  .qa-answer{display:none;padding:0 14px 14px 46px;font-size:13px;line-height:1.7;color:#c9d1d9;border-top:1px solid var(--border);padding-top:12px;}
-  .qa-card.open .qa-answer{display:block;}
-  .qa-answer code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface2);padding:2px 5px;border-radius:3px;color:#79c0ff;}
-  .qa-answer pre{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow-x:auto;margin:8px 0;font-family:'JetBrains Mono',monospace;font-size:12px;color:#79c0ff;line-height:1.6;}
-  .qa-answer ul{padding-left:16px;margin:6px 0;}
-  .qa-answer ul li{margin-bottom:4px;}
-  .qa-answer .tip{background:#0d2818;border-left:3px solid var(--accent2);padding:7px 10px;border-radius:0 4px 4px 0;margin-top:8px;font-size:12px;color:#7ee787;}
-  .qa-answer .note{background:#271d00;border-left:3px solid var(--warn);padding:7px 10px;border-radius:0 4px 4px 0;margin-top:8px;font-size:12px;color:#e3b341;}
-  .difficulty{font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;letter-spacing:.5px;text-transform:uppercase;margin-left:auto;white-space:nowrap;}
-  .difficulty.easy{background:#1c2d1e;color:var(--accent2);}
-  .difficulty.medium{background:#2d2000;color:var(--warn);}
-  .difficulty.hard{background:#2d1318;color:var(--danger);}
-  /* AI EVAL */
-  .ai-section{margin-top:24px;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
-  .ai-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
-  .ai-dot{width:7px;height:7px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite;}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-  .ai-label{font-size:13px;font-weight:600;color:var(--accent);}
-  .ai-sublabel{font-size:11px;color:var(--muted);margin-left:auto;}
-  .ai-body{padding:14px;}
-  .ai-select-q{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-family:'Inter',sans-serif;font-size:12px;padding:7px 10px;border-radius:6px;margin-bottom:8px;outline:none;}
-  .ai-textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 10px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;resize:vertical;min-height:80px;outline:none;transition:border-color .2s;}
-  .ai-textarea:focus{border-color:var(--accent);}
-  .ai-btn{margin-top:8px;padding:8px 16px;background:var(--accent);color:#0d1117;border:none;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .2s;}
-  .ai-btn:hover{opacity:.85;}
-  .ai-btn:disabled{opacity:.4;cursor:not-allowed;}
-  .ai-response{margin-top:12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:10px 12px;font-size:13px;line-height:1.7;color:#c9d1d9;display:none;white-space:pre-wrap;}
+  .qa-list{display:flex;flex-direction:column;gap:10px}
+  .qa-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;transition:all .2s;position:relative;
+  }
+  .qa-card:hover{border-color:#2d3347}
+  .qa-card.open{border-color:rgba(96,165,250,0.2)}
+  .qa-card.open .q-chevron{transform:rotate(90deg)}
+  .qa-question{
+    padding:14px 18px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;user-select:none;
+  }
+  .q-number{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+    min-width:26px;padding-top:2px;font-weight:600;
+  }
+  .q-text{font-size:13.5px;font-weight:600;flex:1;line-height:1.5;color:var(--text2)}
+  .q-chevron{color:var(--muted);font-size:11px;margin-top:3px;transition:transform .2s;flex-shrink:0}
+  .qa-answer{
+    display:none;padding:0 18px 18px 56px;font-size:13.5px;line-height:1.8;
+    color:var(--text2);border-top:1px solid var(--border);padding-top:14px;
+  }
+  .qa-card.open .qa-answer{display:block}
+  .qa-answer code{
+    font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface3);
+    padding:2px 6px;border-radius:4px;color:var(--accent);border:1px solid var(--border);
+  }
+  .qa-answer pre{
+    background:var(--surface3);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:12px 14px;overflow-x:auto;margin:10px 0;font-family:'JetBrains Mono',monospace;
+    font-size:12px;color:var(--accent);line-height:1.7;
+  }
+  .qa-answer ul{padding-left:18px;margin:8px 0}
+  .qa-answer ul li{margin-bottom:5px}
+  .qa-answer .tip{
+    background:var(--success-bg);border-left:3px solid var(--accent2);
+    padding:8px 12px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-top:10px;
+    font-size:12.5px;color:var(--success-text);
+  }
+  .qa-answer .note{
+    background:var(--warning-bg);border-left:3px solid var(--warn);
+    padding:8px 12px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-top:10px;
+    font-size:12.5px;color:var(--warning-text);
+  }
+  .difficulty{
+    font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:0.5px;
+    text-transform:uppercase;margin-left:auto;white-space:nowrap;border:1px solid;
+  }
+  .difficulty.easy{background:var(--success-bg);color:var(--success-text);border-color:rgba(74,222,128,0.2)}
+  .difficulty.medium{background:var(--warning-bg);color:var(--warning-text);border-color:rgba(251,191,36,0.2)}
+  .difficulty.hard{background:var(--error-bg);color:var(--error-text);border-color:rgba(248,113,113,0.2)}
+
+  /* SELF-ASSESSMENT */
+  .assess-bar{
+    display:flex;gap:6px;margin-top:10px;padding-left:56px;
+  }
+  .assess-btn{
+    padding:5px 14px;border-radius:var(--radius-sm);font-size:11px;font-weight:600;
+    cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--muted);
+    transition:all .15s;font-family:'Inter',sans-serif;
+  }
+  .assess-btn:hover{transform:translateY(-1px)}
+  .assess-btn.knew{border-color:rgba(74,222,128,0.3);color:var(--accent2)}
+  .assess-btn.knew:hover,.assess-btn.knew.active{background:var(--success-bg);color:var(--success-text)}
+  .assess-btn.partial{border-color:rgba(251,191,36,0.3);color:var(--warn)}
+  .assess-btn.partial:hover,.assess-btn.partial.active{background:var(--warning-bg);color:var(--warning-text)}
+  .assess-btn.dont-know{border-color:rgba(248,113,113,0.3);color:var(--danger)}
+  .assess-btn.dont-know:hover,.assess-btn.dont-know.active{background:var(--error-bg);color:var(--error-text)}
+
+  /* AI EVAL (FIXED) */
+  .ai-section{
+    margin-top:28px;background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);overflow:hidden;
+  }
+  .ai-header{
+    padding:14px 18px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:10px;
+  }
+  .ai-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+  .ai-label{font-size:14px;font-weight:700;color:var(--accent)}
+  .ai-sublabel{font-size:11px;color:var(--muted);margin-left:auto}
+  .ai-body{padding:18px}
+  .ai-select-q{
+    width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);
+    font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;border-radius:var(--radius-sm);
+    margin-bottom:10px;outline:none;cursor:pointer;transition:all .2s;
+  }
+  .ai-select-q:focus{border-color:var(--accent)}
+  .ai-textarea{
+    width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:13.5px;
+    resize:vertical;min-height:100px;outline:none;transition:all .2s;line-height:1.7;
+  }
+  .ai-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(96,165,250,0.08)}
+  .ai-textarea::placeholder{color:var(--muted)}
+  .ai-btn{
+    margin-top:10px;padding:9px 20px;background:var(--accent);color:#0a0c10;
+    border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;
+    font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;
+    display:flex;align-items:center;gap:6px;
+  }
+  .ai-btn:hover{opacity:0.85;transform:translateY(-1px)}
+  .ai-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+  .ai-response{
+    margin-top:14px;background:var(--surface2);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:14px 16px;font-size:13px;line-height:1.8;
+    color:var(--text2);display:none;white-space:pre-wrap;
+  }
+  .ai-score{
+    font-size:28px;font-weight:800;color:var(--accent);font-family:'JetBrains Mono',monospace;
+    margin-bottom:8px;
+  }
+  .ai-section-title{
+    font-size:12px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.8px;
+    margin:14px 0 6px;border-bottom:1px solid var(--border);padding-bottom:4px;
+  }
+
   /* SCHEDULE */
-  .schedule-section{display:flex;flex-direction:column;gap:16px;}
-  .schedule-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
-  .schedule-card-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
-  .schedule-card-title{font-size:13px;font-weight:600;}
-  .schedule-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:.5px;text-transform:uppercase;margin-left:auto;}
-  .badge-week1{background:#1f3d6e;color:var(--accent);}
-  .badge-week2{background:#1c2d1e;color:var(--accent2);}
-  .badge-rule{background:#2d2000;color:var(--warn);}
-  .schedule-table{width:100%;border-collapse:collapse;}
-  .schedule-table tr:not(:last-child) td{border-bottom:1px solid var(--border);}
-  .schedule-table td{padding:9px 14px;font-size:13px;vertical-align:top;}
-  .schedule-table td:first-child{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11px;width:55%;}
-  .schedule-table td:last-child{font-weight:500;}
-  .schedule-table tr.total-row td{background:var(--surface2);font-weight:700;}
-  .schedule-table tr.total-row td:last-child{color:var(--accent);}
-  .split-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;}
-  .split-card{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:12px;}
-  .split-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
-  .split-hours{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--accent);}
-  .split-desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4;}
-  .rule-box{padding:14px;}
-  .rule-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--border);}
-  .rule-item:last-child{border-bottom:none;padding-bottom:0;}
-  .rule-icon{font-size:16px;min-width:24px;text-align:center;}
-  .rule-text{font-size:12px;line-height:1.5;}
-  .rule-text strong{color:var(--text);}
-  .rule-text span{color:var(--muted);}
+  .schedule-section{display:flex;flex-direction:column;gap:16px}
+  .schedule-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+  }
+  .schedule-card-header{
+    padding:14px 18px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:10px;
+  }
+  .schedule-card-title{font-size:14px;font-weight:700}
+  .schedule-badge{
+    font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;
+    letter-spacing:0.5px;text-transform:uppercase;margin-left:auto;
+  }
+  .badge-week1{background:var(--tag-bg);color:var(--accent)}
+  .badge-week2{background:var(--success-bg);color:var(--accent2)}
+  .badge-rule{background:var(--warning-bg);color:var(--warn)}
+  .schedule-table{width:100%;border-collapse:collapse}
+  .schedule-table tr:not(:last-child) td{border-bottom:1px solid var(--border)}
+  .schedule-table td{padding:11px 18px;font-size:13.5px;vertical-align:top}
+  .schedule-table td:first-child{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11.5px;width:55%}
+  .schedule-table td:last-child{font-weight:600;color:var(--text2)}
+  .schedule-table tr.total-row td{background:var(--surface2);font-weight:700}
+  .schedule-table tr.total-row td:last-child{color:var(--accent)}
+  .split-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px}
+  .split-card{
+    background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;
+    transition:all .15s;
+  }
+  .split-card:hover{border-color:#2d3347}
+  .split-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .split-hours{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:800;color:var(--accent)}
+  .split-desc{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.5}
+  .rule-box{padding:16px 18px}
+  .rule-item{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border)}
+  .rule-item:last-child{border-bottom:none;padding-bottom:0}
+  .rule-icon{font-size:18px;min-width:26px;text-align:center;flex-shrink:0}
+  .rule-text{font-size:12.5px;line-height:1.6}
+  .rule-text strong{color:var(--text);font-weight:600}
+  .rule-text span{color:var(--muted)}
+
   /* TOOLS */
-  .tools-section{display:flex;flex-direction:column;gap:16px;}
-  .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-  .tool-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:6px;}
-  .tool-header{display:flex;align-items:center;gap:8px;}
-  .tool-icon{font-size:20px;}
-  .tool-name{font-size:13px;font-weight:600;}
-  .tool-cat{font-size:10px;font-weight:700;padding:2px 6px;border-radius:8px;margin-left:auto;text-transform:uppercase;letter-spacing:.5px;}
-  .cat-practice{background:#1f3d6e;color:var(--accent);}
-  .cat-learn{background:#1c2d1e;color:var(--accent2);}
-  .cat-setup{background:#2d2000;color:var(--warn);}
-  .cat-ref{background:#1d1d3d;color:var(--purple);}
-  .tool-desc{font-size:12px;color:var(--muted);line-height:1.5;}
-  .tool-why{font-size:12px;color:var(--text);line-height:1.5;}
-  .tool-link{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--accent);text-decoration:none;margin-top:4px;font-weight:500;}
-  .tool-link:hover{text-decoration:underline;}
+  .tools-section{display:flex;flex-direction:column;gap:20px}
+  .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .tool-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:18px;display:flex;flex-direction:column;gap:8px;transition:all .15s;
+  }
+  .tool-card:hover{border-color:#2d3347;transform:translateY(-2px);box-shadow:var(--shadow)}
+  .tool-header{display:flex;align-items:center;gap:10px}
+  .tool-icon{font-size:22px}
+  .tool-name{font-size:14px;font-weight:700}
+  .tool-cat{
+    font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;margin-left:auto;
+    text-transform:uppercase;letter-spacing:0.5px;
+  }
+  .cat-practice{background:var(--tag-bg);color:var(--accent)}
+  .cat-learn{background:var(--success-bg);color:var(--accent2)}
+  .cat-setup{background:var(--warning-bg);color:var(--warn)}
+  .cat-ref{background:#1d1d3d;color:var(--accent3)}
+  .tool-desc{font-size:12.5px;color:var(--muted);line-height:1.6}
+  .tool-why{font-size:12.5px;color:var(--text2);line-height:1.6}
+  .tool-link{
+    display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--accent);
+    text-decoration:none;margin-top:4px;font-weight:600;transition:opacity .15s;
+  }
+  .tool-link:hover{opacity:0.7;text-decoration:underline}
+
+  /* REVIEW TAB */
+  .review-empty{
+    text-align:center;padding:60px 20px;color:var(--muted);
+  }
+  .review-empty-icon{font-size:48px;margin-bottom:16px;opacity:0.5}
+  .review-empty h3{font-size:18px;color:var(--text);margin-bottom:8px}
+  .review-empty p{font-size:14px;line-height:1.6;max-width:400px;margin:0 auto}
+  .review-list{display:flex;flex-direction:column;gap:10px}
+  .review-card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:14px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;
+    transition:all .15s;
+  }
+  .review-card:hover{border-color:#2d3347;background:var(--surface2)}
+  .review-status{
+    width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  }
+  .review-status.dont-know{background:var(--danger)}
+  .review-status.partial{background:var(--warn)}
+  .review-info{flex:1;min-width:0}
+  .review-q{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .review-meta{font-size:11px;color:var(--muted);display:flex;gap:12px}
+  .review-day{font-family:'JetBrains Mono',monospace}
+  .review-diff{font-size:10px;padding:1px 6px;border-radius:4px;text-transform:uppercase;font-weight:700}
+  .review-diff.easy{background:var(--success-bg);color:var(--accent2)}
+  .review-diff.medium{background:var(--warning-bg);color:var(--warn)}
+  .review-diff.hard{background:var(--error-bg);color:var(--danger)}
+  .review-btn{
+    padding:6px 14px;border-radius:var(--radius-sm);font-size:11px;font-weight:600;
+    border:1px solid var(--border);background:var(--surface3);color:var(--text2);
+    cursor:pointer;transition:all .15s;white-space:nowrap;
+  }
+  .review-btn:hover{background:var(--accent);color:#0a0c10;border-color:var(--accent)}
+
+  /* FLASHCARD MODE */
+  .flashcard-container{
+    perspective:1000px;max-width:600px;margin:0 auto;
+  }
+  .flashcard{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px;text-align:center;cursor:pointer;transition:all .3s;position:relative;
+    user-select:none;
+  }
+  .flashcard:hover{border-color:rgba(96,165,250,0.2)}
+  .flashcard.flipped .flash-front{opacity:0;pointer-events:none;position:absolute}
+  .flashcard.flipped .flash-back{opacity:1;position:relative}
+  .flash-front,.flash-back{transition:opacity .3s;width:100%}
+  .flash-back{opacity:0;position:absolute;pointer-events:none}
+  .flash-q{font-size:18px;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:20px}
+  .flash-hint{font-size:12px;color:var(--muted);margin-top:16px}
+  .flash-answer{font-size:14px;color:var(--text2);line-height:1.8;text-align:left}
+  .flash-answer code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface3);padding:2px 6px;border-radius:4px;color:var(--accent)}
+  .flash-answer ul{padding-left:20px;margin:10px 0}
+  .flash-answer ul li{margin-bottom:5px}
+  .flash-answer .tip{background:var(--success-bg);border-left:3px solid var(--accent2);padding:8px 12px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-top:10px;font-size:12.5px;color:var(--success-text)}
+  .flash-answer .note{background:var(--warning-bg);border-left:3px solid var(--warn);padding:8px 12px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-top:10px;font-size:12.5px;color:var(--warning-text)}
+  .flash-controls{
+    display:flex;justify-content:center;gap:10px;margin-top:20px;
+  }
+  .flash-btn{
+    padding:10px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;
+    cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .15s;
+  }
+  .flash-btn-wrong{background:var(--error-bg);color:var(--danger);border:1px solid rgba(248,113,113,0.2)}
+  .flash-btn-wrong:hover{background:rgba(248,113,113,0.15)}
+  .flash-btn-partial{background:var(--warning-bg);color:var(--warn);border:1px solid rgba(251,191,36,0.2)}
+  .flash-btn-partial:hover{background:rgba(251,191,36,0.15)}
+  .flash-btn-correct{background:var(--success-bg);color:var(--accent2);border:1px solid rgba(74,222,128,0.2)}
+  .flash-btn-correct:hover{background:rgba(74,222,128,0.15)}
+  .flash-nav{
+    display:flex;justify-content:center;align-items:center;gap:16px;margin-top:16px;
+  }
+  .flash-nav-btn{
+    width:36px;height:36px;border-radius:50%;border:1px solid var(--border);
+    background:var(--surface2);color:var(--text2);cursor:pointer;display:flex;
+    align-items:center;justify-content:center;font-size:16px;transition:all .15s;
+  }
+  .flash-nav-btn:hover{background:var(--surface3);border-color:var(--accent)}
+  .flash-counter{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .flash-difficulty{
+    position:absolute;top:16px;right:18px;font-size:10px;font-weight:700;
+    padding:3px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;
+  }
+
+  /* OVERALL PROGRESS */
+  .progress-bar-wrap{
+    width:100%;height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-top:12px;
+  }
+  .progress-bar-fill{
+    height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:3px;
+    transition:width .5s ease;
+  }
+
   /* DIVIDER */
-  .divider{border:none;border-top:1px solid var(--border);margin:20px 0;}
+  .divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+
   /* SCROLLBAR */
-  ::-webkit-scrollbar{width:5px;}
-  ::-webkit-scrollbar-track{background:transparent;}
-  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-  @media(max-width:600px){
-    .sidebar{width:54px;min-width:54px;}
-    .day-btn span.day-label{display:none;}
-    .main{padding:14px;}
-    .tools-grid,.concept-grid,.split-grid{grid-template-columns:1fr;}
+  ::-webkit-scrollbar{width:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+  ::-webkit-scrollbar-thumb:hover{background:#3a4055}
+
+  /* ANIMATIONS */
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .fade-in{animation:fadeIn .3s ease}
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    .sidebar{width:220px;min-width:220px}
+    .search-wrap{flex:0 0 200px}
+    .concept-grid,.tools-grid,.split-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:700px){
+    .sidebar{width:64px;min-width:64px}
+    .day-info,.day-date,.sidebar-label,.sidebar-footer,.search-wrap,.header-sub{display:none}
+    .day-row{padding:10px 8px;justify-content:center}
+    .day-num{min-width:36px;padding:5px 8px;font-size:11px}
+    .day-check{position:absolute;bottom:2px;right:2px;width:14px;height:14px;font-size:8px}
+    .main-scroll{padding:16px}
+    .day-hero{padding:18px}
+    .day-hero h1{font-size:20px}
+    .qa-answer{padding-left:18px}
+    .assess-bar{padding-left:18px}
+    .flashcard{padding:24px}
+    .flash-q{font-size:15px}
+    .tab-btn{padding:8px 12px;font-size:12px}
+    .hero-btn{padding:6px 12px;font-size:11px}
+    .tools-grid,.concept-grid,.split-grid{grid-template-columns:1fr}
+    .code-body{font-size:11px;padding:10px}
   }
 
-/* ===== Responsive Enhancements ===== */
-@media (min-width: 1920px){
-  .main{
-    max-width:1600px;
-    padding:28px 40px;
+  /* PRINT */
+  @media print{
+    .sidebar,.search-wrap,.tab-bar,.ai-section,.assess-bar,.hero-btn,.flash-controls{display:none!important}
+    .main{overflow:visible}
+    .topic-body,.qa-answer{display:block!important}
+    body{background:#fff;color:#000}
+    .topic-card,.qa-card{border:1px solid #ccc}
   }
-  .sidebar{
-    width:260px;
-    min-width:260px;
-  }
-}
-
-@media (min-width: 2560px){
-  .main{
-    max-width:2100px;
-    padding:36px 60px;
-  }
-  .sidebar{
-    width:300px;
-    min-width:300px;
-  }
-}
-
-/* Keep mobile experience unchanged */
-@media(max-width:600px){
-  .sidebar{width:54px;min-width:54px;}
-  .day-btn span.day-label{display:none;}
-  .main{padding:14px;max-width:none;}
-  .tools-grid,.concept-grid,.split-grid{grid-template-columns:1fr;}
-}
-
 </style>
+<base target="_blank">
 </head>
 <body>
 <header>
-  <div class="logo">&lt;/&gt; JavaPrep</div>
+  <div class="logo">JavaPrep</div>
   <div class="header-title">Interview Prep — 14 Day Plan</div>
-  <div class="header-sub">7 YOE · Spring Boot · Microservices</div>
+  <div class="search-wrap">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search topics, Q&A, code..." autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+  <div class="header-sub"><span class="dot"></span>7 YOE · Spring Boot · Microservices</div>
 </header>
 <div class="layout">
   <nav class="sidebar" id="sidebar"></nav>
   <main class="main" id="main"></main>
 </div>
+
 <script>
+
 const DAYS = [
-  // ─────────────────────────────────────────────
-  // DAY 1
-  // ─────────────────────────────────────────────
   {
-    day:1, date:"Sat, Jun 13", title:"Java Basics",
+    day:1, title:"Java Basics",
     desc:"OOP pillars, Collections, Exception Handling — the foundation.",
     topics:[
       {
         title:"The 4 Pillars of OOP",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Every Java interview starts here. You must be able to explain each pillar in plain English, give an example, and say <b>why it matters</b>.</p>
 
 <b>1. Encapsulation — Hiding data</b>
 <p>Bundle related data (fields) and behaviour (methods) into one class, and restrict direct access to the data using <code>private</code>. Others interact only through public methods.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">EXAMPLE — Encapsulation</div>
+  <div class="code-label">EXAMPLE — Encapsulation <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="kw">public class</span> <span class="cl">BankAccount</span> {
-    <span class="kw">private double</span> balance;          <span class="cm">// hidden — no one touches this directly</span>
+    <span class="kw">private double</span> balance;
 
     <span class="kw">public void</span> <span class="fn">deposit</span>(<span class="kw">double</span> amount) {
-        <span class="kw">if</span> (amount &gt; <span class="nm">0</span>) balance += amount;  <span class="cm">// validation lives here</span>
+        <span class="kw">if</span> (amount &gt; <span class="nm">0</span>) balance += amount;
     }
 
     <span class="kw">public double</span> <span class="fn">getBalance</span>() { <span class="kw">return</span> balance; }
@@ -268,26 +653,24 @@ const DAYS = [
 <p>A child class (<code>extends</code>) acquires all non-private fields and methods of the parent, and can add or override behaviour.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">EXAMPLE — Inheritance</div>
+  <div class="code-label">EXAMPLE — Inheritance <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="kw">class</span> <span class="cl">Animal</span> {
     <span class="kw">void</span> <span class="fn">breathe</span>() { System.out.println(<span class="st">"Breathing"</span>); }
 }
-
-<span class="kw">class</span> <span class="cl">Dog</span> <span class="kw">extends</span> <span class="cl">Animal</span> {          <span class="cm">// inherits breathe()</span>
+<span class="kw">class</span> <span class="cl">Dog</span> <span class="kw">extends</span> <span class="cl">Animal</span> {
     <span class="kw">void</span> <span class="fn">bark</span>() { System.out.println(<span class="st">"Woof!"</span>); }
 }
-
 <span class="cl">Dog</span> dog = <span class="kw">new</span> <span class="cl">Dog</span>();
-dog.breathe(); <span class="cm">// works! inherited from Animal</span>
-dog.bark();    <span class="cm">// Dog's own method</span></div>
+dog.breathe(); <span class="cm">// inherited from Animal</span>
+dog.bark();</div>
 </div>
 
 <div class="topic-intro">
 <b>3. Polymorphism — One interface, many forms</b>
-<p>Two types: <b>Runtime polymorphism</b> (method overriding — which method runs is decided at runtime by the actual object type) and <b>Compile-time</b> (method overloading — same name, different parameters).</p>
+<p>Runtime polymorphism (method overriding — decided at runtime by actual object type) and Compile-time (method overloading — same name, different parameters).</p>
 </div>
 <div class="code-block">
-  <div class="code-label">EXAMPLE — Runtime Polymorphism (Overriding)</div>
+  <div class="code-label">EXAMPLE — Runtime Polymorphism <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="kw">class</span> <span class="cl">Shape</span> {
     <span class="kw">void</span> <span class="fn">draw</span>() { System.out.println(<span class="st">"Drawing shape"</span>); }
 }
@@ -295,9 +678,8 @@ dog.bark();    <span class="cm">// Dog's own method</span></div>
     <span class="an">@Override</span>
     <span class="kw">void</span> <span class="fn">draw</span>() { System.out.println(<span class="st">"Drawing circle"</span>); }
 }
-
-<span class="cl">Shape</span> s = <span class="kw">new</span> <span class="cl">Circle</span>();  <span class="cm">// reference type = Shape, actual = Circle</span>
-s.draw();  <span class="cm">// prints "Drawing circle" — runtime decides!</span></div>
+<span class="cl">Shape</span> s = <span class="kw">new</span> <span class="cl">Circle</span>();
+s.draw();  <span class="cm">// "Drawing circle" — runtime decides!</span></div>
 </div>
 
 <div class="topic-intro">
@@ -305,14 +687,12 @@ s.draw();  <span class="cm">// prints "Drawing circle" — runtime decides!</spa
 <p>Show only what's necessary, hide the how. Achieved via <code>abstract</code> classes or interfaces.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">EXAMPLE — Abstraction</div>
+  <div class="code-label">EXAMPLE — Abstraction <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="kw">abstract class</span> <span class="cl">Payment</span> {
-    <span class="kw">abstract void</span> <span class="fn">pay</span>(<span class="kw">double</span> amount); <span class="cm">// WHAT to do — no implementation</span>
+    <span class="kw">abstract void</span> <span class="fn">pay</span>(<span class="kw">double</span> amount);
 }
-
 <span class="kw">class</span> <span class="cl">CreditCardPayment</span> <span class="kw">extends</span> <span class="cl">Payment</span> {
     <span class="kw">void</span> <span class="fn">pay</span>(<span class="kw">double</span> amount) {
-        <span class="cm">// HOW to do it — hidden behind the abstract contract</span>
         System.out.println(<span class="st">"Charging card: "</span> + amount);
     }
 }</div>
@@ -321,8 +701,7 @@ s.draw();  <span class="cm">// prints "Drawing circle" — runtime decides!</spa
       },
       {
         title:"Interface vs Abstract Class",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>One of the most common interview questions. The key is to know not just the differences but <b>when to use each</b>.</p>
 </div>
 <table class="cmp-table">
@@ -334,22 +713,17 @@ s.draw();  <span class="cm">// prints "Drawing circle" — runtime decides!</spa
   <tr><td>Access modifiers</td><td>Any</td><td>public only</td></tr>
 </table>
 <div class="code-block">
-  <div class="code-label">WHEN TO USE — Abstract Class (shared state + behaviour)</div>
+  <div class="code-label">WHEN TO USE — Abstract Class <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="kw">abstract class</span> <span class="cl">Vehicle</span> {
-    <span class="kw">protected int</span> speed;           <span class="cm">// shared state</span>
-    <span class="kw">void</span> <span class="fn">accelerate</span>() { speed += <span class="nm">10</span>; } <span class="cm">// shared behaviour</span>
-    <span class="kw">abstract void</span> <span class="fn">fuelType</span>();       <span class="cm">// each subclass decides this</span>
+    <span class="kw">protected int</span> speed;
+    <span class="kw">void</span> <span class="fn">accelerate</span>() { speed += <span class="nm">10</span>; }
+    <span class="kw">abstract void</span> <span class="fn">fuelType</span>();
 }</div>
 </div>
 <div class="code-block">
-  <div class="code-label">WHEN TO USE — Interface (capability/contract)</div>
-  <div class="code-body"><span class="kw">interface</span> <span class="cl">Flyable</span> {
-    <span class="kw">void</span> <span class="fn">fly</span>();
-}
-<span class="kw">interface</span> <span class="cl">Swimmable</span> {
-    <span class="kw">void</span> <span class="fn">swim</span>();
-}
-
+  <div class="code-label">WHEN TO USE — Interface <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">interface</span> <span class="cl">Flyable</span> { <span class="kw">void</span> <span class="fn">fly</span>(); }
+<span class="kw">interface</span> <span class="cl">Swimmable</span> { <span class="kw">void</span> <span class="fn">swim</span>(); }
 <span class="cm">// Duck can fly AND swim — not possible with abstract class</span>
 <span class="kw">class</span> <span class="cl">Duck</span> <span class="kw">implements</span> <span class="cl">Flyable</span>, <span class="cl">Swimmable</span> {
     <span class="kw">public void</span> <span class="fn">fly</span>()  { System.out.println(<span class="st">"Duck flying"</span>); }
@@ -360,8 +734,7 @@ s.draw();  <span class="cm">// prints "Drawing circle" — runtime decides!</spa
       },
       {
         title:"Collections — List, Set, Map",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>You'll use these every day. Know the internal structure, time complexity, and when to pick each.</p>
 </div>
 <table class="cmp-table">
@@ -374,7 +747,7 @@ s.draw();  <span class="cm">// prints "Drawing circle" — runtime decides!</spa
   <tr><td>LinkedHashMap</td><td>Yes (insertion)</td><td>Keys: No</td><td>One null key</td><td>O(1)</td><td>O(1)</td></tr>
 </table>
 <div class="code-block">
-  <div class="code-label">EXAMPLE — Choosing the right collection</div>
+  <div class="code-label">EXAMPLE — Choosing the right collection <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm">// Need fast lookup by key → HashMap</span>
 Map&lt;<span class="cl">String</span>, <span class="cl">User</span>&gt; userMap = <span class="kw">new</span> HashMap&lt;&gt;();
 userMap.put(<span class="st">"sachin"</span>, user);
@@ -394,12 +767,11 @@ names.get(<span class="nm">0</span>); <span class="cm">// O(1)</span></div>
       },
       {
         title:"Exception Handling",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Java has a structured exception hierarchy. Knowing checked vs unchecked is must-have knowledge.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">Exception Hierarchy</div>
+  <div class="code-label">Exception Hierarchy <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">Throwable
 ├── Error            <span class="cm">// JVM-level: StackOverflowError, OutOfMemoryError (don't catch)</span>
 └── Exception
@@ -411,12 +783,10 @@ names.get(<span class="nm">0</span>); <span class="cm">// O(1)</span></div>
         └── IndexOutOfBoundsException</div>
 </div>
 <div class="code-block">
-  <div class="code-label">EXAMPLE — try/catch/finally + custom exception</div>
+  <div class="code-label">EXAMPLE — try/catch/finally + custom exception <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm">// Custom unchecked exception</span>
 <span class="kw">public class</span> <span class="cl">UserNotFoundException</span> <span class="kw">extends</span> <span class="cl">RuntimeException</span> {
-    <span class="kw">public</span> <span class="fn">UserNotFoundException</span>(<span class="cl">String</span> message) {
-        <span class="kw">super</span>(message);
-    }
+    <span class="kw">public</span> <span class="fn">UserNotFoundException</span>(<span class="cl">String</span> message) { <span class="kw">super</span>(message); }
 }
 
 <span class="cm">// Usage</span>
@@ -431,7 +801,7 @@ names.get(<span class="nm">0</span>); <span class="cm">// O(1)</span></div>
 } <span class="kw">catch</span> (<span class="cl">UserNotFoundException</span> e) {
     log.error(<span class="st">"Not found"</span>, e);
 } <span class="kw">finally</span> {
-    <span class="cm">// always runs — use for cleanup (closing resources)</span>
+    <span class="cm">// always runs — use for cleanup</span>
 }</div>
 </div>
 <div class="callout callout-tip">💡 In Spring Boot, you almost never catch exceptions in service code — let them bubble up to <code>@ControllerAdvice</code> which handles them globally.</div>`
@@ -446,17 +816,14 @@ names.get(<span class="nm">0</span>); <span class="cm">// O(1)</span></div>
       {q:"What is a functional interface? Give examples.",d:"easy",a:`Exactly one abstract method. Foundation for lambdas.<br><ul><li><code>Predicate&lt;T&gt;</code> — test() returns boolean</li><li><code>Function&lt;T,R&gt;</code> — apply() returns R</li><li><code>Consumer&lt;T&gt;</code> — accept() returns void</li><li><code>Supplier&lt;T&gt;</code> — get() returns T</li><li><code>Runnable</code> — run()</li></ul>`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 2
-  // ─────────────────────────────────────────────
+
   {
-    day:2,date:"Sun, Jun 14",title:"Java Intermediate",
+    day:2,title:"Java Intermediate",
     desc:"Strings, Generics, Streams, Optional, Java 8+ features.",
     topics:[
       {
         title:"String Internals — Immutability & Pool",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Strings are the most used class in Java. Understanding why they're immutable and how the String pool works is essential.</p>
 <p><b>Why is String immutable?</b></p>
 <ul>
@@ -467,19 +834,19 @@ names.get(<span class="nm">0</span>); <span class="cm">// O(1)</span></div>
 </ul>
 </div>
 <div class="code-block">
-  <div class="code-label">String Pool vs Heap</div>
-  <div class="code-body"><span class="cl">String</span> a = <span class="st">"hello"</span>;            <span class="cm">// goes to String pool</span>
-<span class="cl">String</span> b = <span class="st">"hello"</span>;            <span class="cm">// same pool object reused</span>
-<span class="cl">String</span> c = <span class="kw">new</span> <span class="cl">String</span>(<span class="st">"hello"</span>); <span class="cm">// new heap object</span>
+  <div class="code-label">String Pool vs Heap <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cl">String</span> a = <span class="st">"hello"</span>;
+<span class="cl">String</span> b = <span class="st">"hello"</span>;
+<span class="cl">String</span> c = <span class="kw">new</span> <span class="cl">String</span>(<span class="st">"hello"</span>);
 
-a == b        <span class="cm">// true  — same pool reference</span>
+a == b        <span class="cm">// true — same pool reference</span>
 a == c        <span class="cm">// false — c is a separate heap object</span>
-a.equals(c)   <span class="cm">// true  — same content</span>
+a.equals(c)   <span class="cm">// true — same content</span>
 
 <span class="cm">// RULE: Always use equals() for String comparison, never ==</span></div>
 </div>
 <div class="code-block">
-  <div class="code-label">String vs StringBuilder vs StringBuffer</div>
+  <div class="code-label">String vs StringBuilder vs StringBuffer <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm">// String — immutable, creates new object every concatenation</span>
 <span class="cl">String</span> s = <span class="st">""</span>;
 <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; <span class="nm">1000</span>; i++) s += i; <span class="cm">// creates 1000 String objects! Bad.</span>
@@ -495,8 +862,7 @@ sb.toString();
       },
       {
         title:"Java Streams — Declarative Data Processing",tag:"code",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Streams let you process collections in a pipeline style — filter, transform, collect. They replace verbose for-loops with clean, readable code.</p>
 <p><b>Key concepts:</b></p>
 <ul>
@@ -507,30 +873,25 @@ sb.toString();
 </ul>
 </div>
 <div class="code-block">
-  <div class="code-label">EXAMPLE — Common Stream operations</div>
+  <div class="code-label">EXAMPLE — Common Stream operations <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">List&lt;<span class="cl">String</span>&gt; names = List.of(<span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Anna"</span>, <span class="st">"Charlie"</span>);
 
-<span class="cm">// Filter + map + collect</span>
 List&lt;<span class="cl">String</span>&gt; result = names.stream()
-    .filter(n -&gt; n.startsWith(<span class="st">"A"</span>))    <span class="cm">// ["Alice", "Anna"]</span>
-    .map(<span class="cl">String</span>::toUpperCase)           <span class="cm">// ["ALICE", "ANNA"]</span>
-    .sorted()                             <span class="cm">// ["ALICE", "ANNA"]</span>
+    .filter(n -&gt; n.startsWith(<span class="st">"A"</span>))
+    .map(<span class="cl">String</span>::toUpperCase)
+    .sorted()
     .collect(Collectors.toList());
 
-<span class="cm">// Count</span>
 <span class="kw">long</span> count = names.stream().filter(n -&gt; n.length() &gt; <span class="nm">3</span>).count();
 
-<span class="cm">// findFirst</span>
 Optional&lt;<span class="cl">String</span>&gt; first = names.stream()
     .filter(n -&gt; n.startsWith(<span class="st">"B"</span>))
-    .findFirst(); <span class="cm">// Optional["Bob"]</span>
+    .findFirst();
 
-<span class="cm">// reduce — sum all lengths</span>
 <span class="kw">int</span> total = names.stream()
     .mapToInt(<span class="cl">String</span>::length)
     .sum();
 
-<span class="cm">// groupBy</span>
 Map&lt;<span class="cl">Integer</span>, List&lt;<span class="cl">String</span>&gt;&gt; byLength = names.stream()
     .collect(Collectors.groupingBy(<span class="cl">String</span>::length));</div>
 </div>
@@ -538,52 +899,50 @@ Map&lt;<span class="cl">Integer</span>, List&lt;<span class="cl">String</span>&g
       },
       {
         title:"Optional — Null Safety",tag:"code",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p><code>Optional&lt;T&gt;</code> is a container that may or may not hold a value. It was introduced in Java 8 to make null handling explicit and eliminate accidental NullPointerExceptions.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">EXAMPLE — Optional patterns</div>
+  <div class="code-label">EXAMPLE — Optional patterns <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm">// Creating</span>
 Optional&lt;<span class="cl">String</span>&gt; present = Optional.of(<span class="st">"hello"</span>);
 Optional&lt;<span class="cl">String</span>&gt; empty   = Optional.empty();
-Optional&lt;<span class="cl">String</span>&gt; maybe  = Optional.ofNullable(getValue()); <span class="cm">// null-safe</span>
+Optional&lt;<span class="cl">String</span>&gt; maybe  = Optional.ofNullable(getValue());
 
 <span class="cm">// Consuming safely</span>
-present.ifPresent(v -&gt; System.out.println(v)); <span class="cm">// only runs if present</span>
+present.ifPresent(v -&gt; System.out.println(v));
 
 <span class="cm">// Fallback values</span>
-<span class="cl">String</span> val  = maybe.orElse(<span class="st">"default"</span>);                   <span class="cm">// always evaluated</span>
-<span class="cl">String</span> val2 = maybe.orElseGet(() -&gt; fetchDefault());       <span class="cm">// lazy — only if empty</span>
+<span class="cl">String</span> val  = maybe.orElse(<span class="st">"default"</span>);
+<span class="cl">String</span> val2 = maybe.orElseGet(() -&gt; fetchDefault());
 <span class="cl">String</span> val3 = maybe.orElseThrow(() -&gt; <span class="kw">new</span> <span class="cl">RuntimeException</span>(<span class="st">"Missing"</span>));
 
 <span class="cm">// Chaining (most common in Spring repos)</span>
-<span class="cl">String</span> name = userRepo.findById(id)    <span class="cm">// returns Optional&lt;User&gt;</span>
-    .map(<span class="cl">User</span>::getName)                <span class="cm">// Optional&lt;String&gt;</span>
+<span class="cl">String</span> name = userRepo.findById(id)
+    .map(<span class="cl">User</span>::getName)
     .orElse(<span class="st">"Unknown"</span>);</div>
 </div>
 <div class="callout callout-warn">⚠️ Don't use Optional as a method parameter or field. Only use it as a return type to signal "this might not be present".</div>`
       },
       {
         title:"Java 8–17 Key Features",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>With 7 YOE, interviewers expect you to know modern Java. Here's what matters most.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">Java 8 — Lambda & Method References</div>
+  <div class="code-label">Java 8 — Lambda & Method References <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm">// Lambda — anonymous function</span>
 List&lt;<span class="cl">String</span>&gt; names = Arrays.asList(<span class="st">"Bob"</span>, <span class="st">"Alice"</span>);
 names.sort((a, b) -&gt; a.compareTo(b));       <span class="cm">// lambda</span>
 names.sort(<span class="cl">String</span>::compareTo);              <span class="cm">// method reference (same)</span></div>
 </div>
 <div class="code-block">
-  <div class="code-label">Java 10 — var (local type inference)</div>
-  <div class="code-body"><span class="kw">var</span> list = <span class="kw">new</span> ArrayList&lt;<span class="cl">String</span>&gt;(); <span class="cm">// compiler infers ArrayList&lt;String&gt;</span>
+  <div class="code-label">Java 10 — var (local type inference) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">var</span> list = <span class="kw">new</span> ArrayList&lt;<span class="cl">String</span>&gt;();
 <span class="kw">var</span> map  = <span class="kw">new</span> HashMap&lt;<span class="cl">String</span>, <span class="cl">Integer</span>&gt;();</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Java 14+ — Switch Expressions</div>
+  <div class="code-label">Java 14+ — Switch Expressions <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cl">String</span> result = <span class="kw">switch</span> (day) {
     <span class="kw">case</span> MONDAY, FRIDAY -&gt; <span class="st">"Weekday"</span>;
     <span class="kw">case</span> SATURDAY, SUNDAY -&gt; <span class="st">"Weekend"</span>;
@@ -591,7 +950,7 @@ names.sort(<span class="cl">String</span>::compareTo);              <span class=
 };</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Java 16 — Records (immutable data classes)</div>
+  <div class="code-label">Java 16 — Records (immutable data classes) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm">// Auto-generates: constructor, getters, equals, hashCode, toString</span>
 <span class="kw">record</span> <span class="cl">UserDTO</span>(<span class="cl">String</span> name, <span class="cl">String</span> email) {}
 
@@ -601,7 +960,7 @@ dto.email();  <span class="cm">// "s@s.com"</span>
 <span class="cm">// Use Records for DTOs instead of Lombok @Data</span></div>
 </div>
 <div class="code-block">
-  <div class="code-label">Java 17 — Sealed Classes</div>
+  <div class="code-label">Java 17 — Sealed Classes <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="kw">public sealed class</span> <span class="cl">Shape</span> <span class="kw">permits</span> <span class="cl">Circle</span>, <span class="cl">Rectangle</span> {}
 <span class="kw">public final class</span> <span class="cl">Circle</span>    <span class="kw">extends</span> <span class="cl">Shape</span> { <span class="kw">double</span> radius; }
 <span class="kw">public final class</span> <span class="cl">Rectangle</span> <span class="kw">extends</span> <span class="cl">Shape</span> { <span class="kw">double</span> w, h; }
@@ -619,21 +978,17 @@ dto.email();  <span class="cm">// "s@s.com"</span>
       {q:"What are generics and why are they useful?",d:"easy",a:`Type-safe reusable code without casting. Catch type mismatches at compile time instead of runtime ClassCastException. <code>List&lt;String&gt;</code> guarantees only Strings, no cast needed on get().`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 3
-  // ─────────────────────────────────────────────
   {
-    day:3,date:"Mon, Jun 15",title:"Java Advanced",
+    day:3,title:"Java Advanced",
     desc:"Multithreading, JVM internals, concurrency utilities.",
     topics:[
       {
         title:"Threads & Concurrency Basics",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Multithreading lets multiple tasks run concurrently. The challenge is <b>shared mutable state</b> — when two threads modify the same data, you get race conditions.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">Creating Threads — 3 Ways</div>
+  <div class="code-label">Creating Threads — 3 Ways <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm">// 1. Extend Thread (avoid — limits inheritance)</span>
 <span class="kw">class</span> <span class="cl">MyThread</span> <span class="kw">extends</span> <span class="cl">Thread</span> {
     <span class="kw">public void</span> <span class="fn">run</span>() { System.out.println(<span class="st">"Running"</span>); }
@@ -650,14 +1005,14 @@ executor.submit(() -&gt; System.out.println(<span class="st">"Task running"</spa
 executor.shutdown();</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Race Condition — The Problem</div>
+  <div class="code-label">Race Condition — The Problem <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="kw">int</span> count = <span class="nm">0</span>;
 <span class="cm">// Thread 1 and Thread 2 both do count++ simultaneously</span>
 <span class="cm">// count++ is actually: read → increment → write (3 steps)</span>
 <span class="cm">// Both threads can read the same value before either writes → count wrong!</span></div>
 </div>
 <div class="code-block">
-  <div class="code-label">synchronized — The Fix</div>
+  <div class="code-label">synchronized — The Fix <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="kw">public class</span> <span class="cl">Counter</span> {
     <span class="kw">private int</span> count = <span class="nm">0</span>;
 
@@ -674,12 +1029,11 @@ counter.incrementAndGet(); <span class="cm">// thread-safe, faster than synchron
       },
       {
         title:"JVM — Heap, Stack, GC",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>You don't need to be a JVM expert, but you should understand memory layout and basic GC to discuss performance issues.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">JVM Memory Layout</div>
+  <div class="code-label">JVM Memory Layout <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">JVM Memory
 ├── Heap (shared across threads — GC managed)
 │   ├── Young Generation (Eden + Survivor spaces)
@@ -692,7 +1046,7 @@ counter.incrementAndGet(); <span class="cm">// thread-safe, faster than synchron
 └── Code Cache (compiled JIT code)</div>
 </div>
 <div class="code-block">
-  <div class="code-label">What lives where</div>
+  <div class="code-label">What lives where <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="kw">void</span> <span class="fn">method</span>() {
     <span class="kw">int</span> x = <span class="nm">5</span>;               <span class="cm">// x lives on the STACK (primitive)</span>
     <span class="cl">String</span> s = <span class="st">"hi"</span>;         <span class="cm">// s reference on STACK, object on HEAP</span>
@@ -715,23 +1069,20 @@ counter.incrementAndGet(); <span class="cm">// thread-safe, faster than synchron
       {q:"What are Sealed Classes?",d:"hard",a:`Restrict which classes can extend them (Java 17). Compiler knows all subtypes — enables exhaustive pattern matching. Great for domain modeling where you have a fixed set of variants (Shape = Circle | Rectangle | Triangle).`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 4
-  // ─────────────────────────────────────────────
+
   {
-    day:4,date:"Tue, Jun 16",title:"Spring Core",
+    day:4,title:"Spring Core",
     desc:"IoC, DI, Bean lifecycle, AOP — the engine under Spring.",
     topics:[
       {
         title:"IoC and Dependency Injection",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p><b>IoC (Inversion of Control)</b> means the framework controls object creation, not your code. You don't say <code>new Service()</code> — Spring creates it and gives it to you.</p>
 <p><b>Dependency Injection</b> is how IoC is implemented: Spring "injects" objects into your classes.</p>
 <p>Why does this matter? Without DI, every class creates its own dependencies. This creates tight coupling — you can't swap implementations, testing is hard, and changing one class breaks others.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">Without DI — Tightly Coupled (Bad)</div>
+  <div class="code-label">Without DI — Tightly Coupled (Bad) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="kw">class</span> <span class="cl">OrderService</span> {
     <span class="cm">// OrderService creates its own dependency — tightly coupled</span>
     <span class="kw">private</span> <span class="cl">PaymentService</span> paymentService = <span class="kw">new</span> <span class="cl">PaymentService</span>();
@@ -740,7 +1091,7 @@ counter.incrementAndGet(); <span class="cm">// thread-safe, faster than synchron
 }</div>
 </div>
 <div class="code-block">
-  <div class="code-label">With DI — Loosely Coupled (Good)</div>
+  <div class="code-label">With DI — Loosely Coupled (Good) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@Service</span>
 <span class="kw">class</span> <span class="cl">OrderService</span> {
     <span class="kw">private final</span> <span class="cl">PaymentService</span> paymentService;
@@ -756,12 +1107,11 @@ counter.incrementAndGet(); <span class="cm">// thread-safe, faster than synchron
       },
       {
         title:"Bean Scopes & Lifecycle",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Every object Spring manages is called a <b>Bean</b>. Spring controls its creation, initialization, and destruction.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">Bean Lifecycle — Simplified</div>
+  <div class="code-label">Bean Lifecycle — Simplified <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="nm">1</span>. Spring reads <span class="an">@Component</span>/<span class="an">@Service</span>/<span class="an">@Repository</span> etc.
 <span class="nm">2</span>. Instantiates the bean (calls constructor)
 <span class="nm">3</span>. Injects dependencies (<span class="an">@Autowired</span>)
@@ -771,7 +1121,7 @@ counter.incrementAndGet(); <span class="cm">// thread-safe, faster than synchron
 <span class="nm">7</span>. Bean is destroyed</div>
 </div>
 <div class="code-block">
-  <div class="code-label">PostConstruct & PreDestroy</div>
+  <div class="code-label">PostConstruct & PreDestroy <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@Service</span>
 <span class="kw">public class</span> <span class="cl">CacheService</span> {
 
@@ -799,8 +1149,7 @@ counter.incrementAndGet(); <span class="cm">// thread-safe, faster than synchron
       },
       {
         title:"Spring AOP — Cross-Cutting Concerns",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>AOP (Aspect-Oriented Programming) lets you add behaviour (logging, security, transactions) to methods <b>without changing the method itself</b>. This avoids scattering logging code across hundreds of methods.</p>
 <p><b>Key terms:</b></p>
 <ul>
@@ -811,7 +1160,7 @@ counter.incrementAndGet(); <span class="cm">// thread-safe, faster than synchron
 </ul>
 </div>
 <div class="code-block">
-  <div class="code-label">EXAMPLE — Logging Aspect</div>
+  <div class="code-label">EXAMPLE — Logging Aspect <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@Aspect</span>
 <span class="an">@Component</span>
 <span class="kw">public class</span> <span class="cl">LoggingAspect</span> {
@@ -844,21 +1193,17 @@ counter.incrementAndGet(); <span class="cm">// thread-safe, faster than synchron
       {q:"What is Spring AOP and what problem does it solve?",d:"hard",a:`Separates cross-cutting concerns (logging, transactions, security) from business logic. Write once as an Aspect, apply declaratively. Works via JDK dynamic proxies (for interfaces) or CGLIB (for classes). @Transactional and @Cacheable are built on AOP.`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 5
-  // ─────────────────────────────────────────────
   {
-    day:5,date:"Wed, Jun 17",title:"Spring Boot",
+    day:5,title:"Spring Boot",
     desc:"Auto-configuration, Actuator, Profiles, what Boot adds over Spring.",
     topics:[
       {
         title:"Auto-Configuration — How Boot Magic Works",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>This is Spring Boot's defining feature. It looks at what's on your classpath and automatically configures beans so you don't have to write XML or @Bean methods for every standard setup.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">How it works — step by step</div>
+  <div class="code-label">How it works — step by step <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="nm">1</span>. <span class="an">@SpringBootApplication</span> includes <span class="an">@EnableAutoConfiguration</span>
 <span class="nm">2</span>. Spring loads all auto-config classes listed in:
    META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
@@ -877,12 +1222,11 @@ counter.incrementAndGet(); <span class="cm">// thread-safe, faster than synchron
       },
       {
         title:"Profiles & Externalized Config",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Real apps run in multiple environments (dev, test, prod). Profiles let you have environment-specific configuration without changing code.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">application.yml with profiles</div>
+  <div class="code-label">application.yml with profiles <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm"># application.yml (shared config)</span>
 spring:
   application:
@@ -909,7 +1253,7 @@ spring:
     show-sql: <span class="kw">false</span></div>
 </div>
 <div class="code-block">
-  <div class="code-label">Activating profiles</div>
+  <div class="code-label">Activating profiles <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm"># In application.properties</span>
 spring.profiles.active=dev
 
@@ -927,12 +1271,11 @@ SPRING_PROFILES_ACTIVE=prod
       },
       {
         title:"Spring Actuator — Production Monitoring",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Actuator exposes HTTP endpoints that let you monitor and manage your running application. Essential for production operations.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">Key Actuator endpoints</div>
+  <div class="code-label">Key Actuator endpoints <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">GET /actuator/health      <span class="cm">→ { "status": "UP" } — used by load balancers</span>
 GET /actuator/metrics     <span class="cm">→ JVM memory, HTTP response times, custom metrics</span>
 GET /actuator/env         <span class="cm">→ All environment properties (CAREFUL in prod!)</span>
@@ -943,7 +1286,7 @@ GET /actuator/threaddump  <span class="cm">→ JVM thread dump</span>
 GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
 </div>
 <div class="code-block">
-  <div class="code-label">Custom health indicator</div>
+  <div class="code-label">Custom health indicator <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@Component</span>
 <span class="kw">public class</span> <span class="cl">DatabaseHealthIndicator</span> <span class="kw">implements</span> <span class="cl">HealthIndicator</span> {
     <span class="an">@Override</span>
@@ -966,17 +1309,13 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
       {q:"What is @SpringBootApplication?",d:"medium",a:`Combines @Configuration (config class) + @EnableAutoConfiguration (auto-config) + @ComponentScan (scans package for beans). One annotation to rule them all.`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 6
-  // ─────────────────────────────────────────────
   {
-    day:6,date:"Thu, Jun 18",title:"REST API — Core",
+    day:6,title:"REST API — Core",
     desc:"HTTP methods, status codes, Spring MVC annotations, exception handling.",
     topics:[
       {
         title:"REST Fundamentals",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>REST (Representational State Transfer) is an architectural style for building APIs over HTTP. Understanding its constraints helps you design clean APIs.</p>
 <p><b>6 REST Constraints:</b></p>
 <ol>
@@ -1000,8 +1339,7 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
       },
       {
         title:"HTTP Status Codes You Must Know",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Returning the correct status code is part of building a good REST API. Interviewers will ask you to name codes for specific scenarios.</p>
 </div>
 <table class="cmp-table">
@@ -1021,9 +1359,8 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
       },
       {
         title:"Spring MVC Annotations & Exception Handling",tag:"code",
-        body:`
-<div class="code-block">
-  <div class="code-label">Controller annotations</div>
+        body:`<div class="code-block">
+  <div class="code-label">Controller annotations <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@RestController</span>           <span class="cm">// = @Controller + @ResponseBody — returns JSON</span>
 <span class="an">@RequestMapping</span>(<span class="st">"/api/v1"</span>) <span class="cm">// base path for all methods</span>
 <span class="kw">public class</span> <span class="cl">UserController</span> {
@@ -1049,7 +1386,7 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
 }</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Global Exception Handler — @RestControllerAdvice</div>
+  <div class="code-label">Global Exception Handler — @RestControllerAdvice <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@RestControllerAdvice</span>
 <span class="kw">public class</span> <span class="cl">GlobalExceptionHandler</span> {
 
@@ -1080,18 +1417,14 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
       {q:"What is the difference between @PathVariable and @RequestParam?",d:"easy",a:`@PathVariable extracts from URL path: GET /users/42 → @PathVariable Long id. @RequestParam extracts from query string: GET /users?page=1 → @RequestParam int page.`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 7
-  // ─────────────────────────────────────────────
   {
-    day:7,date:"Fri, Jun 19",title:"REST API — Advanced",
+    day:7,title:"REST API — Advanced",
     desc:"Versioning, validation, DTOs, pagination, best practices.",
     topics:[
       {
         title:"Request Validation with Bean Validation",tag:"code",
-        body:`
-<div class="code-block">
-  <div class="code-label">DTO with validation annotations</div>
+        body:`<div class="code-block">
+  <div class="code-label">DTO with validation annotations <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="kw">public class</span> <span class="cl">CreateUserRequest</span> {
 
     <span class="an">@NotBlank</span>(message = <span class="st">"Name is required"</span>)
@@ -1121,8 +1454,7 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
       },
       {
         title:"DTO Pattern — Why Never Expose Entities",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Directly returning your JPA entity from a REST endpoint seems easy but causes serious problems in production.</p>
 </div>
 <div class="concept-grid">
@@ -1132,7 +1464,7 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
   <div class="concept-cell"><div class="concept-cell-label">📦 Flexibility</div><div class="concept-cell-val">API response can combine data from multiple entities, computed fields, aggregations</div></div>
 </div>
 <div class="code-block">
-  <div class="code-label">Entity → DTO mapping</div>
+  <div class="code-label">Entity → DTO mapping <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm">// Entity — internal DB representation</span>
 <span class="an">@Entity</span>
 <span class="kw">public class</span> <span class="cl">User</span> {
@@ -1153,9 +1485,8 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
       },
       {
         title:"Pagination & API Best Practices",tag:"concept",
-        body:`
-<div class="code-block">
-  <div class="code-label">Pagination with Spring Data</div>
+        body:`<div class="code-block">
+  <div class="code-label">Pagination with Spring Data <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@GetMapping</span>(<span class="st">"/users"</span>)
 <span class="kw">public</span> <span class="cl">Page</span>&lt;<span class="cl">UserDTO</span>&gt; <span class="fn">getUsers</span>(
     <span class="an">@RequestParam</span>(defaultValue=<span class="st">"0"</span>) <span class="kw">int</span> page,
@@ -1166,8 +1497,8 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
     <span class="kw">return</span> userRepository.findAll(pageable).map(<span class="cl">UserDTO</span>::from);
 }
 
-<span class="cm">// Response includes:
-// { content: [...], totalElements: 1000, totalPages: 50, number: 0 }</span></div>
+<span class="cm">// Response includes:</span>
+<span class="cm">// { content: [...], totalElements: 1000, totalPages: 50, number: 0 }</span></div>
 </div>
 <div class="topic-intro"><b>REST API Naming Best Practices</b></div>
 <table class="cmp-table">
@@ -1190,21 +1521,18 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
       {q:"What is ResponseEntity and when do you use it?",d:"easy",a:`Full control over HTTP response — status code, headers, body. Use when you need to set specific status (201 Created), add headers (Location), or return no body (204). For simple 200 responses, returning the object directly is fine.`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 8
-  // ─────────────────────────────────────────────
+
   {
-    day:8,date:"Sat, Jun 20",title:"Spring Data JPA",
+    day:8,title:"Spring Data JPA",
     desc:"ORM, entities, repositories, N+1, transactions.",
     topics:[
       {
         title:"JPA Entities & Relationships",tag:"code",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>JPA maps Java classes to DB tables. You write objects — Hibernate writes SQL for you.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">Entity mapping</div>
+  <div class="code-label">Entity mapping <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@Entity</span>
 <span class="an">@Table</span>(name = <span class="st">"orders"</span>)
 <span class="kw">public class</span> <span class="cl">Order</span> {
@@ -1217,7 +1545,7 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
     <span class="kw">private</span> <span class="cl">String</span> status;
 
     <span class="an">@ManyToOne</span>(fetch = FetchType.LAZY)
-    <span class="an">@JoinColumn</span>(name = <span class="st">"user_id"</span>)     <span class="cm">// foreign key column in orders table</span>
+    <span class="an">@JoinColumn</span>(name = <span class="st">"user_id"</span>)
     <span class="kw">private</span> <span class="cl">User</span> user;
 
     <span class="an">@OneToMany</span>(mappedBy = <span class="st">"order"</span>, cascade = CascadeType.ALL)
@@ -1228,13 +1556,12 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
       },
       {
         title:"The N+1 Problem — Most Asked JPA Question",tag:"gotcha",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>This is the #1 JPA performance issue interviewers ask about. You must be able to explain it and fix it.</p>
 <p><b>The problem:</b> Fetching N entities triggers N additional SQL queries for their relationships. 100 orders → 101 queries!</p>
 </div>
 <div class="code-block">
-  <div class="code-label">N+1 — The Bug</div>
+  <div class="code-label">N+1 — The Bug <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">List&lt;<span class="cl">Order</span>&gt; orders = orderRepo.findAll(); <span class="cm">// 1 query: SELECT * FROM orders</span>
 <span class="kw">for</span> (<span class="cl">Order</span> o : orders) {
     o.getItems(); <span class="cm">// 1 query PER order: SELECT * FROM order_items WHERE order_id=?</span>
@@ -1242,13 +1569,13 @@ GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
 <span class="cm">// Result: 1 + N queries. For 100 orders = 101 queries. BAD.</span></div>
 </div>
 <div class="code-block">
-  <div class="code-label">Fix 1 — JOIN FETCH in JPQL</div>
+  <div class="code-label">Fix 1 — JOIN FETCH in JPQL <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@Query</span>(<span class="st">"SELECT o FROM Order o JOIN FETCH o.items"</span>)
 List&lt;<span class="cl">Order</span>&gt; <span class="fn">findAllWithItems</span>();
 <span class="cm">// Result: 1 query with JOIN. Items loaded eagerly for this specific call.</span></div>
 </div>
 <div class="code-block">
-  <div class="code-label">Fix 2 — @EntityGraph</div>
+  <div class="code-label">Fix 2 — @EntityGraph <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@EntityGraph</span>(attributePaths = {<span class="st">"items"</span>})
 List&lt;<span class="cl">Order</span>&gt; <span class="fn">findAll</span>();
 <span class="cm">// Declarative — tells JPA to eagerly load items for this query</span></div>
@@ -1257,9 +1584,8 @@ List&lt;<span class="cl">Order</span>&gt; <span class="fn">findAll</span>();
       },
       {
         title:"@Transactional — Deep Dive",tag:"gotcha",
-        body:`
-<div class="code-block">
-  <div class="code-label">Basic usage</div>
+        body:`<div class="code-block">
+  <div class="code-label">Basic usage <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@Service</span>
 <span class="kw">public class</span> <span class="cl">OrderService</span> {
 
@@ -1273,7 +1599,7 @@ List&lt;<span class="cl">Order</span>&gt; <span class="fn">findAll</span>();
 }</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Propagation — what happens when transactional methods call each other</div>
+  <div class="code-label">Propagation — what happens when transactional methods call each other <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">REQUIRED (default)    <span class="cm">// join existing tx, or create new one if none</span>
 REQUIRES_NEW          <span class="cm">// always new tx, suspend existing one</span>
 NESTED                <span class="cm">// savepoint inside existing tx</span>
@@ -1295,36 +1621,32 @@ NOT_SUPPORTED         <span class="cm">// suspend any existing tx, run without</
       {q:"What is the difference between JpaRepository and CrudRepository?",d:"easy",a:`CrudRepository: basic CRUD. PagingAndSortingRepository: adds pagination. JpaRepository: extends both + JPA-specific (flush, saveAndFlush, findAll(Pageable)). Use JpaRepository unless you have a specific reason not to.`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 9
-  // ─────────────────────────────────────────────
   {
-    day:9,date:"Sun, Jun 21",title:"SQL Basics",
+    day:9,title:"SQL Basics",
     desc:"JOINs, indexes, aggregations, ACID — what every backend dev needs.",
     topics:[
       {
         title:"JOINs — The Visual Way to Understand Them",tag:"code",
-        body:`
-<div class="code-block">
-  <div class="code-label">Sample tables</div>
+        body:`<div class="code-block">
+  <div class="code-label">Sample tables <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">users:  id=1 Alice, id=2 Bob, id=3 Charlie
 orders: id=A user_id=1, id=B user_id=1, id=C user_id=99 (no matching user!)</div>
 </div>
 <div class="code-block">
-  <div class="code-label">INNER JOIN — only rows matching in BOTH tables</div>
+  <div class="code-label">INNER JOIN — only rows matching in BOTH tables <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">SELECT u.name, o.id
 FROM users u INNER JOIN orders o ON u.id = o.user_id;
 <span class="cm">-- Result: Alice + A, Alice + B (Bob and Charlie excluded, order C excluded)</span></div>
 </div>
 <div class="code-block">
-  <div class="code-label">LEFT JOIN — ALL left rows, matching right (nulls if no match)</div>
+  <div class="code-label">LEFT JOIN — ALL left rows, matching right (nulls if no match) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">SELECT u.name, o.id
 FROM users u LEFT JOIN orders o ON u.id = o.user_id;
 <span class="cm">-- Result: Alice + A, Alice + B, Bob + NULL, Charlie + NULL</span>
 <span class="cm">-- Use when: "Give me all users even if they have no orders"</span></div>
 </div>
 <div class="code-block">
-  <div class="code-label">Common interview query patterns</div>
+  <div class="code-label">Common interview query patterns <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm">-- Users with no orders</span>
 SELECT u.name FROM users u
 LEFT JOIN orders o ON u.id = o.user_id
@@ -1334,18 +1656,17 @@ WHERE o.id IS NULL;
 SELECT u.name, COUNT(o.id) AS order_count
 FROM users u JOIN orders o ON u.id = o.user_id
 GROUP BY u.id, u.name
-HAVING COUNT(o.id) > <span class="nm">2</span>
+HAVING COUNT(o.id) &gt; <span class="nm">2</span>
 ORDER BY order_count DESC;</div>
 </div>`
       },
       {
         title:"Indexes — Why Queries Are Slow Without Them",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>An index is a sorted data structure (usually B-tree) that the DB maintains alongside a table. Think of it as a book's index — instead of reading every page (full table scan), you jump straight to the right page.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">Index example</div>
+  <div class="code-label">Index example <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="cm">-- Without index: DB reads every row (full table scan)</span>
 SELECT * FROM users WHERE email = 'alice@example.com';
 <span class="cm">-- 1 million rows → checks all 1M. O(n)</span>
@@ -1367,8 +1688,7 @@ CREATE INDEX idx_users_email ON users(email);
       },
       {
         title:"ACID Properties",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>ACID is what makes relational databases reliable for financial and critical data.</p>
 </div>
 <div class="concept-grid">
@@ -1388,17 +1708,13 @@ CREATE INDEX idx_users_email ON users(email);
       {q:"What is a Primary Key vs Foreign Key vs Unique constraint?",d:"easy",a:`PK: uniquely identifies row, not null, one per table. FK: references PK in another table, enforces referential integrity. Unique: like PK but allows nulls, table can have multiple unique constraints.`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 10
-  // ─────────────────────────────────────────────
   {
-    day:10,date:"Mon, Jun 22",title:"Microservices",
+    day:10,title:"Microservices",
     desc:"Architecture patterns, communication, service discovery, resilience.",
     topics:[
       {
         title:"Monolith vs Microservices",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Understanding the real tradeoffs — not just the buzzwords — is what separates senior devs in interviews.</p>
 </div>
 <table class="cmp-table">
@@ -1415,9 +1731,8 @@ CREATE INDEX idx_users_email ON users(email);
       },
       {
         title:"Service Communication — Sync vs Async",tag:"concept",
-        body:`
-<div class="code-block">
-  <div class="code-label">Synchronous — REST (caller waits)</div>
+        body:`<div class="code-block">
+  <div class="code-label">Synchronous — REST (caller waits) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">OrderService  ──── REST call ───→  PaymentService
               ←─── response ────
 
@@ -1427,7 +1742,7 @@ CREATE INDEX idx_users_email ON users(email);
 ❌ Tight temporal coupling</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Asynchronous — Message Queue (fire and forget)</div>
+  <div class="code-label">Asynchronous — Message Queue (fire and forget) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">OrderService ──── message ───→  Queue (RabbitMQ/SQS)
                                        └───→  PaymentService (processes when ready)
 
@@ -1440,13 +1755,12 @@ CREATE INDEX idx_users_email ON users(email);
       },
       {
         title:"Circuit Breaker Pattern",tag:"pattern",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Without a circuit breaker: Service A calls slow/down Service B → A's threads pile up waiting → A runs out of threads → A crashes. Cascading failure.</p>
 <p>The circuit breaker stops this by <b>failing fast</b> when a downstream service is unhealthy.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">Circuit Breaker States</div>
+  <div class="code-label">Circuit Breaker States <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">CLOSED   → Normal. Requests flow through. Failure rate monitored.
            If failure rate > threshold (e.g., 50%) → switch to OPEN
 
@@ -1458,7 +1772,7 @@ HALF-OPEN → Let one test request through.
             If failure → switch back to OPEN</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Resilience4j — Spring Boot</div>
+  <div class="code-label">Resilience4j — Spring Boot <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@CircuitBreaker</span>(name = <span class="st">"paymentService"</span>, fallbackMethod = <span class="st">"paymentFallback"</span>)
 <span class="kw">public</span> <span class="cl">PaymentResult</span> <span class="fn">processPayment</span>(<span class="cl">PaymentRequest</span> req) {
     <span class="kw">return</span> paymentClient.process(req);
@@ -1480,21 +1794,17 @@ HALF-OPEN → Let one test request through.
       {q:"What is the Saga pattern?",d:"hard",a:`Manages distributed transactions. Choreography: services emit events, react to others (decentralized). Orchestration: central coordinator tells each service what to do, handles compensation on failure. Example: order → reserve inventory → charge → if charge fails → undo reservation.`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 11
-  // ─────────────────────────────────────────────
   {
-    day:11,date:"Tue, Jun 23",title:"Security & Caching",
+    day:11,title:"Security & Caching",
     desc:"JWT, Spring Security filter chain, Redis caching, connection pooling.",
     topics:[
       {
         title:"JWT Authentication — End to End",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>JWT (JSON Web Token) enables <b>stateless authentication</b> — no session stored on server. Each request carries its own proof of identity.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">JWT Structure — 3 parts separated by dots</div>
+  <div class="code-label">JWT Structure — 3 parts separated by dots <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGVzIjpbIlVTRVIiXSwiZXhwIjoxNzE5MDAwMDAwfQ.abc123
 
 HEADER (base64)   → { "alg": "HS256", "typ": "JWT" }
@@ -1505,7 +1815,7 @@ The server validates signature to confirm token wasn't tampered with.
 No DB lookup needed — the token IS the identity.</div>
 </div>
 <div class="code-block">
-  <div class="code-label">JWT Auth Flow</div>
+  <div class="code-label">JWT Auth Flow <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="nm">1</span>. Client: POST /auth/login { username, password }
 <span class="nm">2</span>. Server: validates credentials → generates JWT (exp: 15 min)
 <span class="nm">3</span>. Client: stores token, sends with every request:
@@ -1517,12 +1827,11 @@ No DB lookup needed — the token IS the identity.</div>
       },
       {
         title:"Spring Security Filter Chain",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Every HTTP request passes through a chain of security filters before reaching your controller. Each filter has a specific job.</p>
 </div>
 <div class="code-block">
-  <div class="code-label">Filter chain order</div>
+  <div class="code-label">Filter chain order <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">HTTP Request
     │
     ▼
@@ -1544,7 +1853,7 @@ FilterSecurityInterceptor           → checks @PreAuthorize / SecurityConfig ru
 Your Controller Method</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Security config — Spring Boot 3</div>
+  <div class="code-label">Security config — Spring Boot 3 <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@Configuration</span>
 <span class="kw">public class</span> <span class="cl">SecurityConfig</span> {
 
@@ -1566,9 +1875,8 @@ Your Controller Method</div>
       },
       {
         title:"Redis Caching — Cache-Aside Pattern",tag:"code",
-        body:`
-<div class="code-block">
-  <div class="code-label">Cache-Aside — how it works</div>
+        body:`<div class="code-block">
+  <div class="code-label">Cache-Aside — how it works <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="nm">1</span>. App checks Redis for data (cache lookup)
 <span class="nm">2</span>. Cache HIT  → return data directly (fast, no DB hit)
 <span class="nm">3</span>. Cache MISS → fetch from DB → store in Redis with TTL → return data
@@ -1576,7 +1884,7 @@ Your Controller Method</div>
 <span class="cm">// Spring makes this trivial with @Cacheable</span></div>
 </div>
 <div class="code-block">
-  <div class="code-label">Spring Cache annotations</div>
+  <div class="code-label">Spring Cache annotations <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body"><span class="an">@Service</span>
 <span class="kw">public class</span> <span class="cl">ProductService</span> {
 
@@ -1610,17 +1918,14 @@ Your Controller Method</div>
       {q:"What is HikariCP and why does connection pool size matter?",d:"medium",a:`Default Spring Boot connection pool. Maintains pre-opened DB connections. Too small → threads wait for connections. Too large → DB overloaded. Rule of thumb: 2×CPU cores + effective spindle count. Default is 10.`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 12
-  // ─────────────────────────────────────────────
+
   {
-    day:12,date:"Wed, Jun 24",title:"System Design Basics",
+    day:12,title:"System Design Basics",
     desc:"How to approach design questions, scale, databases, load balancing.",
     topics:[
       {
         title:"How to Approach a System Design Question",tag:"pattern",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>System design interviews test your ability to think through building large-scale systems. They're open-ended — there's no single right answer. The goal is to show structured thinking.</p>
 <p><b>Framework — use this every time:</b></p>
 <ol>
@@ -1636,21 +1941,20 @@ Your Controller Method</div>
       },
       {
         title:"URL Shortener — Full Design Walkthrough",tag:"pattern",
-        body:`
-<div class="code-block">
-  <div class="code-label">Step 1 — Clarify & Estimate</div>
+        body:`<div class="code-block">
+  <div class="code-label">Step 1 — Clarify & Estimate <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">Scale: 100M URLs created/day, 10B redirects/day
 Read:write ratio = 100:1 (very read-heavy)
 Latency: redirect must be < 100ms
 Storage: 100M × 500 bytes avg = ~50GB/day</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Step 2 — API</div>
+  <div class="code-label">Step 2 — API <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">POST /shorten  { originalUrl, expiresAt? }  → { shortCode, shortUrl }
 GET  /{code}                                 → 301 Redirect to originalUrl</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Step 3 — Data Model</div>
+  <div class="code-label">Step 3 — Data Model <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">urls table:
   id          BIGINT PRIMARY KEY
   short_code  VARCHAR(8)  INDEXED UNIQUE   ← lookup key
@@ -1659,7 +1963,7 @@ GET  /{code}                                 → 301 Redirect to originalUrl</di
   expires_at  TIMESTAMP</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Step 4 — Short Code Generation</div>
+  <div class="code-label">Step 4 — Short Code Generation <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">Base62 encode a counter: chars = [a-z, A-Z, 0-9] = 62 chars
 6 chars = 62^6 = 56 billion unique codes
 
@@ -1667,7 +1971,7 @@ Alternative: MD5(originalUrl) → take first 6 chars
 Risk: collisions → retry with different chars</div>
 </div>
 <div class="code-block">
-  <div class="code-label">Step 5 — Architecture</div>
+  <div class="code-label">Step 5 — Architecture <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">Client → CDN (cache hot redirects) → API Gateway → App Server
                                                           │
                                               ┌───────────┴──────────┐
@@ -1681,8 +1985,7 @@ Redirect flow:
       },
       {
         title:"SQL vs NoSQL — When to Use What",tag:"concept",
-        body:`
-<table class="cmp-table">
+        body:`<table class="cmp-table">
   <tr><th>Scenario</th><th>Choice</th><th>Why</th></tr>
   <tr><td>Financial data, orders, invoices</td><td>PostgreSQL (SQL)</td><td>ACID, relationships, complex queries</td></tr>
   <tr><td>User profiles, product catalogs</td><td>MongoDB (NoSQL)</td><td>Flexible schema, document structure</td></tr>
@@ -1702,17 +2005,13 @@ Redirect flow:
       {q:"What is a load balancer and what algorithms can it use?",d:"medium",a:`Distributes traffic across multiple instances. Algorithms: Round Robin (sequential), Least Connections (send to least busy), IP Hash (same client → same server), Weighted Round Robin (more traffic to stronger instances).`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 13
-  // ─────────────────────────────────────────────
   {
-    day:13,date:"Thu, Jun 25",title:"Mock Interview Day",
+    day:13,title:"Mock Interview Day",
     desc:"Mixed deep-dive questions across all topics — simulate a real interview.",
     topics:[
       {
         title:"How to Perform Well in Technical Interviews",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Technical knowledge is only 60% of the interview. The other 40% is how you communicate that knowledge.</p>
 <p><b>Before you answer any question:</b></p>
 <ol>
@@ -1741,17 +2040,13 @@ Redirect flow:
       {q:"What causes a LazyInitializationException and how do you fix it?",d:"hard",a:`Accessing a lazy-loaded JPA association outside a transaction (session already closed). Fixes: 1. Open transaction (extend @Transactional scope). 2. JOIN FETCH in query. 3. @EntityGraph. 4. Use DTO projection — fetch only needed fields in one query. Avoid: never set everything to EAGER.`}
     ]
   },
-  // ─────────────────────────────────────────────
-  // DAY 14
-  // ─────────────────────────────────────────────
   {
-    day:14,date:"Fri, Jun 26",title:"Behavioral & Final Revision",
+    day:14,title:"Behavioral & Final Revision",
     desc:"STAR answers, project walkthroughs, interview day mindset.",
     topics:[
       {
         title:"STAR Framework for Behavioral Questions",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>Behavioral questions test how you handle real situations. Use the STAR framework to structure every answer.</p>
 <ul>
 <li><b>S</b>ituation — Context: team size, project, time</li>
@@ -1773,13 +2068,12 @@ Redirect flow:
       },
       {
         title:"Tell Me About Yourself — Structure",tag:"concept",
-        body:`
-<div class="topic-intro">
+        body:`<div class="topic-intro">
 <p>This is the first question in most interviews. It sets the tone. Don't ramble. Use this formula:</p>
 <p><b>Present → Past → Future</b> (keep it under 2 minutes)</p>
 </div>
 <div class="code-block">
-  <div class="code-label">Template</div>
+  <div class="code-label">Template <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
   <div class="code-body">"I'm a Java backend developer with 7 years of experience,
 specializing in Spring Boot and microservices.
 
@@ -1810,47 +2104,47 @@ I'm excited about this role because [specific thing about the company/role]."</d
 const TOOLS = [
   { icon:"💻", name:"IntelliJ IDEA", cat:"setup", catLabel:"Setup",
     desc:"The industry-standard Java IDE. Community edition is free.",
-    why:"Powerful refactoring, built-in Spring support, debugger, database viewer, JVM profiler. If you're not using IntelliJ, switch.",
+    why:"Powerful refactoring, built-in Spring support, debugger, database viewer, JVM profiler.",
     link:"https://www.jetbrains.com/idea/download/" },
   { icon:"🔧", name:"Postman", cat:"practice", catLabel:"Practice",
     desc:"Test and explore REST APIs visually.",
-    why:"Essential for testing your Spring Boot APIs during practice. Build collections of requests to simulate real interview scenarios.",
+    why:"Essential for testing your Spring Boot APIs during practice.",
     link:"https://www.postman.com/downloads/" },
   { icon:"📦", name:"Docker Desktop", cat:"setup", catLabel:"Setup",
     desc:"Run PostgreSQL, Redis, RabbitMQ locally without installing anything.",
-    why:"docker run -e POSTGRES_PASSWORD=pass -p 5432:5432 postgres — instant DB. No install headaches. You'll use this daily.",
+    why:"docker run -e POSTGRES_PASSWORD=pass -p 5432:5432 postgres — instant DB.",
     link:"https://www.docker.com/products/docker-desktop/" },
   { icon:"📝", name:"LeetCode", cat:"practice", catLabel:"Practice",
     desc:"Coding challenge platform. Focus: Easy + Medium array/map/string problems.",
-    why:"For your level, do 10–15 problems max. Focus on patterns: sliding window, two pointer, hashmap, BFS/DFS. Quality over quantity.",
+    why:"For your level, do 10–15 problems max. Focus on patterns: sliding window, two pointer, hashmap.",
     link:"https://leetcode.com/problemset/" },
   { icon:"🗃️", name:"DBeaver", cat:"practice", catLabel:"Practice",
     desc:"Free universal DB client — PostgreSQL, MySQL, H2, Oracle.",
-    why:"Write and run SQL queries against a real DB. Practice EXPLAIN ANALYZE on queries. Visualize table relationships.",
+    why:"Write and run SQL queries against a real DB. Practice EXPLAIN ANALYZE on queries.",
     link:"https://dbeaver.io/download/" },
   { icon:"🍃", name:"Spring Initializr", cat:"setup", catLabel:"Setup",
     desc:"Generate Spring Boot projects in seconds.",
-    why:"During interviews you may need to quickly set up a demo project. Know how to use this and what starters to add (web, jpa, security, actuator).",
+    why:"During interviews you may need to quickly set up a demo project.",
     link:"https://start.spring.io" },
   { icon:"📚", name:"Baeldung", cat:"learn", catLabel:"Learn",
     desc:"The best Spring/Java tutorial site on the internet.",
-    why:"Deep, accurate, code-first articles. Every Spring Boot topic has a Baeldung article. Use as reference when studying any day's topic.",
+    why:"Deep, accurate, code-first articles. Every Spring Boot topic has a Baeldung article.",
     link:"https://www.baeldung.com" },
   { icon:"🔴", name:"Redis Insight", cat:"practice", catLabel:"Practice",
     desc:"Visual Redis client to see what's in your cache.",
-    why:"Run Redis in Docker, use this to inspect cached keys, see TTL values, debug cache issues. Makes Redis tangible.",
+    why:"Run Redis in Docker, use this to inspect cached keys, see TTL values.",
     link:"https://redis.com/redis-enterprise/redis-insight/" },
-  { icon:"📊", name:"draw.io (diagrams.net)", cat:"practice", catLabel:"Practice",
+  { icon:"📊", name:"draw.io", cat:"practice", catLabel:"Practice",
     desc:"Free diagramming tool for system design.",
-    why:"Practice drawing system architecture diagrams. In interviews you'll sketch these on a whiteboard — practicing in draw.io builds the habit of thinking visually.",
+    why:"Practice drawing system architecture diagrams. In interviews you'll sketch these on a whiteboard.",
     link:"https://app.diagrams.net" },
   { icon:"🧪", name:"JUnit 5 + Mockito", cat:"setup", catLabel:"Setup",
     desc:"Java testing frameworks included with Spring Boot starter-test.",
-    why:"Write a few unit tests for your practice code. Interviewers often ask about testing strategy and you'll be asked to write a test live.",
+    why:"Write a few unit tests for your practice code. Interviewers often ask about testing strategy.",
     link:"https://junit.org/junit5/" },
   { icon:"📖", name:"Spring Docs", cat:"learn", catLabel:"Learn",
     desc:"Official Spring Framework & Spring Boot documentation.",
-    why:"Ground truth. When in doubt, go here. The Spring Boot reference guide is surprisingly readable. Bookmark it.",
+    why:"Ground truth. When in doubt, go here. The Spring Boot reference guide is surprisingly readable.",
     link:"https://docs.spring.io/spring-boot/docs/current/reference/html/" },
   { icon:"🧠", name:"Anki Flashcards", cat:"practice", catLabel:"Practice",
     desc:"Spaced-repetition flashcard app — free.",
@@ -1858,20 +2152,109 @@ const TOOLS = [
     link:"https://apps.ankiweb.net" },
 ];
 
-let currentDay = 0;
-let activeTab = 'learn';
+// ═══════════════════════════════════════════════════════════════
+// STATE & STORAGE
+// ═══════════════════════════════════════════════════════════════
+
+let currentDay = parseInt(localStorage.getItem('jp_currentDay')) || 0;
+let activeTab = localStorage.getItem('jp_activeTab') || 'learn';
+let flashcardMode = false;
+let flashcardIndex = 0;
+let flashcardItems = [];
+
+// Load saved progress
+function loadProgress() {
+  try {
+    const saved = localStorage.getItem('jp_progress');
+    return saved ? JSON.parse(saved) : {};
+  } catch { return {}; }
+}
+function saveProgress(p) {
+  localStorage.setItem('jp_progress', JSON.stringify(p));
+}
+let progress = loadProgress();
+
+// ═══════════════════════════════════════════════════════════════
+// SEARCH INDEX
+// ═══════════════════════════════════════════════════════════════
+
+const searchIndex = [];
+DAYS.forEach((d, di) => {
+  d.topics.forEach((t, ti) => {
+    searchIndex.push({
+      type: 'topic', day: di, dayNum: d.day, dayTitle: d.title,
+      title: t.title, text: t.title + ' ' + stripHtml(t.body).substring(0, 200),
+      id: `topic-${di}-${ti}`
+    });
+  });
+  d.qa.forEach((q, qi) => {
+    searchIndex.push({
+      type: 'qa', day: di, dayNum: d.day, dayTitle: d.title,
+      title: q.q, text: q.q + ' ' + stripHtml(q.a).substring(0, 200),
+      id: `qa-${di}-${qi}`, difficulty: q.d
+    });
+  });
+});
+
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER SIDEBAR
+// ═══════════════════════════════════════════════════════════════
 
 function renderSidebar() {
   const sb = document.getElementById('sidebar');
-  sb.innerHTML = '<div class="sidebar-label">14-Day Plan</div>';
-  DAYS.forEach((d, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'day-btn' + (i === currentDay ? ' active' : '');
-    btn.innerHTML = `<span class="day-num">D${d.day}</span><span class="day-label" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d.title}</span>`;
-    btn.onclick = () => { currentDay = i; activeTab = 'learn'; renderSidebar(); renderMain(); };
-    sb.appendChild(btn);
-  });
+  const completedCount = Object.keys(progress).filter(k => k.startsWith('day_') && progress[k] === 'done').length;
+  const totalDays = DAYS.length;
+  const pct = Math.round((completedCount / totalDays) * 100);
+
+  sb.innerHTML = `
+    <div class="sidebar-header">
+      <div class="sidebar-label">14-Day Plan</div>
+      <span class="progress-pill">${pct}%</span>
+    </div>
+    <div class="sidebar-scroll">
+      ${DAYS.map((d, i) => {
+        const isActive = i === currentDay;
+        const isCompleted = progress[`day_${d.day}`] === 'done';
+        return `
+          <div class="day-row ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}" onclick="goToDay(${i})">
+            <div class="day-progress"></div>
+            <span class="day-num">D${d.day}</span>
+            <div class="day-info">
+              <div class="day-title-row">${d.title}</div>
+              </div>
+            <div class="day-check ${isCompleted ? 'done' : ''}">${isCompleted ? '✓' : ''}</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div class="sidebar-footer">
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" style="width:${pct}%"></div>
+      </div>
+      <div style="margin-top:6px">${completedCount}/${totalDays} days completed</div>
+    </div>
+  `;
 }
+
+function goToDay(i) {
+  currentDay = i;
+  activeTab = 'learn';
+  flashcardMode = false;
+  localStorage.setItem('jp_currentDay', currentDay);
+  localStorage.setItem('jp_activeTab', activeTab);
+  renderSidebar();
+  renderMain();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER TABS
+// ═══════════════════════════════════════════════════════════════
 
 function renderLearnTab(d) {
   return d.topics.map((t, ti) => `
@@ -1882,23 +2265,32 @@ function renderLearnTab(d) {
         <span class="topic-tag tag-${t.tag}">${t.tag}</span>
         <span class="topic-chevron">▶</span>
       </div>
-      <div class="topic-body">${t.body}</div>
+      <div class="topic-body"><div class="topic-body-inner">${t.body}</div></div>
     </div>
   `).join('');
 }
 
 function renderQATab(d) {
-  const qaCards = d.qa.map((item, qi) => `
-    <div class="qa-card" id="qa-${qi}">
-      <div class="qa-question" onclick="toggleQA(${qi})">
-        <span class="q-number">Q${qi+1}</span>
-        <span class="q-text">${item.q}</span>
-        <span class="difficulty ${item.d}">${item.d}</span>
-        <span class="q-chevron">▶</span>
+  const qaCards = d.qa.map((item, qi) => {
+    const key = `qa_${d.day}_${qi}`;
+    const status = progress[key] || '';
+    return `
+      <div class="qa-card ${status ? 'assessed-' + status : ''}" id="qa-${qi}">
+        <div class="qa-question" onclick="toggleQA(${qi})">
+          <span class="q-number">Q${qi+1}</span>
+          <span class="q-text">${item.q}</span>
+          <span class="difficulty ${item.d}">${item.d}</span>
+          <span class="q-chevron">▶</span>
+        </div>
+        <div class="qa-answer">${item.a}</div>
+        <div class="assess-bar">
+          <button class="assess-btn knew ${status === 'knew' ? 'active' : ''}" onclick="assessQA(event, ${d.day}, ${qi}, 'knew')">✓ Knew it</button>
+          <button class="assess-btn partial ${status === 'partial' ? 'active' : ''}" onclick="assessQA(event, ${d.day}, ${qi}, 'partial')">~ Partial</button>
+          <button class="assess-btn dont-know ${status === 'dont-know' ? 'active' : ''}" onclick="assessQA(event, ${d.day}, ${qi}, 'dont-know')">✗ Didn't know</button>
+        </div>
       </div>
-      <div class="qa-answer">${item.a}</div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 
   return `
     <div class="qa-list">${qaCards}</div>
@@ -1907,7 +2299,7 @@ function renderQATab(d) {
       <div class="ai-header">
         <div class="ai-dot"></div>
         <div class="ai-label">AI Evaluator</div>
-        <div class="ai-sublabel">Type your answer — get scored</div>
+        <div class="ai-sublabel">Type your answer — get scored locally</div>
       </div>
       <div class="ai-body">
         <select class="ai-select-q" id="ai-q-select">
@@ -2018,6 +2410,105 @@ function renderToolsTab() {
   `;
 }
 
+function renderReviewTab() {
+  const weakItems = [];
+  DAYS.forEach((d, di) => {
+    d.qa.forEach((q, qi) => {
+      const key = `qa_${d.day}_${qi}`;
+      if (progress[key] === 'dont-know' || progress[key] === 'partial') {
+        weakItems.push({ day: d.day, dayIndex: di, dayTitle: d.title, qIndex: qi, question: q.q, difficulty: q.d, status: progress[key] });
+      }
+    });
+  });
+
+  if (weakItems.length === 0) {
+    return `
+      <div class="review-empty">
+        <div class="review-empty-icon">🎉</div>
+        <h3>All caught up!</h3>
+        <p>You haven't marked any questions as "Partial" or "Didn't know" yet. Go through the Q&A tabs and self-assess honestly — that's how this review queue gets populated.</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div style="margin-bottom:16px">
+      <h2 style="font-size:18px;margin-bottom:4px">Review Queue</h2>
+      <p style="font-size:13px;color:var(--muted)">${weakItems.length} question${weakItems.length > 1 ? 's' : ''} need${weakItems.length === 1 ? 's' : ''} review</p>
+    </div>
+    <div class="review-list">
+      ${weakItems.map(item => `
+        <div class="review-card" onclick="goToDayAndQA(${item.dayIndex}, ${item.qIndex})">
+          <div class="review-status ${item.status}"></div>
+          <div class="review-info">
+            <div class="review-q">${item.question}</div>
+            <div class="review-meta">
+              <span class="review-day">Day ${item.day} · ${item.dayTitle}</span>
+              <span class="review-diff ${item.difficulty}">${item.difficulty}</span>
+            </div>
+          </div>
+          <button class="review-btn">Review →</button>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderFlashcardTab() {
+  if (flashcardItems.length === 0) {
+    // Build flashcard items from all Q&A
+    flashcardItems = [];
+    DAYS.forEach((d, di) => {
+      d.qa.forEach((q, qi) => {
+        flashcardItems.push({ dayIndex: di, qIndex: qi, question: q.q, answer: q.a, difficulty: q.d, day: d.day });
+      });
+    });
+    // Shuffle
+    for (let i = flashcardItems.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [flashcardItems[i], flashcardItems[j]] = [flashcardItems[j], flashcardItems[i]];
+    }
+    flashcardIndex = 0;
+  }
+
+  const item = flashcardItems[flashcardIndex];
+  if (!item) return '<div class="review-empty"><h3>No flashcards available</h3></div>';
+
+  return `
+    <div style="margin-bottom:16px;text-align:center">
+      <h2 style="font-size:18px;margin-bottom:4px">Flashcard Mode</h2>
+      <p style="font-size:13px;color:var(--muted)">Click the card to flip · Assess yourself honestly</p>
+    </div>
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard" onclick="toggleFlashcard()">
+        <div class="flash-front">
+          <div class="flash-difficulty ${item.difficulty}">${item.difficulty}</div>
+          <div class="flash-q">${item.question}</div>
+          <div class="flash-hint">Tap to reveal answer</div>
+        </div>
+        <div class="flash-back">
+          <div class="flash-difficulty ${item.difficulty}">${item.difficulty}</div>
+          <div class="flash-answer">${item.answer}</div>
+        </div>
+      </div>
+    </div>
+    <div class="flash-controls">
+      <button class="flash-btn flash-btn-wrong" onclick="flashcardRate('dont-know')">✗ Didn't know</button>
+      <button class="flash-btn flash-btn-partial" onclick="flashcardRate('partial')">~ Partial</button>
+      <button class="flash-btn flash-btn-correct" onclick="flashcardRate('knew')">✓ Knew it</button>
+    </div>
+    <div class="flash-nav">
+      <button class="flash-nav-btn" onclick="prevFlashcard()">←</button>
+      <span class="flash-counter">${flashcardIndex + 1} / ${flashcardItems.length}</span>
+      <button class="flash-nav-btn" onclick="nextFlashcard()">→</button>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER MAIN
+// ═══════════════════════════════════════════════════════════════
+
 function renderMain() {
   const d = DAYS[currentDay];
   const tabs = [
@@ -2025,9 +2516,12 @@ function renderMain() {
     {id:'qa',label:'❓ Q&A'},
     {id:'schedule',label:'⏱ Schedule'},
     {id:'tools',label:'🛠 Tools'},
+    {id:'review',label:'🔄 Review', badge: getReviewCount()},
+    {id:'flashcards',label:'🃏 Flashcards'},
   ];
+
   const tabBar = tabs.map(t =>
-    `<button class="tab-btn${activeTab===t.id?' active':''}" onclick="switchTab('${t.id}')">${t.label}</button>`
+    `<button class="tab-btn${activeTab===t.id?' active':''}" onclick="switchTab('${t.id}')">${t.label}${t.badge ? `<span class="tab-badge">${t.badge}</span>` : ''}</button>`
   ).join('');
 
   let tabContent = '';
@@ -2035,27 +2529,62 @@ function renderMain() {
   else if (activeTab === 'qa') tabContent = renderQATab(d);
   else if (activeTab === 'schedule') tabContent = renderScheduleTab(d);
   else if (activeTab === 'tools') tabContent = renderToolsTab();
+  else if (activeTab === 'review') tabContent = renderReviewTab();
+  else if (activeTab === 'flashcards') tabContent = renderFlashcardTab();
+
+  const isCompleted = progress[`day_${d.day}`] === 'done';
 
   document.getElementById('main').innerHTML = `
-    <div>
-      <div class="day-tag">Day ${d.day} · ${d.date}</div>
-      <div class="day-title">${d.title}</div>
-      <div class="day-desc">${d.desc}</div>
-      <div class="stats-row">
-        <span class="stat-chip">${d.topics.length} topics</span>
-        <span class="stat-chip">${d.qa.length} questions</span>
-        <span class="stat-chip easy">Easy: ${d.qa.filter(q=>q.d==='easy').length}</span>
-        <span class="stat-chip medium">Med: ${d.qa.filter(q=>q.d==='medium').length}</span>
-        <span class="stat-chip hard">Hard: ${d.qa.filter(q=>q.d==='hard').length}</span>
+    <div class="main-scroll">
+      <div class="main-inner fade-in">
+        <div class="day-hero">
+          <div class="day-hero-top">
+            <span class="day-tag">Day ${d.day}</span>
+          </div>
+          <h1>${d.title}</h1>
+          <div class="day-hero-desc">${d.desc}</div>
+          <div class="day-hero-actions">
+            <button class="hero-btn ${isCompleted ? 'hero-btn-success' : 'hero-btn-primary'}" onclick="markDayComplete(${d.day})">
+              ${isCompleted ? '✓ Completed' : 'Mark Day Complete'}
+            </button>
+            <button class="hero-btn hero-btn-secondary" onclick="printDay()">🖨 Print</button>
+            <button class="hero-btn hero-btn-secondary" onclick="expandAll()">📖 Expand All</button>
+            <button class="hero-btn hero-btn-secondary" onclick="collapseAll()">📕 Collapse All</button>
+          </div>
+          <div class="stats-row">
+            <span class="stat-chip">${d.topics.length} topics</span>
+            <span class="stat-chip">${d.qa.length} questions</span>
+            <span class="stat-chip easy">Easy: ${d.qa.filter(q=>q.d==='easy').length}</span>
+            <span class="stat-chip medium">Med: ${d.qa.filter(q=>q.d==='medium').length}</span>
+            <span class="stat-chip hard">Hard: ${d.qa.filter(q=>q.d==='hard').length}</span>
+          </div>
+        </div>
+        <div class="tab-bar">${tabBar}</div>
+        <div class="tab-content">${tabContent}</div>
       </div>
     </div>
-    <div class="tab-bar">${tabBar}</div>
-    <div class="tab-content">${tabContent}</div>
   `;
 }
 
+function getReviewCount() {
+  let count = 0;
+  DAYS.forEach(d => {
+    d.qa.forEach((q, qi) => {
+      const key = `qa_${d.day}_${qi}`;
+      if (progress[key] === 'dont-know' || progress[key] === 'partial') count++;
+    });
+  });
+  return count > 0 ? count : '';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INTERACTIONS
+// ═══════════════════════════════════════════════════════════════
+
 function switchTab(tab) {
   activeTab = tab;
+  localStorage.setItem('jp_activeTab', activeTab);
+  if (tab === 'flashcards') flashcardMode = true;
   renderMain();
 }
 
@@ -2067,53 +2596,271 @@ function toggleQA(qi) {
   document.getElementById(`qa-${qi}`).classList.toggle('open');
 }
 
-async function evaluateAnswer() {
+function assessQA(event, day, qi, rating) {
+  event.stopPropagation();
+  const key = `qa_${day}_${qi}`;
+  progress[key] = rating;
+  saveProgress(progress);
+  renderMain();
+  renderSidebar();
+}
+
+function markDayComplete(day) {
+  const key = `day_${day}`;
+  if (progress[key] === 'done') {
+    delete progress[key];
+  } else {
+    progress[key] = 'done';
+  }
+  saveProgress(progress);
+  renderSidebar();
+  renderMain();
+}
+
+function expandAll() {
+  document.querySelectorAll('.topic-card').forEach(c => c.classList.add('open'));
+  document.querySelectorAll('.qa-card').forEach(c => c.classList.add('open'));
+}
+
+function collapseAll() {
+  document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.qa-card').forEach(c => c.classList.remove('open'));
+}
+
+function printDay() {
+  window.print();
+}
+
+function goToDayAndQA(dayIndex, qIndex) {
+  currentDay = dayIndex;
+  activeTab = 'qa';
+  localStorage.setItem('jp_currentDay', currentDay);
+  localStorage.setItem('jp_activeTab', activeTab);
+  renderSidebar();
+  renderMain();
+  setTimeout(() => {
+    const el = document.getElementById(`qa-${qIndex}`);
+    if (el) {
+      el.classList.add('open');
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 100);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FLASHCARDS
+// ═══════════════════════════════════════════════════════════════
+
+function toggleFlashcard() {
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextFlashcard() {
+  if (flashcardIndex < flashcardItems.length - 1) {
+    flashcardIndex++;
+    renderMain();
+  }
+}
+
+function prevFlashcard() {
+  if (flashcardIndex > 0) {
+    flashcardIndex--;
+    renderMain();
+  }
+}
+
+function flashcardRate(rating) {
+  const item = flashcardItems[flashcardIndex];
+  if (item) {
+    const key = `qa_${item.day}_${item.qIndex}`;
+    progress[key] = rating;
+    saveProgress(progress);
+  }
+  nextFlashcard();
+  renderSidebar();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AI EVALUATOR (LOCAL — NO API KEY NEEDED)
+// ═══════════════════════════════════════════════════════════════
+
+function evaluateAnswer() {
   const d = DAYS[currentDay];
   const qIndex = parseInt(document.getElementById('ai-q-select').value);
   const userAnswer = document.getElementById('ai-answer').value.trim();
   const btn = document.getElementById('ai-eval-btn');
   const responseDiv = document.getElementById('ai-response');
+
   if (!userAnswer) { alert('Please type your answer first.'); return; }
-  btn.disabled = true; btn.textContent = 'Evaluating...';
-  responseDiv.style.display = 'block'; responseDiv.textContent = 'Thinking...';
-  const question = d.qa[qIndex].q;
-  const ref = d.qa[qIndex].a.replace(/<[^>]+>/g, '');
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6', max_tokens: 1000,
-        messages: [{ role: 'user', content:
-`You are a senior Java/Spring Boot interview coach. Candidate has 7 YOE.
 
-Question: ${question}
-Reference concepts: ${ref}
-Candidate's answer: ${userAnswer}
+  btn.disabled = true;
+  btn.textContent = 'Evaluating...';
+  responseDiv.style.display = 'block';
+  responseDiv.textContent = 'Analyzing...';
 
-Evaluate in this exact format:
-Score: X/10
+  // Simulate processing delay for UX
+  setTimeout(() => {
+    const question = d.qa[qIndex].q;
+    const refText = stripHtml(d.qa[qIndex].a).toLowerCase();
+    const userText = userAnswer.toLowerCase();
 
-Strengths:
-- [what they got right]
+    // Extract key terms from reference
+    const keyTerms = extractKeyTerms(refText);
+    const matchedTerms = keyTerms.filter(term => userText.includes(term));
+    const coverage = keyTerms.length > 0 ? matchedTerms.length / keyTerms.length : 0;
 
-Gaps / Missing:
-- [what was missing or wrong — be specific]
+    // Length check
+    const wordCount = userAnswer.split(/\s+/).length;
+    const lengthScore = Math.min(wordCount / 30, 1); // expect ~30+ words for a good answer
 
-One tip:
-[Single most important improvement]
+    // Structure check
+    const hasStructure = /\n|\. |\d\./.test(userAnswer);
+    const structureBonus = hasStructure ? 0.5 : 0;
 
-Be direct. Be specific. Don't pad.` }]
-      })
-    });
-    const data = await res.json();
-    responseDiv.textContent = data.content.map(c => c.text||'').join('');
-  } catch(e) { responseDiv.textContent = 'Error. Please try again.'; }
-  btn.disabled = false; btn.textContent = 'Evaluate My Answer';
+    // Calculate score
+    let score = Math.round((coverage * 6 + lengthScore * 2 + structureBonus) * 10) / 10;
+    score = Math.min(Math.max(score, 1), 10);
+
+    // Generate feedback
+    let feedback = '';
+    let strengths = [];
+    let gaps = [];
+
+    if (coverage > 0.5) strengths.push('Good coverage of key concepts');
+    if (coverage > 0.3) strengths.push('You hit several important points');
+    if (wordCount > 20) strengths.push('Answer has sufficient depth');
+    if (hasStructure) strengths.push('Well-structured response');
+
+    if (coverage < 0.3) gaps.push('Missing most key concepts from the reference answer');
+    else if (coverage < 0.6) gaps.push('Missing some key concepts — review the reference answer');
+    if (wordCount < 15) gaps.push('Answer is too brief — aim for 2-3 sentences minimum');
+    if (!hasStructure) gaps.push('Consider structuring your answer with bullet points or clear sections');
+
+    // Missing specific terms
+    const missingTerms = keyTerms.filter(term => !userText.includes(term)).slice(0, 5);
+    if (missingTerms.length > 0 && coverage < 0.7) {
+      gaps.push(`Key terms to include: ${missingTerms.join(', ')}`);
+    }
+
+    if (strengths.length === 0) strengths.push('Attempted the question — good start!');
+
+    feedback = `Score: ${score}/10\n\n`;
+    feedback += 'Strengths:\n';
+    strengths.forEach(s => feedback += `  ✓ ${s}\n`);
+    feedback += '\nGaps / Missing:\n';
+    gaps.forEach(g => feedback += `  • ${g}\n`);
+    feedback += '\nOne tip:\n';
+    if (score >= 8) feedback += '  🌟 Strong answer! Practice saying this out loud to build fluency.';
+    else if (score >= 5) feedback += '  💡 Good foundation. Focus on the missing concepts and try again.';
+    else feedback += '  📚 Review the topic thoroughly, then attempt again with the reference answer hidden.';
+
+    responseDiv.textContent = feedback;
+    btn.disabled = false;
+    btn.textContent = 'Evaluate My Answer';
+
+    // Auto-mark based on score
+    const assessKey = `qa_${d.day}_${qIndex}`;
+    if (score >= 8) progress[assessKey] = 'knew';
+    else if (score >= 5) progress[assessKey] = 'partial';
+    else progress[assessKey] = 'dont-know';
+    saveProgress(progress);
+    renderSidebar();
+  }, 600);
 }
+
+function extractKeyTerms(text) {
+  // Extract meaningful technical terms (2+ chars, not common words)
+  const commonWords = new Set(['the','and','for','are','but','not','you','all','can','had','her','was','one','our','out','day','get','has','him','his','how','its','may','new','now','old','see','two','who','boy','did','she','use','her','way','many','oil','sit','set','run','eat','far','sea','eye','ago','off','too','any','say','man','try','ask','end','why','let','put','say','she','try','way','own','say','too','old','tell','very','when','come','here','just','like','long','make','over','such','take','than','them','well','were','with','have','from','they','know','want','been','good','much','some','time','very','when','come','here','just','like','long','make','over','such','take','than','them','well','were','with','have','from','they','know','want','been','good','much','some','time']);
+  const words = text.split(/[^a-z]+/).filter(w => w.length >= 3 && !commonWords.has(w));
+  const unique = [...new Set(words)];
+  return unique.slice(0, 15); // top 15 unique terms
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════════════════════
+
+function setupSearch() {
+  const input = document.getElementById('searchInput');
+  const results = document.getElementById('searchResults');
+
+  input.addEventListener('input', (e) => {
+    const query = e.target.value.trim().toLowerCase();
+    if (query.length < 2) {
+      results.classList.remove('active');
+      return;
+    }
+
+    const matches = searchIndex.filter(item =>
+      item.text.toLowerCase().includes(query) ||
+      item.title.toLowerCase().includes(query)
+    ).slice(0, 10);
+
+    if (matches.length === 0) {
+      results.innerHTML = '<div class="search-item"><div class="search-item-text" style="color:var(--muted)">No results found</div></div>';
+    } else {
+      results.innerHTML = matches.map(m => `
+        <div class="search-item" onclick="goToSearchResult(${m.day}, '${m.type}', ${m.id.split('-').pop()})">
+          <div class="search-item-day">Day ${m.dayNum} · ${m.dayTitle}</div>
+          <div class="search-item-text">${highlightQuery(m.title, query)}</div>
+          <div class="search-item-type">${m.type === 'topic' ? '📖 Topic' : '❓ Q&A'}</div>
+        </div>
+      `).join('');
+    }
+    results.classList.add('active');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search-wrap')) {
+      results.classList.remove('active');
+    }
+  });
+}
+
+function highlightQuery(text, query) {
+  const regex = new RegExp(`(${query})`, 'gi');
+  return text.replace(regex, '<mark style="background:rgba(96,165,250,0.3);color:var(--accent);border-radius:2px;padding:0 2px">$1</mark>');
+}
+
+function goToSearchResult(dayIndex, type, itemIndex) {
+  currentDay = dayIndex;
+  activeTab = type === 'topic' ? 'learn' : 'qa';
+  localStorage.setItem('jp_currentDay', currentDay);
+  localStorage.setItem('jp_activeTab', activeTab);
+  renderSidebar();
+  renderMain();
+  setTimeout(() => {
+    const el = document.getElementById(`${type === 'topic' ? 'topic' : 'qa'}-${itemIndex}`);
+    if (el) {
+      el.classList.add('open');
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 100);
+  document.getElementById('searchResults').classList.remove('active');
+  document.getElementById('searchInput').value = '';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════
+
+function copyCode(btn) {
+  const block = btn.closest('.code-block').querySelector('.code-body');
+  const text = block.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = original, 1500);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
 
 renderSidebar();
 renderMain();
+setupSearch();
 </script>
 </body>
 </html>
