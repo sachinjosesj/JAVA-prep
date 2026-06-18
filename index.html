@@ -3,24 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Java Interview Prep</title>
+<title>Java Interview Prep — Enhanced</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
   :root{
-    --bg:#0a0c10;--surface:#11141a;--surface2:#181b23;--surface3:#1e2230;--border:#252a3a;
-    --accent:#60a5fa;--accent2:#4ade80;--accent3:#f472b6;--warn:#fbbf24;--danger:#f87171;
-    --text:#f1f5f9;--text2:#cbd5e1;--muted:#64748b;--tag-bg:#1e3a5f;
-    --success-bg:#0f2e1e;--success-text:#86efac;--warning-bg:#2a2000;--warning-text:#fde047;
-    --error-bg:#2a1215;--error-text:#fca5a5;--info-bg:#0f2544;--info-text:#93c5fd;
-    --shadow:0 4px 6px -1px rgba(0,0,0,0.3),0 2px 4px -2px rgba(0,0,0,0.3);
-    --shadow-lg:0 10px 15px -3px rgba(0,0,0,0.4),0 4px 6px -4px rgba(0,0,0,0.4);
+    --bg:#000000;--surface:#0a0a0a;--surface2:#111111;--surface3:#161616;--border:#1a1a1a;
+    --accent:#3b82f6;--accent2:#22c55e;--accent3:#ec4899;--warn:#eab308;--danger:#ef4444;
+    --text:#f8fafc;--text2:#94a3b8;--muted:#475569;--tag-bg:#0f172a;
+    --success-bg:#052e16;--success-text:#4ade80;--warning-bg:#422006;--warning-text:#facc15;
+    --error-bg:#450a0a;--error-text:#fca5a5;--info-bg:#0c1e3a;--info-text:#60a5fa;
+    --shadow:0 4px 6px -1px rgba(0,0,0,0.5),0 2px 4px -2px rgba(0,0,0,0.5);
+    --shadow-lg:0 10px 15px -3px rgba(0,0,0,0.6),0 4px 6px -4px rgba(0,0,0,0.6);
     --radius:10px;--radius-sm:6px;
+    --theme-transition:background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  [data-theme="light"]{
+    --bg:#ffffff;--surface:#fafafa;--surface2:#f5f5f5;--surface3:#eeeeee;--border:#e5e5e5;
+    --accent:#2563eb;--accent2:#16a34a;--accent3:#db2777;--warn:#ca8a04;--danger:#dc2626;
+    --text:#0f172a;--text2:#334155;--muted:#64748b;--tag-bg:#eff6ff;
+    --success-bg:#dcfce7;--success-text:#166534;--warning-bg:#fef9c3;--warning-text:#854d0e;
+    --error-bg:#fee2e2;--error-text:#991b1b;--info-bg:#dbeafe;--info-text:#1e40af;
+    --shadow:0 4px 6px -1px rgba(0,0,0,0.06),0 2px 4px -2px rgba(0,0,0,0.06);
+    --shadow-lg:0 10px 15px -3px rgba(0,0,0,0.08),0 4px 6px -4px rgba(0,0,0,0.08);
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
-  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden}
+  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden;transition:var(--theme-transition)}
 
   /* HEADER */
   header{
@@ -29,11 +39,2957 @@
     background:linear-gradient(180deg,var(--surface) 0%,var(--bg) 100%);
     position:relative;z-index:100;
   }
+  .theme-toggle{
+    width:36px;height:36px;border-radius:50%;border:1px solid var(--border);
+    background:var(--surface2);color:var(--text2);cursor:pointer;display:flex;
+    align-items:center;justify-content:center;font-size:16px;transition:all .3s ease;
+    margin-left:8px;flex-shrink:0;
+  }
+  .theme-toggle:hover{
+    transform:rotate(20deg) scale(1.1);
+    border-color:var(--accent);
+    box-shadow:0 0 12px rgba(59,130,246,0.3);
+  }
   .logo{
     font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;
     color:var(--accent);background:var(--tag-bg);padding:5px 12px;border-radius:var(--radius-sm);
     border:1px solid rgba(96,165,250,0.2);display:flex;align-items:center;gap:6px;
   }
+  .logo::before{content:'◆';font-size:10px;opacity:0.7}
+  .header-title{font-size:15px;font-weight:700;letter-spacing:-0.3px}
+  .header-sub{font-size:12px;color:var(--muted);margin-left:auto;display:flex;align-items:center;gap:8px}
+  .header-sub .dot{width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite}
+
+  /* SEARCH BAR */
+  .search-wrap{
+    position:relative;margin-left:20px;flex:0 0 280px;
+  }
+  .search-input{
+    width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:7px 14px 7px 36px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;
+    outline:none;transition:all .2s;
+  }
+  .search-input:focus{border-color:var(--accent);background:var(--surface3);box-shadow:0 0 0 3px rgba(96,165,250,0.1)}
+  .search-wrap::before{content:'🔍';position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:12px;opacity:0.5}
+  .search-results{transition:opacity .2s ease, var(--theme-transition);
+    position:absolute;top:calc(100% + 6px);left:0;right:0;background:var(--surface2);
+    border:1px solid var(--border);border-radius:var(--radius-sm);max-height:320px;overflow-y:auto;
+    display:none;z-index:200;box-shadow:var(--shadow-lg);
+  }
+  .search-results.active{display:block}
+  .search-item{padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+  .search-item:hover{background:var(--surface3)}
+  .search-item:last-child{border-bottom:none}
+  .search-item-day{font-size:10px;color:var(--accent);font-family:'JetBrains Mono',monospace;margin-bottom:2px}
+  .search-item-text{font-size:12px;color:var(--text2);line-height:1.4}
+  .search-item-type{font-size:10px;color:var(--muted);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px}
+
+  /* LAYOUT */
+  .layout{display:flex;flex:1;height:calc(100vh - 60px);overflow:hidden}
+
+  /* SIDEBAR */
+  .sidebar{transition:var(--theme-transition);
+    width:260px;min-width:260px;background:var(--surface);border-right:1px solid var(--border);
+    display:flex;flex-direction:column;overflow:hidden;
+  }
+  .sidebar-header{
+    padding:16px 16px 8px;display:flex;align-items:center;justify-content:space-between;
+  }
+  .sidebar-label{font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase}
+  .progress-pill{
+    font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--accent2);
+    background:var(--success-bg);padding:2px 8px;border-radius:20px;border:1px solid rgba(74,222,128,0.15);
+  }
+  .sidebar-scroll{flex:1;overflow-y:auto;padding:0 8px 12px}
+  .day-row{
+    display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:2px;
+    border-radius:var(--radius-sm);cursor:pointer;transition:all .15s;
+    border:1px solid transparent;position:relative;
+  }
+  .day-row:hover{background:var(--surface2);border-color:rgba(255,255,255,0.04)}
+  .day-row.active{background:var(--surface3);border-color:rgba(59,130,246,0.25);box-shadow:0 0 16px rgba(59,130,246,0.08)}
+  .day-row.active .day-num{background:var(--tag-bg);color:var(--accent)}
+  .day-row.completed .day-check{opacity:1}
+  .day-row.completed .day-num{background:var(--success-bg);color:var(--success-text)}
+  .day-num{
+    font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
+    background:var(--surface3);color:var(--muted);padding:3px 6px;border-radius:4px;min-width:28px;text-align:center;
+    transition:all .15s;
+  }
+  .day-info{flex:1;min-width:0}
+  .day-title-row{font-size:12px;font-weight:600;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .day-row.active .day-title-row{color:var(--accent)}
+  .day-date{font-size:10px;color:var(--muted);margin-top:1px}
+  .day-check{
+    width:18px;height:18px;border-radius:50%;border:2px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--accent2);
+    opacity:0;transition:opacity .2s;flex-shrink:0;
+  }
+  .day-check.done{background:var(--success-bg);border-color:var(--accent2);opacity:1}
+  .day-progress{
+    position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:var(--radius-sm) 0 0 var(--radius-sm);
+    background:transparent;transition:background .2s;
+  }
+  .day-row.active .day-progress{background:var(--accent)}
+  .day-row.completed .day-progress{background:var(--accent2)}
+  .sidebar-footer{
+    padding:12px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);text-align:center;
+  }
+
+  /* MAIN */
+  .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+  .main-scroll{flex:1;overflow-y:auto;padding:24px 28px}
+  .main-inner{max-width:900px;margin:0 auto}
+
+  /* DAY HEADER */
+  .day-hero{
+    background:linear-gradient(135deg,var(--surface) 0%,var(--surface2) 100%);
+    border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;
+    margin-bottom:24px;position:relative;overflow:hidden;
+  }
+  .day-hero::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+    background:linear-gradient(90deg,var(--accent),var(--accent3));
+  }
+  .day-hero-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap}
+  .day-tag{
+    font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    color:var(--accent);font-family:'JetBrains Mono',monospace;
+    background:var(--tag-bg);padding:3px 10px;border-radius:20px;
+  }
+  .day-hero h1{font-size:26px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px}
+  .day-hero-desc{font-size:14px;color:var(--muted);line-height:1.6;max-width:600px}
+  .day-hero-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+  .hero-btn{transition:all .2s ease, var(--theme-transition);
+    padding:7px 16px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;
+    font-family:'Inter',sans-serif;cursor:pointer;transition:all .15s;border:none;
+    display:flex;align-items:center;gap:6px;
+  }
+  .hero-btn-primary{background:var(--accent);color:#0a0c10}
+  .hero-btn-primary:hover{opacity:0.85;transform:translateY(-1px)}
+  .hero-btn-secondary{background:var(--surface3);color:var(--text2);border:1px solid var(--border)}
+  .hero-btn-secondary:hover{background:var(--surface2)}
+  .hero-btn-success{background:var(--success-bg);color:var(--success-text);border:1px solid rgba(74,222,128,0.2)}
+  .hero-btn-success:hover{opacity:0.85}
+
+  .stats-row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .stat-chip{
+    font-size:11px;font-family:'JetBrains Mono',monospace;padding:4px 10px;
+    border-radius:20px;border:1px solid var(--border);color:var(--muted);background:var(--surface2);
+    display:flex;align-items:center;gap:5px;
+  }
+  .stat-chip.easy{border-color:rgba(74,222,128,0.25);color:var(--accent2);background:rgba(74,222,128,0.05)}
+  .stat-chip.medium{border-color:rgba(251,191,36,0.25);color:var(--warn);background:rgba(251,191,36,0.05)}
+  .stat-chip.hard{border-color:rgba(248,113,113,0.25);color:var(--danger);background:rgba(248,113,113,0.05)}
+
+  /* TABS */
+  .tab-bar{display:flex;gap:4px;margin:0 0 20px;border-bottom:1px solid var(--border);padding:0 2px;transition:var(--theme-transition)}
+  .tab-btn{transition:all .2s ease, var(--theme-transition);
+    padding:9px 18px;background:none;border:none;border-bottom:2px solid transparent;
+    color:var(--muted);font-size:13px;font-family:'Inter',sans-serif;font-weight:500;
+    cursor:pointer;margin-bottom:-1px;transition:all .15s;white-space:nowrap;
+    display:flex;align-items:center;gap:6px;border-radius:var(--radius-sm) var(--radius-sm) 0 0;
+  }
+  .tab-btn:hover{color:var(--text);background:rgba(255,255,255,0.02)}
+  .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(96,165,250,0.05)}
+  .tab-badge{
+    font-size:9px;font-weight:700;padding:1px 5px;border-radius:10px;background:var(--surface3);color:var(--muted);min-width:18px;text-align:center;
+  }
+  .tab-btn.active .tab-badge{background:var(--tag-bg);color:var(--accent)}
+
+  /* TOPIC CARDS */
+  .topic-card{transition:all .3s ease, var(--theme-transition);
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;margin-bottom:12px;transition:all .2s;position:relative;
+  }
+  .topic-card:hover{border-color:#2d3347}
+  .topic-card.open{border-color:rgba(59,130,246,0.3);box-shadow:0 0 20px rgba(59,130,246,0.06)}
+  .topic-card.open .topic-chevron{transform:rotate(90deg)}
+  .topic-header{
+    padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;user-select:none;
+  }
+  .topic-header:hover{background:var(--surface2)}
+  .topic-num{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+    min-width:22px;text-align:center;font-weight:600;
+  }
+  .topic-title{font-size:14px;font-weight:600;flex:1}
+  .topic-tag{
+    font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;
+    text-transform:uppercase;letter-spacing:0.6px;white-space:nowrap;
+  }
+  .tag-concept{background:#1a2f5c;color:#93c5fd;border:1px solid rgba(147,197,253,0.15)}
+  .tag-code{background:#1a3a2a;color:#86efac;border:1px solid rgba(134,239,172,0.15)}
+  .tag-pattern{background:#3a2a00;color:#fde047;border:1px solid rgba(253,224,71,0.15)}
+  .tag-gotcha{background:#3a1515;color:#fca5a5;border:1px solid rgba(252,165,165,0.15)}
+  .topic-chevron{color:var(--muted);font-size:11px;transition:transform .2s;flex-shrink:0}
+  .topic-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border)}
+  .topic-card.open .topic-body{display:block}
+  .topic-body-inner{padding-top:16px}
+
+  .topic-intro{font-size:13.5px;color:var(--text2);line-height:1.85}
+  .topic-intro p{margin-bottom:12px}
+  .topic-intro ul{padding-left:20px;margin:10px 0}
+  .topic-intro ul li{margin-bottom:6px}
+  .topic-intro ol{padding-left:20px;margin:10px 0}
+  .topic-intro ol li{margin-bottom:6px}
+  .topic-intro b,.topic-intro strong{color:var(--text);font-weight:600}
+  .topic-intro code{
+    font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface3);
+    padding:2px 6px;border-radius:4px;color:var(--accent);border:1px solid var(--border);
+  }
+
+  /* CODE BLOCK */
+  .code-block{
+    background:#07090d;border:1px solid #1a1f2e;border-radius:var(--radius-sm);
+    margin:14px 0;overflow:hidden;position:relative;
+  }
+  .code-label{
+    font-size:10px;font-weight:600;color:var(--muted);padding:8px 14px;
+    background:var(--surface2);border-bottom:1px solid #1a1f2e;
+    letter-spacing:0.5px;font-family:'JetBrains Mono',monospace;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .code-copy{
+    font-size:10px;color:var(--muted);cursor:pointer;transition:color .15s;
+    background:none;border:none;font-family:'Inter',sans-serif;
+  }
+  .code-copy:hover{color:var(--accent)}
+  .code-body{
+    padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:12.5px;
+    line-height:1.8;overflow-x:auto;color:#e2e8f0;white-space:pre;
+  }
+  .kw{color:#f472b6} .cl{color:#fbbf24} .fn{color:#a78bfa}
+  .st{color:#7dd3fc} .cm{color:#475569;font-style:italic}
+  .an{color:#60a5fa} .nm{color:#fb923c}
+
+  /* CALLOUTS */
+  .callout{transition:var(--theme-transition);
+    border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:12px 16px;
+    margin:14px 0;font-size:13px;line-height:1.7;border-left:3px solid;
+  }
+  .callout-tip{background:var(--success-bg);border-color:var(--accent2);color:var(--success-text)}
+  .callout-warn{background:var(--warning-bg);border-color:var(--warn);color:var(--warning-text)}
+  .callout-info{background:var(--info-bg);border-color:var(--accent);color:var(--info-text)}
+  .callout-danger{background:var(--error-bg);border-color:var(--danger);color:var(--error-text)}
+  .callout b{font-weight:700}
+
+  /* CONCEPT GRID */
+  .concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+  .concept-cell{transition:all .2s ease, var(--theme-transition);
+    background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;
+    transition:all .15s;
+  }
+  .concept-cell:hover{border-color:#2d3347}
+  .concept-cell-label{
+    font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:6px;
+  }
+  .concept-cell-val{font-size:12.5px;line-height:1.6;color:var(--text2)}
+
+  /* COMPARISON TABLE */
+  .cmp-table{transition:var(--theme-transition);width:100%;border-collapse:collapse;margin:14px 0;font-size:12.5px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--border)}
+  .cmp-table th{transition:var(--theme-transition);
+    background:var(--surface2);padding:10px 12px;text-align:left;font-weight:600;
+    font-size:11px;color:var(--muted);border-bottom:1px solid var(--border);
+  }
+  .cmp-table td{transition:var(--theme-transition);padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6;color:var(--text2)}
+  .cmp-table tr:last-child td{border-bottom:none}
+  .cmp-table tr:hover td{background:rgba(255,255,255,0.01)}
+
+  /* Q&A */
+  .qa-list{display:flex;flex-direction:column;gap:10px}
+  .qa-card{transition:all .3s ease, var(--theme-transition);
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    overflow:hidden;transition:all .2s;position:relative;
+  }
+  .qa-card:hover{border-color:#2d3347}
+  .qa-card.open{border-color:rgba(59,130,246,0.3);box-shadow:0 0 20px rgba(59,130,246,0.06)}
+  .qa-card.open .q-chevron{transform:rotate(90deg)}
+  .qa-question{
+    padding:14px 18px;cursor:pointer;display:flex;align-items:flex-start;gap:12px;user-select:none;
+  }
+  .q-number{
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+    min-width:26px;padding-top:2px;font-weight:600;
+  }
+  .q-text{font-size:13.5px;font-weight:600;flex:1;line-height:1.5;color:var(--text2)}
+  .q-chevron{color:var(--muted);font-size:11px;margin-top:3px;transition:transform .2s;flex-shrink:0}
+  .qa-answer{
+    display:none;padding:0 18px 18px 56px;font-size:13.5px;line-height:1.8;
+    color:var(--text2);border-top:1px solid var(--border);padding-top:14px;
+  }
+  .qa-card.open .qa-answer{display:block}
+  .qa-answer code{
+    font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface3);
+    padding:2px 6px;border-radius:4px;color:var(--accent);border:1px solid var(--border);
+  }
+  .qa-answer pre{
+    background:var(--surface3);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:12px 14px;overflow-x:auto;margin:10px 0;font-family:'JetBrains Mono',monospace;
+    font-size:12px;color:var(--accent);line-height:1.7;
+  }
+  .qa-answer ul{padding-left:18px;margin:8px 0}
+  .qa-answer ul li{margin-bottom:5px}
+  .qa-answer .tip{
+    background:var(--success-bg);border-left:3px solid var(--accent2);
+    padding:8px 12px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-top:10px;
+    font-size:12.5px;color:var(--success-text);
+  }
+  .qa-answer .note{
+    background:var(--warning-bg);border-left:3px solid var(--warn);
+    padding:8px 12px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-top:10px;
+    font-size:12.5px;color:var(--warning-text);
+  }
+  .difficulty{
+    font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:0.5px;
+    text-transform:uppercase;margin-left:auto;white-space:nowrap;border:1px solid;
+  }
+  .difficulty.easy{background:var(--success-bg);color:var(--success-text);border-color:rgba(74,222,128,0.2)}
+  .difficulty.medium{background:var(--warning-bg);color:var(--warning-text);border-color:rgba(251,191,36,0.2)}
+  .difficulty.hard{background:var(--error-bg);color:var(--error-text);border-color:rgba(248,113,113,0.2)}
+
+  /* SELF-ASSESSMENT */
+  .assess-bar{
+    display:flex;gap:6px;margin-top:10px;padding-left:56px;
+  }
+  .assess-btn{transition:all .2s ease, var(--theme-transition);
+    padding:5px 14px;border-radius:var(--radius-sm);font-size:11px;font-weight:600;
+    cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--muted);
+    transition:all .15s;font-family:'Inter',sans-serif;
+  }
+  .assess-btn:hover{transform:translateY(-1px)}
+  .assess-btn.knew{border-color:rgba(74,222,128,0.3);color:var(--accent2)}
+  .assess-btn.knew:hover,.assess-btn.knew.active{background:var(--success-bg);color:var(--success-text)}
+  .assess-btn.partial{border-color:rgba(251,191,36,0.3);color:var(--warn)}
+  .assess-btn.partial:hover,.assess-btn.partial.active{background:var(--warning-bg);color:var(--warning-text)}
+  .assess-btn.dont-know{border-color:rgba(248,113,113,0.3);color:var(--danger)}
+  .assess-btn.dont-know:hover,.assess-btn.dont-know.active{background:var(--error-bg);color:var(--error-text)}
+
+  /* AI EVAL (FIXED) */
+  .ai-section{transition:var(--theme-transition);
+    margin-top:28px;background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);overflow:hidden;
+  }
+  .ai-header{
+    padding:14px 18px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:10px;
+  }
+  .ai-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+  .ai-label{font-size:14px;font-weight:700;color:var(--accent)}
+  .ai-sublabel{font-size:11px;color:var(--muted);margin-left:auto}
+  .ai-body{padding:18px}
+  .ai-select-q{transition:all .2s ease, var(--theme-transition);
+    width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);
+    font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;border-radius:var(--radius-sm);
+    margin-bottom:10px;outline:none;cursor:pointer;transition:all .2s;
+  }
+  .ai-select-q:focus{border-color:var(--accent)}
+  .ai-textarea{transition:all .2s ease, var(--theme-transition);
+    width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:13.5px;
+    resize:vertical;min-height:100px;outline:none;transition:all .2s;line-height:1.7;
+  }
+  .ai-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(96,165,250,0.08)}
+  .ai-textarea::placeholder{color:var(--muted)}
+  .ai-btn{
+    margin-top:10px;padding:9px 20px;background:var(--accent);color:#0a0c10;
+    border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;
+    font-size:13px;font-weight:700;cursor:pointer;transition:all .15s;
+    display:flex;align-items:center;gap:6px;
+  }
+  .ai-btn:hover{opacity:0.85;transform:translateY(-1px)}
+  .ai-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+  .ai-response{transition:var(--theme-transition);
+    margin-top:14px;background:var(--surface2);border:1px solid var(--border);
+    border-radius:var(--radius-sm);padding:14px 16px;font-size:13px;line-height:1.8;
+    color:var(--text2);display:none;white-space:pre-wrap;
+  }
+  .ai-score{
+    font-size:28px;font-weight:800;color:var(--accent);font-family:'JetBrains Mono',monospace;
+    margin-bottom:8px;
+  }
+  .ai-section-title{
+    font-size:12px;font-weight:700;color:var(--text);text-transform:uppercase;letter-spacing:0.8px;
+    margin:14px 0 6px;border-bottom:1px solid var(--border);padding-bottom:4px;
+  }
+
+  /* SCHEDULE */
+  .schedule-section{display:flex;flex-direction:column;gap:16px}
+  .schedule-card{transition:var(--theme-transition);
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+  }
+  .schedule-card-header{
+    padding:14px 18px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:10px;
+  }
+  .schedule-card-title{font-size:14px;font-weight:700}
+  .schedule-badge{
+    font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;
+    letter-spacing:0.5px;text-transform:uppercase;margin-left:auto;
+  }
+  .badge-week1{background:var(--tag-bg);color:var(--accent)}
+  .badge-week2{background:var(--success-bg);color:var(--accent2)}
+  .badge-rule{background:var(--warning-bg);color:var(--warn)}
+  .schedule-table{width:100%;border-collapse:collapse}
+  .schedule-table tr:not(:last-child) td{border-bottom:1px solid var(--border)}
+  .schedule-table td{padding:11px 18px;font-size:13.5px;vertical-align:top}
+  .schedule-table td:first-child{color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:11.5px;width:55%}
+  .schedule-table td:last-child{font-weight:600;color:var(--text2)}
+  .schedule-table tr.total-row td{background:var(--surface2);font-weight:700}
+  .schedule-table tr.total-row td:last-child{color:var(--accent)}
+  .split-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px}
+  .split-card{transition:all .2s ease, var(--theme-transition);
+    background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;
+    transition:all .15s;
+  }
+  .split-card:hover{border-color:#2d3347}
+  .split-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .split-hours{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:800;color:var(--accent)}
+  .split-desc{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.5}
+  .rule-box{padding:16px 18px}
+  .rule-item{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border)}
+  .rule-item:last-child{border-bottom:none;padding-bottom:0}
+  .rule-icon{font-size:18px;min-width:26px;text-align:center;flex-shrink:0}
+  .rule-text{font-size:12.5px;line-height:1.6}
+  .rule-text strong{color:var(--text);font-weight:600}
+  .rule-text span{color:var(--muted)}
+
+  /* TOOLS */
+  .tools-section{display:flex;flex-direction:column;gap:20px}
+  .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .tool-card{transition:all .3s ease, var(--theme-transition);
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:18px;display:flex;flex-direction:column;gap:8px;transition:all .15s;
+  }
+  .tool-card:hover{border-color:#2d3347;transform:translateY(-2px);box-shadow:var(--shadow)}
+  .tool-header{display:flex;align-items:center;gap:10px}
+  .tool-icon{font-size:22px}
+  .tool-name{font-size:14px;font-weight:700}
+  .tool-cat{
+    font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;margin-left:auto;
+    text-transform:uppercase;letter-spacing:0.5px;
+  }
+  .cat-practice{background:var(--tag-bg);color:var(--accent)}
+  .cat-learn{background:var(--success-bg);color:var(--accent2)}
+  .cat-setup{background:var(--warning-bg);color:var(--warn)}
+  .cat-ref{background:#1d1d3d;color:var(--accent3)}
+  .tool-desc{font-size:12.5px;color:var(--muted);line-height:1.6}
+  .tool-why{font-size:12.5px;color:var(--text2);line-height:1.6}
+  .tool-link{
+    display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--accent);
+    text-decoration:none;margin-top:4px;font-weight:600;transition:opacity .15s;
+  }
+  .tool-link:hover{opacity:0.7;text-decoration:underline}
+
+  /* REVIEW TAB */
+  .review-empty{
+    text-align:center;padding:60px 20px;color:var(--muted);
+  }
+  .review-empty-icon{font-size:48px;margin-bottom:16px;opacity:0.5}
+  .review-empty h3{font-size:18px;color:var(--text);margin-bottom:8px}
+  .review-empty p{font-size:14px;line-height:1.6;max-width:400px;margin:0 auto}
+  .review-list{display:flex;flex-direction:column;gap:10px}
+  .review-card{transition:all .3s ease, var(--theme-transition);
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:14px 18px;display:flex;align-items:center;gap:14px;cursor:pointer;
+    transition:all .15s;
+  }
+  .review-card:hover{border-color:#2d3347;background:var(--surface2)}
+  .review-status{
+    width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  }
+  .review-status.dont-know{background:var(--danger)}
+  .review-status.partial{background:var(--warn)}
+  .review-info{flex:1;min-width:0}
+  .review-q{font-size:13px;font-weight:600;color:var(--text2);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .review-meta{font-size:11px;color:var(--muted);display:flex;gap:12px}
+  .review-day{font-family:'JetBrains Mono',monospace}
+  .review-diff{font-size:10px;padding:1px 6px;border-radius:4px;text-transform:uppercase;font-weight:700}
+  .review-diff.easy{background:var(--success-bg);color:var(--accent2)}
+  .review-diff.medium{background:var(--warning-bg);color:var(--warn)}
+  .review-diff.hard{background:var(--error-bg);color:var(--danger)}
+  .review-btn{transition:all .2s ease, var(--theme-transition);
+    padding:6px 14px;border-radius:var(--radius-sm);font-size:11px;font-weight:600;
+    border:1px solid var(--border);background:var(--surface3);color:var(--text2);
+    cursor:pointer;transition:all .15s;white-space:nowrap;
+  }
+  .review-btn:hover{background:var(--accent);color:#0a0c10;border-color:var(--accent)}
+
+  /* FLASHCARD MODE */
+  .flashcard-container{
+    perspective:1000px;max-width:600px;margin:0 auto;
+  }
+  .flashcard{transition:all .4s cubic-bezier(0.16,1,0.3,1), var(--theme-transition);
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:40px;text-align:center;cursor:pointer;transition:all .3s;position:relative;
+    user-select:none;
+  }
+  .flashcard:hover{border-color:rgba(59,130,246,0.25);box-shadow:0 0 30px rgba(59,130,246,0.08);transform:translateY(-2px);}
+  .flashcard.flipped .flash-front{opacity:0;pointer-events:none;position:absolute}
+  .flashcard.flipped .flash-back{opacity:1;position:relative}
+  .flash-front,.flash-back{transition:opacity .3s;width:100%}
+  .flash-back{opacity:0;position:absolute;pointer-events:none}
+  .flash-q{font-size:18px;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:20px}
+  .flash-hint{font-size:12px;color:var(--muted);margin-top:16px}
+  .flash-answer{font-size:14px;color:var(--text2);line-height:1.8;text-align:left}
+  .flash-answer code{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface3);padding:2px 6px;border-radius:4px;color:var(--accent)}
+  .flash-answer ul{padding-left:20px;margin:10px 0}
+  .flash-answer ul li{margin-bottom:5px}
+  .flash-answer .tip{background:var(--success-bg);border-left:3px solid var(--accent2);padding:8px 12px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-top:10px;font-size:12.5px;color:var(--success-text)}
+  .flash-answer .note{background:var(--warning-bg);border-left:3px solid var(--warn);padding:8px 12px;border-radius:0 var(--radius-sm) var(--radius-sm) 0;margin-top:10px;font-size:12.5px;color:var(--warning-text)}
+  .flash-controls{
+    display:flex;justify-content:center;gap:10px;margin-top:20px;
+  }
+  .flash-btn{transition:all .2s ease, var(--theme-transition);
+    padding:10px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;
+    cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .15s;
+  }
+  .flash-btn-wrong{background:var(--error-bg);color:var(--danger);border:1px solid rgba(248,113,113,0.2)}
+  .flash-btn-wrong:hover{background:rgba(248,113,113,0.15)}
+  .flash-btn-partial{background:var(--warning-bg);color:var(--warn);border:1px solid rgba(251,191,36,0.2)}
+  .flash-btn-partial:hover{background:rgba(251,191,36,0.15)}
+  .flash-btn-correct{background:var(--success-bg);color:var(--accent2);border:1px solid rgba(74,222,128,0.2)}
+  .flash-btn-correct:hover{background:rgba(74,222,128,0.15)}
+  .flash-nav{
+    display:flex;justify-content:center;align-items:center;gap:16px;margin-top:16px;
+  }
+  .flash-nav-btn{transition:all .2s ease, var(--theme-transition);
+    width:36px;height:36px;border-radius:50%;border:1px solid var(--border);
+    background:var(--surface2);color:var(--text2);cursor:pointer;display:flex;
+    align-items:center;justify-content:center;font-size:16px;transition:all .15s;
+  }
+  .flash-nav-btn:hover{background:var(--surface3);border-color:var(--accent)}
+  .flash-counter{font-size:12px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+  .flash-difficulty{
+    position:absolute;top:16px;right:18px;font-size:10px;font-weight:700;
+    padding:3px 10px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;
+  }
+
+  /* OVERALL PROGRESS */
+  .progress-bar-wrap{
+    width:100%;height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-top:12px;
+  }
+  .progress-bar-fill{
+    height:100%;background:linear-gradient(90deg,var(--accent),var(--accent3));border-radius:3px;
+    transition:width .5s ease;
+  }
+
+  /* DIVIDER */
+  .divider{border:none;border-top:1px solid var(--border);margin:24px 0}
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar{width:6px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+  ::-webkit-scrollbar-thumb:hover{background:#3a4055}
+
+  /* ANIMATIONS */
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+  @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes fadeInLeft{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes scaleIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
+  @keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+  @keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(59,130,246,0)}50%{box-shadow:0 0 20px 2px rgba(59,130,246,0.15)}}
+  @keyframes borderGlow{0%,100%{border-color:var(--border)}50%{border-color:rgba(59,130,246,0.4)}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  .fade-in{animation:fadeIn .4s cubic-bezier(0.16,1,0.3,1)}
+  .fade-in-up{animation:fadeInUp .5s cubic-bezier(0.16,1,0.3,1)}
+  .fade-in-left{animation:fadeInLeft .4s cubic-bezier(0.16,1,0.3,1)}
+  .scale-in{animation:scaleIn .35s cubic-bezier(0.16,1,0.3,1)}
+  .slide-down{animation:slideDown .3s cubic-bezier(0.16,1,0.3,1)}
+  .topic-card{transition:all .3s ease, var(--theme-transition);animation:fadeIn .4s cubic-bezier(0.16,1,0.3,1) both}
+  .topic-card:nth-child(1){animation-delay:0.05s}
+  .topic-card:nth-child(2){animation-delay:0.1s}
+  .topic-card:nth-child(3){animation-delay:0.15s}
+  .topic-card:nth-child(4){animation-delay:0.2s}
+  .topic-card:nth-child(5){animation-delay:0.25s}
+  .topic-card:nth-child(6){animation-delay:0.3s}
+  .qa-card{transition:all .3s ease, var(--theme-transition);animation:fadeInUp .4s cubic-bezier(0.16,1,0.3,1) both}
+  .qa-card:nth-child(1){animation-delay:0.05s}
+  .qa-card:nth-child(2){animation-delay:0.1s}
+  .qa-card:nth-child(3){animation-delay:0.15s}
+  .qa-card:nth-child(4){animation-delay:0.2s}
+  .qa-card:nth-child(5){animation-delay:0.25s}
+  .qa-card:nth-child(6){animation-delay:0.3s}
+  .day-row{animation:fadeInLeft .3s cubic-bezier(0.16,1,0.3,1) both}
+  .day-row:nth-child(1){animation-delay:0.02s}
+  .day-row:nth-child(2){animation-delay:0.04s}
+  .day-row:nth-child(3){animation-delay:0.06s}
+  .day-row:nth-child(4){animation-delay:0.08s}
+  .day-row:nth-child(5){animation-delay:0.1s}
+  .day-row:nth-child(6){animation-delay:0.12s}
+  .day-row:nth-child(7){animation-delay:0.14s}
+  .day-row:nth-child(8){animation-delay:0.16s}
+  .day-row:nth-child(9){animation-delay:0.18s}
+  .day-row:nth-child(10){animation-delay:0.2s}
+  .day-row:nth-child(11){animation-delay:0.22s}
+  .day-row:nth-child(12){animation-delay:0.24s}
+  .day-row:nth-child(13){animation-delay:0.26s}
+  .day-row:nth-child(14){animation-delay:0.28s}
+  .tool-card{transition:all .3s ease, var(--theme-transition);animation:scaleIn .4s cubic-bezier(0.16,1,0.3,1) both}
+  .tool-card:nth-child(1){animation-delay:0.05s}
+  .tool-card:nth-child(2){animation-delay:0.1s}
+  .tool-card:nth-child(3){animation-delay:0.15s}
+  .tool-card:nth-child(4){animation-delay:0.2s}
+  .tool-card:nth-child(5){animation-delay:0.25s}
+  .tool-card:nth-child(6){animation-delay:0.3s}
+  .schedule-card{transition:var(--theme-transition);animation:fadeInUp .45s cubic-bezier(0.16,1,0.3,1) both}
+  .schedule-card:nth-child(1){animation-delay:0.05s}
+  .schedule-card:nth-child(2){animation-delay:0.12s}
+  .schedule-card:nth-child(3){animation-delay:0.19s}
+  .review-card{transition:all .3s ease, var(--theme-transition);animation:fadeInUp .35s cubic-bezier(0.16,1,0.3,1) both}
+  .review-card:nth-child(1){animation-delay:0.05s}
+  .review-card:nth-child(2){animation-delay:0.1s}
+  .review-card:nth-child(3){animation-delay:0.15s}
+  .review-card:nth-child(4){animation-delay:0.2s}
+  .review-card:nth-child(5){animation-delay:0.25s}
+  .split-card{transition:all .2s ease, var(--theme-transition);animation:scaleIn .4s cubic-bezier(0.16,1,0.3,1) both}
+  .split-card:nth-child(1){animation-delay:0.08s}
+  .split-card:nth-child(2){animation-delay:0.16s}
+  .concept-cell{transition:all .2s ease, var(--theme-transition);animation:scaleIn .35s cubic-bezier(0.16,1,0.3,1) both}
+  .concept-cell:nth-child(1){animation-delay:0.05s}
+  .concept-cell:nth-child(2){animation-delay:0.1s}
+  .concept-cell:nth-child(3){animation-delay:0.15s}
+  .concept-cell:nth-child(4){animation-delay:0.2s}
+  .flashcard{transition:all .4s cubic-bezier(0.16,1,0.3,1), var(--theme-transition);animation:scaleIn .5s cubic-bezier(0.16,1,0.3,1)}
+  .day-hero{animation:fadeInUp .5s cubic-bezier(0.16,1,0.3,1)}
+  .tab-bar{animation:slideDown .3s cubic-bezier(0.16,1,0.3,1)}
+  .stat-chip{animation:scaleIn .3s cubic-bezier(0.16,1,0.3,1) both}
+  .stat-chip:nth-child(1){animation-delay:0.1s}
+  .stat-chip:nth-child(2){animation-delay:0.15s}
+  .stat-chip:nth-child(3){animation-delay:0.2s}
+  .stat-chip:nth-child(4){animation-delay:0.25s}
+  .stat-chip:nth-child(5){animation-delay:0.3s}
+  .hero-btn{transition:all .2s ease, var(--theme-transition);animation:fadeInUp .35s cubic-bezier(0.16,1,0.3,1) both}
+  .hero-btn:nth-child(1){animation-delay:0.15s}
+  .hero-btn:nth-child(2){animation-delay:0.2s}
+  .hero-btn:nth-child(3){animation-delay:0.25s}
+  .hero-btn:nth-child(4){animation-delay:0.3s}
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    .sidebar{transition:var(--theme-transition);width:220px;min-width:220px}
+    .search-wrap{flex:0 0 200px}
+    .concept-grid,.tools-grid,.split-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:700px){
+    .sidebar{transition:var(--theme-transition);width:64px;min-width:64px}
+    .day-info,.day-date,.sidebar-label,.sidebar-footer,.search-wrap,.header-sub,.theme-toggle{display:none}
+    .day-row{padding:10px 8px;justify-content:center}
+    .day-num{min-width:36px;padding:5px 8px;font-size:11px}
+    .day-check{position:absolute;bottom:2px;right:2px;width:14px;height:14px;font-size:8px}
+    .main-scroll{padding:16px}
+    .day-hero{padding:18px}
+    .day-hero h1{font-size:20px}
+    .qa-answer{padding-left:18px}
+    .assess-bar{padding-left:18px}
+    .flashcard{transition:all .4s cubic-bezier(0.16,1,0.3,1), var(--theme-transition);padding:24px}
+    .flash-q{font-size:15px}
+    .tab-btn{transition:all .2s ease, var(--theme-transition);padding:8px 12px;font-size:12px}
+    .hero-btn{transition:all .2s ease, var(--theme-transition);padding:6px 12px;font-size:11px}
+    .tools-grid,.concept-grid,.split-grid{grid-template-columns:1fr}
+    .code-body{font-size:11px;padding:10px}
+  }
+
+  /* PRINT */
+  @media print{
+    .sidebar,.search-wrap,.tab-bar,.ai-section,.assess-bar,.hero-btn,.flash-controls,.theme-toggle{display:none!important}
+    .main{overflow:visible}
+    .topic-body,.qa-answer{display:block!important}
+    body{background:#fff;color:#000}
+    .topic-card,.qa-card{transition:all .3s ease, var(--theme-transition);border:1px solid #ccc}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">JavaPrep</div>
+  <div class="header-title">Interview Prep — 14 Day Plan</div>
+  <div class="search-wrap">
+    <input type="text" class="search-input" id="searchInput" placeholder="Search topics, Q&A, code..." autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
+  <div class="header-sub"><span class="dot"></span>7 YOE · Spring Boot · Microservices</div>
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+
+const DAYS = [
+  {
+    day:1, title:"Java Basics",
+    desc:"OOP pillars, Collections, Exception Handling — the foundation.",
+    topics:[
+      {
+        title:"The 4 Pillars of OOP",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Every Java interview starts here. You must be able to explain each pillar in plain English, give an example, and say <b>why it matters</b>.</p>
+
+<b>1. Encapsulation — Hiding data</b>
+<p>Bundle related data (fields) and behaviour (methods) into one class, and restrict direct access to the data using <code>private</code>. Others interact only through public methods.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">EXAMPLE — Encapsulation <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">public class</span> <span class="cl">BankAccount</span> {
+    <span class="kw">private double</span> balance;
+
+    <span class="kw">public void</span> <span class="fn">deposit</span>(<span class="kw">double</span> amount) {
+        <span class="kw">if</span> (amount &gt; <span class="nm">0</span>) balance += amount;
+    }
+
+    <span class="kw">public double</span> <span class="fn">getBalance</span>() { <span class="kw">return</span> balance; }
+}</div>
+</div>
+<div class="callout callout-tip">💡 Why it matters: Without encapsulation, any code could set <code>balance = -9999</code>. Encapsulation keeps objects in a valid state.</div>
+
+<div class="topic-intro">
+<b>2. Inheritance — Reusing behaviour</b>
+<p>A child class (<code>extends</code>) acquires all non-private fields and methods of the parent, and can add or override behaviour.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">EXAMPLE — Inheritance <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">class</span> <span class="cl">Animal</span> {
+    <span class="kw">void</span> <span class="fn">breathe</span>() { System.out.println(<span class="st">"Breathing"</span>); }
+}
+<span class="kw">class</span> <span class="cl">Dog</span> <span class="kw">extends</span> <span class="cl">Animal</span> {
+    <span class="kw">void</span> <span class="fn">bark</span>() { System.out.println(<span class="st">"Woof!"</span>); }
+}
+<span class="cl">Dog</span> dog = <span class="kw">new</span> <span class="cl">Dog</span>();
+dog.breathe(); <span class="cm">// inherited from Animal</span>
+dog.bark();</div>
+</div>
+
+<div class="topic-intro">
+<b>3. Polymorphism — One interface, many forms</b>
+<p>Runtime polymorphism (method overriding — decided at runtime by actual object type) and Compile-time (method overloading — same name, different parameters).</p>
+</div>
+<div class="code-block">
+  <div class="code-label">EXAMPLE — Runtime Polymorphism <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">class</span> <span class="cl">Shape</span> {
+    <span class="kw">void</span> <span class="fn">draw</span>() { System.out.println(<span class="st">"Drawing shape"</span>); }
+}
+<span class="kw">class</span> <span class="cl">Circle</span> <span class="kw">extends</span> <span class="cl">Shape</span> {
+    <span class="an">@Override</span>
+    <span class="kw">void</span> <span class="fn">draw</span>() { System.out.println(<span class="st">"Drawing circle"</span>); }
+}
+<span class="cl">Shape</span> s = <span class="kw">new</span> <span class="cl">Circle</span>();
+s.draw();  <span class="cm">// "Drawing circle" — runtime decides!</span></div>
+</div>
+
+<div class="topic-intro">
+<b>4. Abstraction — Hiding complexity</b>
+<p>Show only what's necessary, hide the how. Achieved via <code>abstract</code> classes or interfaces.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">EXAMPLE — Abstraction <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">abstract class</span> <span class="cl">Payment</span> {
+    <span class="kw">abstract void</span> <span class="fn">pay</span>(<span class="kw">double</span> amount);
+}
+<span class="kw">class</span> <span class="cl">CreditCardPayment</span> <span class="kw">extends</span> <span class="cl">Payment</span> {
+    <span class="kw">void</span> <span class="fn">pay</span>(<span class="kw">double</span> amount) {
+        System.out.println(<span class="st">"Charging card: "</span> + amount);
+    }
+}</div>
+</div>
+<div class="callout callout-info">ℹ️ <b>Abstraction vs Encapsulation:</b> Abstraction hides <b>complexity</b> (what's happening). Encapsulation hides <b>data</b> (the state). Both hide things, but different things.</div>`
+      },
+      {
+        title:"Interface vs Abstract Class",tag:"concept",
+        body:`<div class="topic-intro">
+<p>One of the most common interview questions. The key is to know not just the differences but <b>when to use each</b>.</p>
+</div>
+<table class="cmp-table">
+  <tr><th>Feature</th><th>Abstract Class</th><th>Interface</th></tr>
+  <tr><td>Inheritance</td><td>Single (extends one)</td><td>Multiple (implements many)</td></tr>
+  <tr><td>Fields</td><td>Can have instance fields (state)</td><td>Only public static final constants</td></tr>
+  <tr><td>Constructor</td><td>Yes</td><td>No</td></tr>
+  <tr><td>Methods</td><td>Abstract + concrete</td><td>Abstract + default + static (Java 8+)</td></tr>
+  <tr><td>Access modifiers</td><td>Any</td><td>public only</td></tr>
+</table>
+<div class="code-block">
+  <div class="code-label">WHEN TO USE — Abstract Class <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">abstract class</span> <span class="cl">Vehicle</span> {
+    <span class="kw">protected int</span> speed;
+    <span class="kw">void</span> <span class="fn">accelerate</span>() { speed += <span class="nm">10</span>; }
+    <span class="kw">abstract void</span> <span class="fn">fuelType</span>();
+}</div>
+</div>
+<div class="code-block">
+  <div class="code-label">WHEN TO USE — Interface <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">interface</span> <span class="cl">Flyable</span> { <span class="kw">void</span> <span class="fn">fly</span>(); }
+<span class="kw">interface</span> <span class="cl">Swimmable</span> { <span class="kw">void</span> <span class="fn">swim</span>(); }
+<span class="cm">// Duck can fly AND swim — not possible with abstract class</span>
+<span class="kw">class</span> <span class="cl">Duck</span> <span class="kw">implements</span> <span class="cl">Flyable</span>, <span class="cl">Swimmable</span> {
+    <span class="kw">public void</span> <span class="fn">fly</span>()  { System.out.println(<span class="st">"Duck flying"</span>); }
+    <span class="kw">public void</span> <span class="fn">swim</span>() { System.out.println(<span class="st">"Duck swimming"</span>); }
+}</div>
+</div>
+<div class="callout callout-tip">💡 Rule of thumb: Use <b>abstract class</b> when classes share code. Use <b>interface</b> to define a capability any class can implement.</div>`
+      },
+      {
+        title:"Collections — List, Set, Map",tag:"concept",
+        body:`<div class="topic-intro">
+<p>You'll use these every day. Know the internal structure, time complexity, and when to pick each.</p>
+</div>
+<table class="cmp-table">
+  <tr><th>Class</th><th>Ordered?</th><th>Duplicates?</th><th>Null?</th><th>get(i)</th><th>contains</th></tr>
+  <tr><td>ArrayList</td><td>Yes (insertion)</td><td>Yes</td><td>Yes</td><td>O(1)</td><td>O(n)</td></tr>
+  <tr><td>LinkedList</td><td>Yes (insertion)</td><td>Yes</td><td>Yes</td><td>O(n)</td><td>O(n)</td></tr>
+  <tr><td>HashSet</td><td>No</td><td>No</td><td>One null</td><td>—</td><td>O(1)</td></tr>
+  <tr><td>TreeSet</td><td>Sorted</td><td>No</td><td>No</td><td>—</td><td>O(log n)</td></tr>
+  <tr><td>HashMap</td><td>No</td><td>Keys: No</td><td>One null key</td><td>O(1)</td><td>O(1)</td></tr>
+  <tr><td>LinkedHashMap</td><td>Yes (insertion)</td><td>Keys: No</td><td>One null key</td><td>O(1)</td><td>O(1)</td></tr>
+</table>
+<div class="code-block">
+  <div class="code-label">EXAMPLE — Choosing the right collection <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm">// Need fast lookup by key → HashMap</span>
+Map&lt;<span class="cl">String</span>, <span class="cl">User</span>&gt; userMap = <span class="kw">new</span> HashMap&lt;&gt;();
+userMap.put(<span class="st">"sachin"</span>, user);
+userMap.get(<span class="st">"sachin"</span>); <span class="cm">// O(1)</span>
+
+<span class="cm">// Need unique emails → HashSet</span>
+Set&lt;<span class="cl">String</span>&gt; emails = <span class="kw">new</span> HashSet&lt;&gt;();
+emails.add(<span class="st">"a@b.com"</span>);
+emails.contains(<span class="st">"a@b.com"</span>); <span class="cm">// O(1)</span>
+
+<span class="cm">// Need ordered list, lots of reads → ArrayList</span>
+List&lt;<span class="cl">String</span>&gt; names = <span class="kw">new</span> ArrayList&lt;&gt;();
+names.add(<span class="st">"Alice"</span>);
+names.get(<span class="nm">0</span>); <span class="cm">// O(1)</span></div>
+</div>
+<div class="callout callout-warn">⚠️ <b>hashCode() + equals() contract:</b> If two objects are equal (equals() returns true), they MUST have the same hashCode(). If you break this, HashSet/HashMap will silently malfunction.</div>`
+      },
+      {
+        title:"Exception Handling",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Java has a structured exception hierarchy. Knowing checked vs unchecked is must-have knowledge.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">Exception Hierarchy <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">Throwable
+├── Error            <span class="cm">// JVM-level: StackOverflowError, OutOfMemoryError (don't catch)</span>
+└── Exception
+    ├── IOException  <span class="cm">// CHECKED — compiler forces you to handle</span>
+    ├── SQLException <span class="cm">// CHECKED</span>
+    └── RuntimeException  <span class="cm">// UNCHECKED — compiler doesn't force handling</span>
+        ├── NullPointerException
+        ├── IllegalArgumentException
+        └── IndexOutOfBoundsException</div>
+</div>
+<div class="code-block">
+  <div class="code-label">EXAMPLE — try/catch/finally + custom exception <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm">// Custom unchecked exception</span>
+<span class="kw">public class</span> <span class="cl">UserNotFoundException</span> <span class="kw">extends</span> <span class="cl">RuntimeException</span> {
+    <span class="kw">public</span> <span class="fn">UserNotFoundException</span>(<span class="cl">String</span> message) { <span class="kw">super</span>(message); }
+}
+
+<span class="cm">// Usage</span>
+<span class="kw">public</span> <span class="cl">User</span> <span class="fn">findUser</span>(<span class="cl">Long</span> id) {
+    <span class="kw">return</span> userRepo.findById(id)
+        .orElseThrow(() -&gt; <span class="kw">new</span> <span class="cl">UserNotFoundException</span>(<span class="st">"User not found: "</span> + id));
+}
+
+<span class="cm">// try-catch-finally</span>
+<span class="kw">try</span> {
+    <span class="cl">User</span> u = <span class="fn">findUser</span>(<span class="nm">42L</span>);
+} <span class="kw">catch</span> (<span class="cl">UserNotFoundException</span> e) {
+    log.error(<span class="st">"Not found"</span>, e);
+} <span class="kw">finally</span> {
+    <span class="cm">// always runs — use for cleanup</span>
+}</div>
+</div>
+<div class="callout callout-tip">💡 In Spring Boot, you almost never catch exceptions in service code — let them bubble up to <code>@ControllerAdvice</code> which handles them globally.</div>`
+      }
+    ],
+    qa:[
+      {q:"What are the 4 pillars of OOP? Explain each briefly.",d:"easy",a:`<ul><li><b>Encapsulation</b> — Private fields + public getters/setters. Hides internal state.</li><li><b>Inheritance</b> — Child extends parent, reuses code.</li><li><b>Polymorphism</b> — Same method name, different behaviour. Overriding (runtime) + overloading (compile-time).</li><li><b>Abstraction</b> — Hide implementation, show only what's needed via abstract class or interface.</li></ul><div class="tip">💡 Abstraction hides complexity. Encapsulation hides data. Both hide things — different things.</div>`},
+      {q:"What is the difference between an Interface and an Abstract Class?",d:"medium",a:`Abstract class: can have state, constructors, abstract + concrete methods, single inheritance.<br>Interface: no state, no constructor, supports multiple implementation, Java 8+ allows default/static methods.<br><br>Use abstract class for shared code. Use interface for capability contracts.<div class="note">⚠️ Java 9 added private methods in interfaces.</div>`},
+      {q:"Checked vs Unchecked exceptions — what's the difference?",d:"easy",a:`<b>Checked</b>: Compiler forces you to handle or declare with throws. Example: IOException, SQLException.<br><b>Unchecked</b>: Subclass of RuntimeException. No forced handling. Example: NPE, IllegalArgumentException.<div class="tip">💡 Use unchecked for programmer errors; checked for recoverable conditions.</div>`},
+      {q:"When would you use ArrayList vs LinkedList vs HashSet?",d:"medium",a:`<ul><li><b>ArrayList</b>: Fast random access O(1), slow mid-insert O(n). Use when reading a lot.</li><li><b>LinkedList</b>: Fast head/tail insert O(1), slow random access O(n). Use when frequently adding/removing.</li><li><b>HashSet</b>: Unique elements, O(1) add/contains. Use for membership checks with no duplicates.</li></ul><div class="tip">💡 ArrayList is the default choice 90% of the time.</div>`},
+      {q:"What happens if you override equals() but not hashCode()?",d:"hard",a:`The equals/hashCode contract breaks. Two objects that are equals() must have the same hashCode(). If you break this, HashSet and HashMap will malfunction — equal objects land in different buckets, lookups fail silently.<div class="note">⚠️ Always override both. IDEs auto-generate them.</div>`},
+      {q:"What is a functional interface? Give examples.",d:"easy",a:`Exactly one abstract method. Foundation for lambdas.<br><ul><li><code>Predicate&lt;T&gt;</code> — test() returns boolean</li><li><code>Function&lt;T,R&gt;</code> — apply() returns R</li><li><code>Consumer&lt;T&gt;</code> — accept() returns void</li><li><code>Supplier&lt;T&gt;</code> — get() returns T</li><li><code>Runnable</code> — run()</li></ul>`}
+    ]
+  },
+
+  {
+    day:2,title:"Java Intermediate",
+    desc:"Strings, Generics, Streams, Optional, Java 8+ features.",
+    topics:[
+      {
+        title:"String Internals — Immutability & Pool",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Strings are the most used class in Java. Understanding why they're immutable and how the String pool works is essential.</p>
+<p><b>Why is String immutable?</b></p>
+<ul>
+<li><b>Security</b> — Strings are used for class names, DB URLs, file paths. If mutable, code could tamper with them mid-flight.</li>
+<li><b>String Pool</b> — JVM reuses string literals. If mutable, changing one reference would affect all others pointing to the same pool object.</li>
+<li><b>Thread safety</b> — Immutable objects are inherently safe to share across threads.</li>
+<li><b>HashCode caching</b> — Computed once and cached, since value never changes.</li>
+</ul>
+</div>
+<div class="code-block">
+  <div class="code-label">String Pool vs Heap <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cl">String</span> a = <span class="st">"hello"</span>;
+<span class="cl">String</span> b = <span class="st">"hello"</span>;
+<span class="cl">String</span> c = <span class="kw">new</span> <span class="cl">String</span>(<span class="st">"hello"</span>);
+
+a == b        <span class="cm">// true — same pool reference</span>
+a == c        <span class="cm">// false — c is a separate heap object</span>
+a.equals(c)   <span class="cm">// true — same content</span>
+
+<span class="cm">// RULE: Always use equals() for String comparison, never ==</span></div>
+</div>
+<div class="code-block">
+  <div class="code-label">String vs StringBuilder vs StringBuffer <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm">// String — immutable, creates new object every concatenation</span>
+<span class="cl">String</span> s = <span class="st">""</span>;
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; <span class="nm">1000</span>; i++) s += i; <span class="cm">// creates 1000 String objects! Bad.</span>
+
+<span class="cm">// StringBuilder — mutable, NOT thread-safe, FAST</span>
+<span class="cl">StringBuilder</span> sb = <span class="kw">new</span> <span class="cl">StringBuilder</span>();
+<span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; <span class="nm">1000</span>; i++) sb.append(i); <span class="cm">// Good</span>
+sb.toString();
+
+<span class="cm">// StringBuffer — mutable, thread-safe, SLOW (synchronized)</span>
+<span class="cm">// Only use when multiple threads share the same buffer</span></div>
+</div>`
+      },
+      {
+        title:"Java Streams — Declarative Data Processing",tag:"code",
+        body:`<div class="topic-intro">
+<p>Streams let you process collections in a pipeline style — filter, transform, collect. They replace verbose for-loops with clean, readable code.</p>
+<p><b>Key concepts:</b></p>
+<ul>
+<li><b>Lazy</b> — intermediate operations don't execute until a terminal operation is called</li>
+<li><b>Not reusable</b> — once a terminal op is called, the stream is consumed</li>
+<li><b>Intermediate ops</b>: filter, map, flatMap, sorted, distinct, limit, peek</li>
+<li><b>Terminal ops</b>: collect, forEach, count, reduce, findFirst, anyMatch, toList</li>
+</ul>
+</div>
+<div class="code-block">
+  <div class="code-label">EXAMPLE — Common Stream operations <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">List&lt;<span class="cl">String</span>&gt; names = List.of(<span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Anna"</span>, <span class="st">"Charlie"</span>);
+
+List&lt;<span class="cl">String</span>&gt; result = names.stream()
+    .filter(n -&gt; n.startsWith(<span class="st">"A"</span>))
+    .map(<span class="cl">String</span>::toUpperCase)
+    .sorted()
+    .collect(Collectors.toList());
+
+<span class="kw">long</span> count = names.stream().filter(n -&gt; n.length() &gt; <span class="nm">3</span>).count();
+
+Optional&lt;<span class="cl">String</span>&gt; first = names.stream()
+    .filter(n -&gt; n.startsWith(<span class="st">"B"</span>))
+    .findFirst();
+
+<span class="kw">int</span> total = names.stream()
+    .mapToInt(<span class="cl">String</span>::length)
+    .sum();
+
+Map&lt;<span class="cl">Integer</span>, List&lt;<span class="cl">String</span>&gt;&gt; byLength = names.stream()
+    .collect(Collectors.groupingBy(<span class="cl">String</span>::length));</div>
+</div>
+<div class="callout callout-tip">💡 In Spring Boot, you'll use streams constantly — filtering DB results, mapping entities to DTOs, grouping data.</div>`
+      },
+      {
+        title:"Optional — Null Safety",tag:"code",
+        body:`<div class="topic-intro">
+<p><code>Optional&lt;T&gt;</code> is a container that may or may not hold a value. It was introduced in Java 8 to make null handling explicit and eliminate accidental NullPointerExceptions.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">EXAMPLE — Optional patterns <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm">// Creating</span>
+Optional&lt;<span class="cl">String</span>&gt; present = Optional.of(<span class="st">"hello"</span>);
+Optional&lt;<span class="cl">String</span>&gt; empty   = Optional.empty();
+Optional&lt;<span class="cl">String</span>&gt; maybe  = Optional.ofNullable(getValue());
+
+<span class="cm">// Consuming safely</span>
+present.ifPresent(v -&gt; System.out.println(v));
+
+<span class="cm">// Fallback values</span>
+<span class="cl">String</span> val  = maybe.orElse(<span class="st">"default"</span>);
+<span class="cl">String</span> val2 = maybe.orElseGet(() -&gt; fetchDefault());
+<span class="cl">String</span> val3 = maybe.orElseThrow(() -&gt; <span class="kw">new</span> <span class="cl">RuntimeException</span>(<span class="st">"Missing"</span>));
+
+<span class="cm">// Chaining (most common in Spring repos)</span>
+<span class="cl">String</span> name = userRepo.findById(id)
+    .map(<span class="cl">User</span>::getName)
+    .orElse(<span class="st">"Unknown"</span>);</div>
+</div>
+<div class="callout callout-warn">⚠️ Don't use Optional as a method parameter or field. Only use it as a return type to signal "this might not be present".</div>`
+      },
+      {
+        title:"Java 8–17 Key Features",tag:"concept",
+        body:`<div class="topic-intro">
+<p>With 7 YOE, interviewers expect you to know modern Java. Here's what matters most.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">Java 8 — Lambda & Method References <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm">// Lambda — anonymous function</span>
+List&lt;<span class="cl">String</span>&gt; names = Arrays.asList(<span class="st">"Bob"</span>, <span class="st">"Alice"</span>);
+names.sort((a, b) -&gt; a.compareTo(b));       <span class="cm">// lambda</span>
+names.sort(<span class="cl">String</span>::compareTo);              <span class="cm">// method reference (same)</span></div>
+</div>
+<div class="code-block">
+  <div class="code-label">Java 10 — var (local type inference) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">var</span> list = <span class="kw">new</span> ArrayList&lt;<span class="cl">String</span>&gt;();
+<span class="kw">var</span> map  = <span class="kw">new</span> HashMap&lt;<span class="cl">String</span>, <span class="cl">Integer</span>&gt;();</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Java 14+ — Switch Expressions <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cl">String</span> result = <span class="kw">switch</span> (day) {
+    <span class="kw">case</span> MONDAY, FRIDAY -&gt; <span class="st">"Weekday"</span>;
+    <span class="kw">case</span> SATURDAY, SUNDAY -&gt; <span class="st">"Weekend"</span>;
+    <span class="kw">default</span> -&gt; <span class="st">"Other"</span>;
+};</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Java 16 — Records (immutable data classes) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm">// Auto-generates: constructor, getters, equals, hashCode, toString</span>
+<span class="kw">record</span> <span class="cl">UserDTO</span>(<span class="cl">String</span> name, <span class="cl">String</span> email) {}
+
+<span class="cl">UserDTO</span> dto = <span class="kw">new</span> <span class="cl">UserDTO</span>(<span class="st">"Sachin"</span>, <span class="st">"s@s.com"</span>);
+dto.name();   <span class="cm">// "Sachin"</span>
+dto.email();  <span class="cm">// "s@s.com"</span>
+<span class="cm">// Use Records for DTOs instead of Lombok @Data</span></div>
+</div>
+<div class="code-block">
+  <div class="code-label">Java 17 — Sealed Classes <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">public sealed class</span> <span class="cl">Shape</span> <span class="kw">permits</span> <span class="cl">Circle</span>, <span class="cl">Rectangle</span> {}
+<span class="kw">public final class</span> <span class="cl">Circle</span>    <span class="kw">extends</span> <span class="cl">Shape</span> { <span class="kw">double</span> radius; }
+<span class="kw">public final class</span> <span class="cl">Rectangle</span> <span class="kw">extends</span> <span class="cl">Shape</span> { <span class="kw">double</span> w, h; }
+
+<span class="cm">// Compiler knows all subtypes — exhaustive switch possible</span></div>
+</div>`
+      }
+    ],
+    qa:[
+      {q:"Why is String immutable in Java?",d:"medium",a:`Security (DB URLs, file paths can't be tampered), String pool reuse, inherent thread safety, hashCode caching. Use StringBuilder for mutable string building.<div class="note">⚠️ String concatenation in a loop creates many objects. Always use StringBuilder.</div>`},
+      {q:"What is the difference between == and equals() for Strings?",d:"easy",a:`<code>==</code> compares references (memory address). <code>equals()</code> compares content. String literals may share the same pool reference so <code>==</code> can be true, but <code>new String("x") == "x"</code> is always false. Always use <code>equals()</code>.`},
+      {q:"Explain Java Streams. What problem do they solve?",d:"medium",a:`Streams replace verbose for-loops with declarative pipelines. Lazy evaluation — intermediate ops don't run until a terminal op is called. Not reusable after terminal op. Intermediate: filter, map, sorted. Terminal: collect, count, reduce, findFirst.`},
+      {q:"What is Optional and why was it introduced?",d:"medium",a:`Container that may hold a value. Eliminates NPE by forcing explicit null handling. Use orElse, orElseGet, orElseThrow, ifPresent, map to safely work with the value.<div class="tip">💡 Only use as return type, not as parameter or field.</div>`},
+      {q:"What is autoboxing? What are its pitfalls?",d:"medium",a:`Auto conversion between primitives (int) and wrapper classes (Integer). Pitfalls: NPE on unboxing null Integer, performance cost of boxing in loops, <code>==</code> comparison wrong beyond -128 to 127 cache range.`},
+      {q:"What are generics and why are they useful?",d:"easy",a:`Type-safe reusable code without casting. Catch type mismatches at compile time instead of runtime ClassCastException. <code>List&lt;String&gt;</code> guarantees only Strings, no cast needed on get().`}
+    ]
+  },
+  {
+    day:3,title:"Java Advanced",
+    desc:"Multithreading, JVM internals, concurrency utilities.",
+    topics:[
+      {
+        title:"Threads & Concurrency Basics",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Multithreading lets multiple tasks run concurrently. The challenge is <b>shared mutable state</b> — when two threads modify the same data, you get race conditions.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">Creating Threads — 3 Ways <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm">// 1. Extend Thread (avoid — limits inheritance)</span>
+<span class="kw">class</span> <span class="cl">MyThread</span> <span class="kw">extends</span> <span class="cl">Thread</span> {
+    <span class="kw">public void</span> <span class="fn">run</span>() { System.out.println(<span class="st">"Running"</span>); }
+}
+<span class="kw">new</span> <span class="cl">MyThread</span>().start();
+
+<span class="cm">// 2. Implement Runnable (preferred)</span>
+<span class="cl">Thread</span> t = <span class="kw">new</span> <span class="cl">Thread</span>(() -&gt; System.out.println(<span class="st">"Running"</span>));
+t.start();
+
+<span class="cm">// 3. ExecutorService (best for production)</span>
+<span class="cl">ExecutorService</span> executor = Executors.newFixedThreadPool(<span class="nm">4</span>);
+executor.submit(() -&gt; System.out.println(<span class="st">"Task running"</span>));
+executor.shutdown();</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Race Condition — The Problem <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">int</span> count = <span class="nm">0</span>;
+<span class="cm">// Thread 1 and Thread 2 both do count++ simultaneously</span>
+<span class="cm">// count++ is actually: read → increment → write (3 steps)</span>
+<span class="cm">// Both threads can read the same value before either writes → count wrong!</span></div>
+</div>
+<div class="code-block">
+  <div class="code-label">synchronized — The Fix <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">public class</span> <span class="cl">Counter</span> {
+    <span class="kw">private int</span> count = <span class="nm">0</span>;
+
+    <span class="cm">// Only one thread can execute this at a time</span>
+    <span class="kw">public synchronized void</span> <span class="fn">increment</span>() { count++; }
+    <span class="kw">public synchronized int</span> <span class="fn">getCount</span>()    { <span class="kw">return</span> count; }
+}
+
+<span class="cm">// Better: use AtomicInteger — no locking, hardware-level atomicity</span>
+<span class="cl">AtomicInteger</span> counter = <span class="kw">new</span> <span class="cl">AtomicInteger</span>(<span class="nm">0</span>);
+counter.incrementAndGet(); <span class="cm">// thread-safe, faster than synchronized</span></div>
+</div>
+<div class="callout callout-info">ℹ️ <b>volatile</b> guarantees visibility (threads see latest value from main memory), but NOT atomicity. Use for simple boolean flags. Use AtomicInteger for counters.</div>`
+      },
+      {
+        title:"JVM — Heap, Stack, GC",tag:"concept",
+        body:`<div class="topic-intro">
+<p>You don't need to be a JVM expert, but you should understand memory layout and basic GC to discuss performance issues.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">JVM Memory Layout <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">JVM Memory
+├── Heap (shared across threads — GC managed)
+│   ├── Young Generation (Eden + Survivor spaces)
+│   │   └── New objects start here. Minor GC cleans this.
+│   └── Old Generation (Tenured)
+│       └── Objects that survive many GCs move here. Major GC.
+├── Stack (per thread)
+│   └── Method frames, local variables, references
+├── Metaspace (class metadata — replaced PermGen in Java 8)
+└── Code Cache (compiled JIT code)</div>
+</div>
+<div class="code-block">
+  <div class="code-label">What lives where <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">void</span> <span class="fn">method</span>() {
+    <span class="kw">int</span> x = <span class="nm">5</span>;               <span class="cm">// x lives on the STACK (primitive)</span>
+    <span class="cl">String</span> s = <span class="st">"hi"</span>;         <span class="cm">// s reference on STACK, object on HEAP</span>
+    <span class="cl">User</span> u = <span class="kw">new</span> <span class="cl">User</span>();     <span class="cm">// u reference on STACK, User object on HEAP</span>
+}
+<span class="cm">// When method ends, stack frame is popped. Heap objects become eligible for GC.</span></div>
+</div>
+<div class="concept-grid">
+  <div class="concept-cell"><div class="concept-cell-label">StackOverflowError</div><div class="concept-cell-val">Stack too deep — infinite recursion or too many nested calls</div></div>
+  <div class="concept-cell"><div class="concept-cell-label">OutOfMemoryError</div><div class="concept-cell-val">Heap full — too many objects, memory leak, pool size too small</div></div>
+</div>`
+      }
+    ],
+    qa:[
+      {q:"What is the difference between a Thread and a Runnable?",d:"easy",a:`Thread is a class — extending it blocks further inheritance. Runnable is a functional interface — implement it and pass to Thread. Preferred. In production use ExecutorService for managed thread pools.`},
+      {q:"What does synchronized do? What problem does it solve?",d:"medium",a:`Ensures only one thread executes a block at a time — prevents race conditions on shared mutable state. Works via a monitor lock on the object. Prefer AtomicInteger or ReentrantLock for finer control.<div class="note">⚠️ synchronized on method locks the whole object. Can cause contention at scale.</div>`},
+      {q:"What is volatile? When do you use it?",d:"hard",a:`Guarantees reads/writes go to main memory, not thread-local CPU cache. Ensures visibility. Does NOT make compound ops (i++) atomic. Use for simple boolean flags shared across threads. Use AtomicInteger for counters.`},
+      {q:"What is the JVM heap vs stack?",d:"medium",a:`Stack: per-thread, stores local variables and method frames, auto-managed, fast. Heap: shared, stores objects, GC-managed. StackOverflowError = too deep recursion. OutOfMemoryError = heap full.`},
+      {q:"What are Records in Java?",d:"easy",a:`Immutable data carriers (Java 16+). Auto-generates constructor, getters, equals, hashCode, toString. Great for DTOs instead of Lombok @Data. Fields accessed as methods: <code>user.name()</code> not <code>user.getName()</code>.`},
+      {q:"What are Sealed Classes?",d:"hard",a:`Restrict which classes can extend them (Java 17). Compiler knows all subtypes — enables exhaustive pattern matching. Great for domain modeling where you have a fixed set of variants (Shape = Circle | Rectangle | Triangle).`}
+    ]
+  },
+
+  {
+    day:4,title:"Spring Core",
+    desc:"IoC, DI, Bean lifecycle, AOP — the engine under Spring.",
+    topics:[
+      {
+        title:"IoC and Dependency Injection",tag:"concept",
+        body:`<div class="topic-intro">
+<p><b>IoC (Inversion of Control)</b> means the framework controls object creation, not your code. You don't say <code>new Service()</code> — Spring creates it and gives it to you.</p>
+<p><b>Dependency Injection</b> is how IoC is implemented: Spring "injects" objects into your classes.</p>
+<p>Why does this matter? Without DI, every class creates its own dependencies. This creates tight coupling — you can't swap implementations, testing is hard, and changing one class breaks others.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">Without DI — Tightly Coupled (Bad) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">class</span> <span class="cl">OrderService</span> {
+    <span class="cm">// OrderService creates its own dependency — tightly coupled</span>
+    <span class="kw">private</span> <span class="cl">PaymentService</span> paymentService = <span class="kw">new</span> <span class="cl">PaymentService</span>();
+
+    <span class="cm">// Problem: Can't test without real PaymentService. Can't swap to MockPayment.</span>
+}</div>
+</div>
+<div class="code-block">
+  <div class="code-label">With DI — Loosely Coupled (Good) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@Service</span>
+<span class="kw">class</span> <span class="cl">OrderService</span> {
+    <span class="kw">private final</span> <span class="cl">PaymentService</span> paymentService;
+
+    <span class="cm">// Spring injects PaymentService — OrderService doesn't create it</span>
+    <span class="kw">public</span> <span class="fn">OrderService</span>(<span class="cl">PaymentService</span> paymentService) {
+        <span class="kw">this</span>.paymentService = paymentService;
+    }
+}
+<span class="cm">// In tests: inject MockPaymentService. In prod: inject real one. Zero code change.</span></div>
+</div>
+<div class="callout callout-tip">💡 Always prefer <b>constructor injection</b>. It allows immutable fields, makes dependencies explicit, and is easy to test.</div>`
+      },
+      {
+        title:"Bean Scopes & Lifecycle",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Every object Spring manages is called a <b>Bean</b>. Spring controls its creation, initialization, and destruction.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">Bean Lifecycle — Simplified <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="nm">1</span>. Spring reads <span class="an">@Component</span>/<span class="an">@Service</span>/<span class="an">@Repository</span> etc.
+<span class="nm">2</span>. Instantiates the bean (calls constructor)
+<span class="nm">3</span>. Injects dependencies (<span class="an">@Autowired</span>)
+<span class="nm">4</span>. Calls <span class="an">@PostConstruct</span> method
+<span class="nm">5</span>. Bean is ready to use
+<span class="nm">6</span>. On shutdown: calls <span class="an">@PreDestroy</span> method
+<span class="nm">7</span>. Bean is destroyed</div>
+</div>
+<div class="code-block">
+  <div class="code-label">PostConstruct & PreDestroy <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@Service</span>
+<span class="kw">public class</span> <span class="cl">CacheService</span> {
+
+    <span class="an">@PostConstruct</span>
+    <span class="kw">void</span> <span class="fn">loadCache</span>() {
+        <span class="cm">// Runs after all dependencies injected</span>
+        <span class="cm">// Good for: loading data, opening connections</span>
+    }
+
+    <span class="an">@PreDestroy</span>
+    <span class="kw">void</span> <span class="fn">clearCache</span>() {
+        <span class="cm">// Runs before Spring shuts down the bean</span>
+        <span class="cm">// Good for: releasing resources, saving state</span>
+    }
+}</div>
+</div>
+<table class="cmp-table">
+  <tr><th>Scope</th><th>What it means</th><th>Use case</th></tr>
+  <tr><td>Singleton (default)</td><td>One instance per Spring container, shared everywhere</td><td>Services, repos — stateless beans</td></tr>
+  <tr><td>Prototype</td><td>New instance every time you request the bean</td><td>Stateful helpers, builders</td></tr>
+  <tr><td>Request</td><td>One per HTTP request</td><td>Web: request-scoped data</td></tr>
+  <tr><td>Session</td><td>One per HTTP session</td><td>Web: user session data</td></tr>
+</table>
+<div class="callout callout-warn">⚠️ Never inject a Prototype bean into a Singleton. The Singleton will always get the same Prototype instance — defeating the purpose.</div>`
+      },
+      {
+        title:"Spring AOP — Cross-Cutting Concerns",tag:"concept",
+        body:`<div class="topic-intro">
+<p>AOP (Aspect-Oriented Programming) lets you add behaviour (logging, security, transactions) to methods <b>without changing the method itself</b>. This avoids scattering logging code across hundreds of methods.</p>
+<p><b>Key terms:</b></p>
+<ul>
+<li><b>Aspect</b> — the class containing the cross-cutting logic</li>
+<li><b>Advice</b> — what to do (@Before, @After, @Around)</li>
+<li><b>Pointcut</b> — which methods to target (expression)</li>
+<li><b>Join point</b> — the actual method execution</li>
+</ul>
+</div>
+<div class="code-block">
+  <div class="code-label">EXAMPLE — Logging Aspect <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@Aspect</span>
+<span class="an">@Component</span>
+<span class="kw">public class</span> <span class="cl">LoggingAspect</span> {
+
+    <span class="cm">// Targets ALL methods in the service package</span>
+    <span class="an">@Before</span>(<span class="st">"execution(* com.example.service.*.*(..))"</span>)
+    <span class="kw">public void</span> <span class="fn">logBefore</span>(<span class="cl">JoinPoint</span> jp) {
+        System.out.println(<span class="st">"Calling: "</span> + jp.getSignature().getName());
+    }
+
+    <span class="an">@Around</span>(<span class="st">"execution(* com.example.service.*.*(..))"</span>)
+    <span class="kw">public</span> <span class="cl">Object</span> <span class="fn">timeMethod</span>(<span class="cl">ProceedingJoinPoint</span> pjp) <span class="kw">throws</span> <span class="cl">Throwable</span> {
+        <span class="kw">long</span> start = System.currentTimeMillis();
+        <span class="cl">Object</span> result = pjp.proceed(); <span class="cm">// call the actual method</span>
+        <span class="kw">long</span> time = System.currentTimeMillis() - start;
+        System.out.println(<span class="st">"Took: "</span> + time + <span class="st">"ms"</span>);
+        <span class="kw">return</span> result;
+    }
+}</div>
+</div>
+<div class="callout callout-info">ℹ️ Spring AOP works via <b>proxies</b>. Spring wraps your bean in a proxy object. When you call a method, the proxy intercepts it, runs the advice, then calls the real method. This is why <code>@Transactional</code> on a private method or a self-call doesn't work — it bypasses the proxy.</div>`
+      }
+    ],
+    qa:[
+      {q:"What is Inversion of Control (IoC)?",d:"easy",a:`Framework controls object creation instead of your code. You don't new up dependencies — Spring creates and wires them. Dependency Injection is the mechanism that implements IoC.`},
+      {q:"What are the types of Dependency Injection?",d:"medium",a:`Constructor (preferred: immutable, testable), Setter (optional dependencies), Field injection (@Autowired on field: easy to write, hard to test, avoid).<div class="tip">💡 If you have only one constructor, Spring 4.3+ doesn't even need @Autowired.</div>`},
+      {q:"What is the lifecycle of a Spring Bean?",d:"medium",a:`Instantiate → Inject dependencies → @PostConstruct → Ready → @PreDestroy → Destroyed. PostConstruct is great for cache loading. PreDestroy for cleanup.`},
+      {q:"What are Bean scopes in Spring?",d:"medium",a:`Singleton (default — one instance shared), Prototype (new per request), Request (one per HTTP request), Session (one per HTTP session).<div class="note">⚠️ Injecting Prototype into Singleton defeats prototyping — Singleton holds one Prototype forever.</div>`},
+      {q:"What does @Qualifier do?",d:"easy",a:`When multiple beans of the same type exist, @Qualifier picks which one to inject. Alternative: mark one bean @Primary to make it the default choice.`},
+      {q:"What is Spring AOP and what problem does it solve?",d:"hard",a:`Separates cross-cutting concerns (logging, transactions, security) from business logic. Write once as an Aspect, apply declaratively. Works via JDK dynamic proxies (for interfaces) or CGLIB (for classes). @Transactional and @Cacheable are built on AOP.`}
+    ]
+  },
+  {
+    day:5,title:"Spring Boot",
+    desc:"Auto-configuration, Actuator, Profiles, what Boot adds over Spring.",
+    topics:[
+      {
+        title:"Auto-Configuration — How Boot Magic Works",tag:"concept",
+        body:`<div class="topic-intro">
+<p>This is Spring Boot's defining feature. It looks at what's on your classpath and automatically configures beans so you don't have to write XML or @Bean methods for every standard setup.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">How it works — step by step <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="nm">1</span>. <span class="an">@SpringBootApplication</span> includes <span class="an">@EnableAutoConfiguration</span>
+<span class="nm">2</span>. Spring loads all auto-config classes listed in:
+   META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
+<span class="nm">3</span>. Each class has <span class="an">@ConditionalOn*</span> guards:
+
+<span class="an">@ConditionalOnClass</span>(<span class="cl">DataSource</span>.<span class="kw">class</span>)        <span class="cm">// JDBC driver on classpath?</span>
+<span class="an">@ConditionalOnMissingBean</span>(<span class="cl">DataSource</span>.<span class="kw">class</span>)  <span class="cm">// No custom DataSource defined?</span>
+<span class="kw">class</span> <span class="cl">DataSourceAutoConfiguration</span> {
+    <span class="cm">// If both conditions true → configure DataSource automatically</span>
+}
+
+<span class="nm">4</span>. Your <span class="an">@Bean</span> definitions always take priority over auto-config
+<span class="nm">5</span>. Run with <span class="kw">--debug</span> to see which auto-configs activated/not</div>
+</div>
+<div class="callout callout-tip">💡 This is why adding <code>spring-boot-starter-data-jpa</code> to pom.xml automatically sets up JPA, Hibernate, and transaction management — no XML needed.</div>`
+      },
+      {
+        title:"Profiles & Externalized Config",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Real apps run in multiple environments (dev, test, prod). Profiles let you have environment-specific configuration without changing code.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">application.yml with profiles <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm"># application.yml (shared config)</span>
+spring:
+  application:
+    name: my-service
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:h2:mem:devdb    <span class="cm"># in-memory for dev</span>
+  jpa:
+    show-sql: <span class="kw">true</span>
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: jdbc:postgresql://prod-db:5432/mydb
+  jpa:
+    show-sql: <span class="kw">false</span></div>
+</div>
+<div class="code-block">
+  <div class="code-label">Activating profiles <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm"># In application.properties</span>
+spring.profiles.active=dev
+
+<span class="cm"># As JVM arg</span>
+java -jar app.jar --spring.profiles.active=prod
+
+<span class="cm"># As env variable (Kubernetes/Docker)</span>
+SPRING_PROFILES_ACTIVE=prod
+
+<span class="cm"># Bean active only in specific profile</span>
+<span class="an">@Profile</span>(<span class="st">"dev"</span>)
+<span class="an">@Bean</span>
+<span class="kw">public</span> <span class="cl">DataSource</span> <span class="fn">h2DataSource</span>() { ... }</div>
+</div>`
+      },
+      {
+        title:"Spring Actuator — Production Monitoring",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Actuator exposes HTTP endpoints that let you monitor and manage your running application. Essential for production operations.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">Key Actuator endpoints <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">GET /actuator/health      <span class="cm">→ { "status": "UP" } — used by load balancers</span>
+GET /actuator/metrics     <span class="cm">→ JVM memory, HTTP response times, custom metrics</span>
+GET /actuator/env         <span class="cm">→ All environment properties (CAREFUL in prod!)</span>
+GET /actuator/beans       <span class="cm">→ All registered Spring beans</span>
+GET /actuator/loggers     <span class="cm">→ View log levels</span>
+POST /actuator/loggers/com.example  <span class="cm">→ Change log level at runtime (no restart!)</span>
+GET /actuator/threaddump  <span class="cm">→ JVM thread dump</span>
+GET /actuator/heapdump    <span class="cm">→ Heap dump file</span></div>
+</div>
+<div class="code-block">
+  <div class="code-label">Custom health indicator <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@Component</span>
+<span class="kw">public class</span> <span class="cl">DatabaseHealthIndicator</span> <span class="kw">implements</span> <span class="cl">HealthIndicator</span> {
+    <span class="an">@Override</span>
+    <span class="kw">public</span> <span class="cl">Health</span> <span class="fn">health</span>() {
+        <span class="kw">if</span> (isDatabaseReachable()) {
+            <span class="kw">return</span> <span class="cl">Health</span>.up().withDetail(<span class="st">"db"</span>, <span class="st">"reachable"</span>).build();
+        }
+        <span class="kw">return</span> <span class="cl">Health</span>.down().withDetail(<span class="st">"db"</span>, <span class="st">"unreachable"</span>).build();
+    }
+}</div>
+</div>
+<div class="callout callout-warn">⚠️ Never expose /actuator/env or /actuator/beans publicly. Restrict with Spring Security or by exposing only /health and /metrics.</div>`
+      }
+    ],
+    qa:[
+      {q:"What does Spring Boot add over plain Spring?",d:"easy",a:`Auto-configuration (detects classpath, configures automatically), embedded Tomcat (no WAR deployment), starter POMs (bundle all dependencies), opinionated defaults, Actuator monitoring.`},
+      {q:"How does Spring Boot auto-configuration work?",d:"hard",a:`@EnableAutoConfiguration loads auto-config classes from META-INF imports file. Each class uses @ConditionalOnClass, @ConditionalOnMissingBean etc. to decide if it activates. Your own @Bean definitions always override auto-config.`},
+      {q:"What is Spring Actuator? Name 5 useful endpoints.",d:"medium",a:`Production monitoring. /health (load balancer checks), /metrics (JVM + HTTP stats), /env (properties), /loggers (change log level at runtime), /threaddump (diagnose stuck threads).`},
+      {q:"How do Spring Profiles work?",d:"easy",a:`Different config per environment. application-dev.yml, application-prod.yml. Activate via spring.profiles.active=prod property, env var, or command-line arg. Use @Profile on beans to load them only in specific environments.`},
+      {q:"What is @SpringBootApplication?",d:"medium",a:`Combines @Configuration (config class) + @EnableAutoConfiguration (auto-config) + @ComponentScan (scans package for beans). One annotation to rule them all.`}
+    ]
+  },
+  {
+    day:6,title:"REST API — Core",
+    desc:"HTTP methods, status codes, Spring MVC annotations, exception handling.",
+    topics:[
+      {
+        title:"REST Fundamentals",tag:"concept",
+        body:`<div class="topic-intro">
+<p>REST (Representational State Transfer) is an architectural style for building APIs over HTTP. Understanding its constraints helps you design clean APIs.</p>
+<p><b>6 REST Constraints:</b></p>
+<ol>
+<li><b>Client-Server</b> — UI and data are separated. They evolve independently.</li>
+<li><b>Stateless</b> — Each request has ALL info needed. Server stores no session. This enables horizontal scaling.</li>
+<li><b>Cacheable</b> — Responses declare if they're cacheable. GET requests should be cacheable.</li>
+<li><b>Uniform Interface</b> — Standard methods (GET/POST/PUT/DELETE), resource URLs, consistent response format.</li>
+<li><b>Layered System</b> — Client can't tell if it's hitting server directly or through a proxy/gateway.</li>
+<li><b>Code on Demand</b> (optional) — Server can send executable code (e.g., JavaScript).</li>
+</ol>
+</div>
+<table class="cmp-table">
+  <tr><th>Method</th><th>Action</th><th>Idempotent?</th><th>Body?</th></tr>
+  <tr><td>GET</td><td>Read resource</td><td>Yes</td><td>No</td></tr>
+  <tr><td>POST</td><td>Create resource</td><td>No</td><td>Yes</td></tr>
+  <tr><td>PUT</td><td>Replace entire resource</td><td>Yes</td><td>Yes</td></tr>
+  <tr><td>PATCH</td><td>Partial update</td><td>Depends</td><td>Yes</td></tr>
+  <tr><td>DELETE</td><td>Delete resource</td><td>Yes</td><td>No</td></tr>
+</table>
+<div class="callout callout-info">ℹ️ <b>Idempotent</b> means calling the same request multiple times gives the same result. PUT /users/1 with the same body 10 times = same outcome. POST /users 10 times = 10 users created.</div>`
+      },
+      {
+        title:"HTTP Status Codes You Must Know",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Returning the correct status code is part of building a good REST API. Interviewers will ask you to name codes for specific scenarios.</p>
+</div>
+<table class="cmp-table">
+  <tr><th>Code</th><th>Name</th><th>When to use</th></tr>
+  <tr><td>200</td><td>OK</td><td>Successful GET, PUT, PATCH</td></tr>
+  <tr><td>201</td><td>Created</td><td>Successful POST — resource created</td></tr>
+  <tr><td>204</td><td>No Content</td><td>Successful DELETE or action with no response body</td></tr>
+  <tr><td>400</td><td>Bad Request</td><td>Validation failed, malformed request</td></tr>
+  <tr><td>401</td><td>Unauthorized</td><td>Not authenticated — no token or invalid token</td></tr>
+  <tr><td>403</td><td>Forbidden</td><td>Authenticated but no permission</td></tr>
+  <tr><td>404</td><td>Not Found</td><td>Resource doesn't exist</td></tr>
+  <tr><td>409</td><td>Conflict</td><td>Duplicate — email already exists</td></tr>
+  <tr><td>422</td><td>Unprocessable Entity</td><td>Semantically invalid (valid JSON but business rule failed)</td></tr>
+  <tr><td>500</td><td>Internal Server Error</td><td>Unexpected server error</td></tr>
+  <tr><td>503</td><td>Service Unavailable</td><td>Server down / overloaded</td></tr>
+</table>`
+      },
+      {
+        title:"Spring MVC Annotations & Exception Handling",tag:"code",
+        body:`<div class="code-block">
+  <div class="code-label">Controller annotations <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@RestController</span>           <span class="cm">// = @Controller + @ResponseBody — returns JSON</span>
+<span class="an">@RequestMapping</span>(<span class="st">"/api/v1"</span>) <span class="cm">// base path for all methods</span>
+<span class="kw">public class</span> <span class="cl">UserController</span> {
+
+    <span class="an">@GetMapping</span>(<span class="st">"/users/{id}"</span>)
+    <span class="kw">public</span> <span class="cl">ResponseEntity</span>&lt;<span class="cl">UserDTO</span>&gt; <span class="fn">getUser</span>(<span class="an">@PathVariable</span> <span class="cl">Long</span> id) {
+        <span class="kw">return</span> <span class="cl">ResponseEntity</span>.ok(userService.getUser(id));
+    }
+
+    <span class="an">@PostMapping</span>(<span class="st">"/users"</span>)
+    <span class="kw">public</span> <span class="cl">ResponseEntity</span>&lt;<span class="cl">UserDTO</span>&gt; <span class="fn">createUser</span>(<span class="an">@Valid</span> <span class="an">@RequestBody</span> <span class="cl">CreateUserRequest</span> req) {
+        <span class="cl">UserDTO</span> created = userService.create(req);
+        <span class="cl">URI</span> location = <span class="cl">URI</span>.create(<span class="st">"/api/v1/users/"</span> + created.getId());
+        <span class="kw">return</span> <span class="cl">ResponseEntity</span>.created(location).body(created);
+    }
+
+    <span class="an">@GetMapping</span>(<span class="st">"/users"</span>)
+    <span class="kw">public</span> <span class="cl">List</span>&lt;<span class="cl">UserDTO</span>&gt; <span class="fn">getUsers</span>(
+        <span class="an">@RequestParam</span>(defaultValue=<span class="st">"0"</span>) <span class="kw">int</span> page,
+        <span class="an">@RequestParam</span>(defaultValue=<span class="st">"10"</span>) <span class="kw">int</span> size) {
+        <span class="kw">return</span> userService.getAll(page, size);
+    }
+}</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Global Exception Handler — @RestControllerAdvice <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@RestControllerAdvice</span>
+<span class="kw">public class</span> <span class="cl">GlobalExceptionHandler</span> {
+
+    <span class="an">@ExceptionHandler</span>(<span class="cl">UserNotFoundException</span>.<span class="kw">class</span>)
+    <span class="kw">public</span> <span class="cl">ResponseEntity</span>&lt;<span class="cl">ErrorResponse</span>&gt; <span class="fn">handleNotFound</span>(<span class="cl">UserNotFoundException</span> ex) {
+        <span class="kw">return</span> <span class="cl">ResponseEntity</span>.status(<span class="nm">404</span>)
+            .body(<span class="kw">new</span> <span class="cl">ErrorResponse</span>(<span class="st">"NOT_FOUND"</span>, ex.getMessage()));
+    }
+
+    <span class="an">@ExceptionHandler</span>(<span class="cl">MethodArgumentNotValidException</span>.<span class="kw">class</span>)
+    <span class="kw">public</span> <span class="cl">ResponseEntity</span>&lt;<span class="cl">ErrorResponse</span>&gt; <span class="fn">handleValidation</span>(<span class="cl">MethodArgumentNotValidException</span> ex) {
+        <span class="cl">String</span> msg = ex.getBindingResult().getFieldErrors().stream()
+            .map(e -&gt; e.getField() + <span class="st">": "</span> + e.getDefaultMessage())
+            .collect(Collectors.joining(<span class="st">", "</span>));
+        <span class="kw">return</span> <span class="cl">ResponseEntity</span>.badRequest()
+            .body(<span class="kw">new</span> <span class="cl">ErrorResponse</span>(<span class="st">"VALIDATION_ERROR"</span>, msg));
+    }
+}</div>
+</div>`
+      }
+    ],
+    qa:[
+      {q:"What are the 6 constraints of REST?",d:"medium",a:`Client-Server (separation), Stateless (no session on server), Cacheable (declare cacheability), Uniform Interface (standard methods + URLs), Layered System (can't tell direct vs proxy), Code on Demand (optional, JS etc).`},
+      {q:"When do you use PUT vs PATCH?",d:"medium",a:`PUT replaces the entire resource — missing fields become null. PATCH applies a partial update — only send what changed. PUT is idempotent. PATCH depends on implementation.`},
+      {q:"What HTTP status code would you return for these cases?",d:"medium",a:`Created → 201. Successful delete → 204. Invalid input → 400. No token → 401. No permission → 403. Not found → 404. Duplicate → 409. Server crash → 500.`},
+      {q:"What is @RestController vs @Controller?",d:"easy",a:`@RestController = @Controller + @ResponseBody. Returns JSON/XML directly. @Controller returns view names (Thymeleaf). For REST APIs always use @RestController.`},
+      {q:"How do you handle global exceptions in a REST API?",d:"medium",a:`@RestControllerAdvice + @ExceptionHandler. Catches exceptions from any controller globally. Return consistent error structure {code, message, timestamp} with the right HTTP status code.`},
+      {q:"What is the difference between @PathVariable and @RequestParam?",d:"easy",a:`@PathVariable extracts from URL path: GET /users/42 → @PathVariable Long id. @RequestParam extracts from query string: GET /users?page=1 → @RequestParam int page.`}
+    ]
+  },
+  {
+    day:7,title:"REST API — Advanced",
+    desc:"Versioning, validation, DTOs, pagination, best practices.",
+    topics:[
+      {
+        title:"Request Validation with Bean Validation",tag:"code",
+        body:`<div class="code-block">
+  <div class="code-label">DTO with validation annotations <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="kw">public class</span> <span class="cl">CreateUserRequest</span> {
+
+    <span class="an">@NotBlank</span>(message = <span class="st">"Name is required"</span>)
+    <span class="an">@Size</span>(min=<span class="nm">2</span>, max=<span class="nm">50</span>)
+    <span class="kw">private</span> <span class="cl">String</span> name;
+
+    <span class="an">@NotBlank</span>
+    <span class="an">@Email</span>(message = <span class="st">"Invalid email format"</span>)
+    <span class="kw">private</span> <span class="cl">String</span> email;
+
+    <span class="an">@NotNull</span>
+    <span class="an">@Min</span>(<span class="nm">18</span>) <span class="an">@Max</span>(<span class="nm">120</span>)
+    <span class="kw">private</span> <span class="cl">Integer</span> age;
+
+    <span class="an">@Pattern</span>(regexp = <span class="st">"^\\+?[0-9]{10,15}$"</span>)
+    <span class="kw">private</span> <span class="cl">String</span> phone;
+}
+
+<span class="cm">// In controller — @Valid triggers validation</span>
+<span class="an">@PostMapping</span>(<span class="st">"/users"</span>)
+<span class="kw">public</span> <span class="cl">ResponseEntity</span>&lt;<span class="cl">UserDTO</span>&gt; <span class="fn">create</span>(<span class="an">@Valid</span> <span class="an">@RequestBody</span> <span class="cl">CreateUserRequest</span> req) {
+    <span class="cm">// If validation fails, Spring throws MethodArgumentNotValidException</span>
+    <span class="cm">// Caught by GlobalExceptionHandler → returns 400</span>
+    <span class="kw">return</span> <span class="cl">ResponseEntity</span>.status(<span class="nm">201</span>).body(userService.create(req));
+}</div>
+</div>`
+      },
+      {
+        title:"DTO Pattern — Why Never Expose Entities",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Directly returning your JPA entity from a REST endpoint seems easy but causes serious problems in production.</p>
+</div>
+<div class="concept-grid">
+  <div class="concept-cell"><div class="concept-cell-label">🔒 Security</div><div class="concept-cell-val">Entities often have fields like password, salt, internalFlag that you'd never want in an API response</div></div>
+  <div class="concept-cell"><div class="concept-cell-label">🔗 Coupling</div><div class="concept-cell-val">If you rename a DB column, your API contract breaks — clients need to update</div></div>
+  <div class="concept-cell"><div class="concept-cell-label">💥 Serialization</div><div class="concept-cell-val">Lazy-loaded relations cause LazyInitializationException or infinite recursion in Jackson</div></div>
+  <div class="concept-cell"><div class="concept-cell-label">📦 Flexibility</div><div class="concept-cell-val">API response can combine data from multiple entities, computed fields, aggregations</div></div>
+</div>
+<div class="code-block">
+  <div class="code-label">Entity → DTO mapping <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm">// Entity — internal DB representation</span>
+<span class="an">@Entity</span>
+<span class="kw">public class</span> <span class="cl">User</span> {
+    <span class="kw">private</span> <span class="cl">Long</span> id;
+    <span class="kw">private</span> <span class="cl">String</span> name;
+    <span class="kw">private</span> <span class="cl">String</span> email;
+    <span class="kw">private</span> <span class="cl">String</span> passwordHash; <span class="cm">// NEVER expose this</span>
+    <span class="kw">private</span> <span class="cl">String</span> internalRef;  <span class="cm">// NEVER expose this</span>
+}
+
+<span class="cm">// DTO — what the API returns</span>
+<span class="kw">record</span> <span class="cl">UserDTO</span>(<span class="cl">Long</span> id, <span class="cl">String</span> name, <span class="cl">String</span> email) {
+    <span class="kw">static</span> <span class="cl">UserDTO</span> <span class="fn">from</span>(<span class="cl">User</span> user) {
+        <span class="kw">return new</span> <span class="cl">UserDTO</span>(user.getId(), user.getName(), user.getEmail());
+    }
+}</div>
+</div>`
+      },
+      {
+        title:"Pagination & API Best Practices",tag:"concept",
+        body:`<div class="code-block">
+  <div class="code-label">Pagination with Spring Data <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@GetMapping</span>(<span class="st">"/users"</span>)
+<span class="kw">public</span> <span class="cl">Page</span>&lt;<span class="cl">UserDTO</span>&gt; <span class="fn">getUsers</span>(
+    <span class="an">@RequestParam</span>(defaultValue=<span class="st">"0"</span>) <span class="kw">int</span> page,
+    <span class="an">@RequestParam</span>(defaultValue=<span class="st">"20"</span>) <span class="kw">int</span> size) {
+
+    size = Math.min(size, <span class="nm">100</span>); <span class="cm">// cap max page size!</span>
+    <span class="cl">Pageable</span> pageable = <span class="cl">PageRequest</span>.of(page, size, <span class="cl">Sort</span>.by(<span class="st">"name"</span>));
+    <span class="kw">return</span> userRepository.findAll(pageable).map(<span class="cl">UserDTO</span>::from);
+}
+
+<span class="cm">// Response includes:</span>
+<span class="cm">// { content: [...], totalElements: 1000, totalPages: 50, number: 0 }</span></div>
+</div>
+<div class="topic-intro"><b>REST API Naming Best Practices</b></div>
+<table class="cmp-table">
+  <tr><th>Scenario</th><th>Good URL</th><th>Bad URL</th></tr>
+  <tr><td>Get all users</td><td>GET /users</td><td>GET /getUsers</td></tr>
+  <tr><td>Get one user</td><td>GET /users/42</td><td>GET /user?id=42</td></tr>
+  <tr><td>Create user</td><td>POST /users</td><td>POST /createUser</td></tr>
+  <tr><td>Update user</td><td>PUT /users/42</td><td>PUT /updateUser/42</td></tr>
+  <tr><td>User's orders</td><td>GET /users/42/orders</td><td>GET /getUserOrders?userId=42</td></tr>
+</table>
+<div class="callout callout-tip">💡 URLs should be <b>nouns</b>, not verbs. The HTTP method IS the verb. Use plural nouns for resources.</div>`
+      }
+    ],
+    qa:[
+      {q:"What are the strategies for REST API versioning?",d:"medium",a:`URI versioning: /api/v1/users (most common, simple). Header versioning: X-API-Version: 1 (cleaner URLs, harder to test). Request param: /api/users?version=1 (easy but pollutes query string). URI versioning is the industry standard for public APIs.`},
+      {q:"Why use DTOs instead of exposing JPA entities directly?",d:"medium",a:`Security (hide password/internal fields), decoupling (rename DB column without breaking API), serialization safety (no lazy init / infinite recursion), flexibility (combine data from multiple sources).`},
+      {q:"How does @Valid work for request validation?",d:"medium",a:`Add Bean Validation annotations on DTO (@NotBlank, @Email, @Min). Add @Valid before @RequestBody in controller. If validation fails, Spring throws MethodArgumentNotValidException → catch in @ExceptionHandler → return 400 with field errors.`},
+      {q:"How would you implement pagination in a REST API?",d:"medium",a:`Use Spring Data Pageable. PageRequest.of(page, size). Repository.findAll(pageable). Map entities to DTOs. Always cap max size (100). Response includes content + totalElements + totalPages.`},
+      {q:"What is idempotency in REST APIs?",d:"medium",a:`Calling the same request multiple times gives the same result. GET/PUT/DELETE are idempotent. POST is not (creates new resource each time). For payment APIs, use idempotency keys to prevent duplicate processing on retries.`},
+      {q:"What is ResponseEntity and when do you use it?",d:"easy",a:`Full control over HTTP response — status code, headers, body. Use when you need to set specific status (201 Created), add headers (Location), or return no body (204). For simple 200 responses, returning the object directly is fine.`}
+    ]
+  },
+
+  {
+    day:8,title:"Spring Data JPA",
+    desc:"ORM, entities, repositories, N+1, transactions.",
+    topics:[
+      {
+        title:"JPA Entities & Relationships",tag:"code",
+        body:`<div class="topic-intro">
+<p>JPA maps Java classes to DB tables. You write objects — Hibernate writes SQL for you.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">Entity mapping <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@Entity</span>
+<span class="an">@Table</span>(name = <span class="st">"orders"</span>)
+<span class="kw">public class</span> <span class="cl">Order</span> {
+
+    <span class="an">@Id</span>
+    <span class="an">@GeneratedValue</span>(strategy = GenerationType.IDENTITY)
+    <span class="kw">private</span> <span class="cl">Long</span> id;
+
+    <span class="an">@Column</span>(nullable = <span class="kw">false</span>)
+    <span class="kw">private</span> <span class="cl">String</span> status;
+
+    <span class="an">@ManyToOne</span>(fetch = FetchType.LAZY)
+    <span class="an">@JoinColumn</span>(name = <span class="st">"user_id"</span>)
+    <span class="kw">private</span> <span class="cl">User</span> user;
+
+    <span class="an">@OneToMany</span>(mappedBy = <span class="st">"order"</span>, cascade = CascadeType.ALL)
+    <span class="kw">private</span> List&lt;<span class="cl">OrderItem</span>&gt; items = <span class="kw">new</span> ArrayList&lt;&gt;();
+}</div>
+</div>
+<div class="callout callout-warn">⚠️ The <b>@ManyToOne side owns</b> the relationship (holds the foreign key). <code>mappedBy</code> on the @OneToMany side tells JPA "the other side owns this". Forget mappedBy → JPA creates an unwanted join table.</div>`
+      },
+      {
+        title:"The N+1 Problem — Most Asked JPA Question",tag:"gotcha",
+        body:`<div class="topic-intro">
+<p>This is the #1 JPA performance issue interviewers ask about. You must be able to explain it and fix it.</p>
+<p><b>The problem:</b> Fetching N entities triggers N additional SQL queries for their relationships. 100 orders → 101 queries!</p>
+</div>
+<div class="code-block">
+  <div class="code-label">N+1 — The Bug <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">List&lt;<span class="cl">Order</span>&gt; orders = orderRepo.findAll(); <span class="cm">// 1 query: SELECT * FROM orders</span>
+<span class="kw">for</span> (<span class="cl">Order</span> o : orders) {
+    o.getItems(); <span class="cm">// 1 query PER order: SELECT * FROM order_items WHERE order_id=?</span>
+}
+<span class="cm">// Result: 1 + N queries. For 100 orders = 101 queries. BAD.</span></div>
+</div>
+<div class="code-block">
+  <div class="code-label">Fix 1 — JOIN FETCH in JPQL <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@Query</span>(<span class="st">"SELECT o FROM Order o JOIN FETCH o.items"</span>)
+List&lt;<span class="cl">Order</span>&gt; <span class="fn">findAllWithItems</span>();
+<span class="cm">// Result: 1 query with JOIN. Items loaded eagerly for this specific call.</span></div>
+</div>
+<div class="code-block">
+  <div class="code-label">Fix 2 — @EntityGraph <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@EntityGraph</span>(attributePaths = {<span class="st">"items"</span>})
+List&lt;<span class="cl">Order</span>&gt; <span class="fn">findAll</span>();
+<span class="cm">// Declarative — tells JPA to eagerly load items for this query</span></div>
+</div>
+<div class="callout callout-tip">💡 Enable SQL logging in dev: <code>spring.jpa.show-sql=true</code>. If you see the same query repeated in a loop, you have N+1.</div>`
+      },
+      {
+        title:"@Transactional — Deep Dive",tag:"gotcha",
+        body:`<div class="code-block">
+  <div class="code-label">Basic usage <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@Service</span>
+<span class="kw">public class</span> <span class="cl">OrderService</span> {
+
+    <span class="an">@Transactional</span>  <span class="cm">// wraps everything in a DB transaction</span>
+    <span class="kw">public void</span> <span class="fn">placeOrder</span>(<span class="cl">OrderRequest</span> req) {
+        <span class="cl">Order</span> order = <span class="fn">createOrder</span>(req);      <span class="cm">// step 1</span>
+        <span class="fn">reserveInventory</span>(req.getItems());  <span class="cm">// step 2</span>
+        <span class="fn">chargePayment</span>(req.getPayment());   <span class="cm">// step 3</span>
+        <span class="cm">// If ANY step fails → ALL rolled back automatically</span>
+    }
+}</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Propagation — what happens when transactional methods call each other <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">REQUIRED (default)    <span class="cm">// join existing tx, or create new one if none</span>
+REQUIRES_NEW          <span class="cm">// always new tx, suspend existing one</span>
+NESTED                <span class="cm">// savepoint inside existing tx</span>
+NOT_SUPPORTED         <span class="cm">// suspend any existing tx, run without</span>
+
+<span class="cm">// Example: audit log should commit even if main tx rolls back</span>
+<span class="an">@Transactional</span>(propagation = Propagation.REQUIRES_NEW)
+<span class="kw">public void</span> <span class="fn">saveAuditLog</span>(<span class="cl">AuditLog</span> log) { ... }</div>
+</div>
+<div class="callout callout-danger">🚫 <b>Common gotchas:</b><br>1. @Transactional only works on <b>public</b> methods<br>2. Calling a @Transactional method from within the same class bypasses the proxy — no transaction!<br>3. RuntimeException causes rollback by default. CheckedException does NOT. Use <code>rollbackFor=Exception.class</code> if needed.</div>`
+      }
+    ],
+    qa:[
+      {q:"What is ORM and what problem does JPA solve?",d:"easy",a:`ORM bridges Java objects and DB tables. Without it you'd write raw SQL + manual mapping. JPA is the spec; Hibernate is the implementation. Write Java objects — Hibernate generates SQL.`},
+      {q:"Explain @OneToMany and @ManyToOne. Which side owns the relationship?",d:"medium",a:`@ManyToOne side owns (holds foreign key). @OneToMany side uses mappedBy to point to the owning side. Forget mappedBy → JPA creates an unwanted join table instead of a foreign key.<div class="note">⚠️ Always initialize collections: private List items = new ArrayList<>();</div>`},
+      {q:"What is the N+1 problem? How do you fix it?",d:"hard",a:`Fetching N entities triggers N extra queries for their relations. Fix: JOIN FETCH in @Query, @EntityGraph, or @BatchSize. Detect with spring.jpa.show-sql=true — repeated queries in a loop = N+1.`},
+      {q:"What is the difference between LAZY and EAGER fetching?",d:"medium",a:`LAZY (default for collections): load on access. Efficient but causes LazyInitializationException outside transaction. EAGER (default for @ManyToOne): load immediately. Avoid setting everything EAGER — causes over-fetching. Use LAZY + JOIN FETCH when needed.`},
+      {q:"What does @Transactional do? What is propagation?",d:"hard",a:`Wraps method in DB transaction — all succeeds or all rolls back. Propagation: REQUIRED (join or create), REQUIRES_NEW (always new), NESTED (savepoint). Gotchas: only public methods, self-calls bypass proxy, RuntimeException rolls back by default.`},
+      {q:"What is the difference between JpaRepository and CrudRepository?",d:"easy",a:`CrudRepository: basic CRUD. PagingAndSortingRepository: adds pagination. JpaRepository: extends both + JPA-specific (flush, saveAndFlush, findAll(Pageable)). Use JpaRepository unless you have a specific reason not to.`}
+    ]
+  },
+  {
+    day:9,title:"SQL Basics",
+    desc:"JOINs, indexes, aggregations, ACID — what every backend dev needs.",
+    topics:[
+      {
+        title:"JOINs — The Visual Way to Understand Them",tag:"code",
+        body:`<div class="code-block">
+  <div class="code-label">Sample tables <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">users:  id=1 Alice, id=2 Bob, id=3 Charlie
+orders: id=A user_id=1, id=B user_id=1, id=C user_id=99 (no matching user!)</div>
+</div>
+<div class="code-block">
+  <div class="code-label">INNER JOIN — only rows matching in BOTH tables <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">SELECT u.name, o.id
+FROM users u INNER JOIN orders o ON u.id = o.user_id;
+<span class="cm">-- Result: Alice + A, Alice + B (Bob and Charlie excluded, order C excluded)</span></div>
+</div>
+<div class="code-block">
+  <div class="code-label">LEFT JOIN — ALL left rows, matching right (nulls if no match) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">SELECT u.name, o.id
+FROM users u LEFT JOIN orders o ON u.id = o.user_id;
+<span class="cm">-- Result: Alice + A, Alice + B, Bob + NULL, Charlie + NULL</span>
+<span class="cm">-- Use when: "Give me all users even if they have no orders"</span></div>
+</div>
+<div class="code-block">
+  <div class="code-label">Common interview query patterns <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm">-- Users with no orders</span>
+SELECT u.name FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE o.id IS NULL;
+
+<span class="cm">-- Orders per user (only users with > 2 orders)</span>
+SELECT u.name, COUNT(o.id) AS order_count
+FROM users u JOIN orders o ON u.id = o.user_id
+GROUP BY u.id, u.name
+HAVING COUNT(o.id) &gt; <span class="nm">2</span>
+ORDER BY order_count DESC;</div>
+</div>`
+      },
+      {
+        title:"Indexes — Why Queries Are Slow Without Them",tag:"concept",
+        body:`<div class="topic-intro">
+<p>An index is a sorted data structure (usually B-tree) that the DB maintains alongside a table. Think of it as a book's index — instead of reading every page (full table scan), you jump straight to the right page.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">Index example <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="cm">-- Without index: DB reads every row (full table scan)</span>
+SELECT * FROM users WHERE email = 'alice@example.com';
+<span class="cm">-- 1 million rows → checks all 1M. O(n)</span>
+
+<span class="cm">-- Add index</span>
+CREATE INDEX idx_users_email ON users(email);
+
+<span class="cm">-- Now: DB uses B-tree to find email directly. O(log n)</span>
+<span class="cm">-- 1 million rows → ~20 comparisons</span></div>
+</div>
+<table class="cmp-table">
+  <tr><th>Index type</th><th>When to use</th></tr>
+  <tr><td>Single column</td><td>Queries filtering by one column (WHERE email = ?)</td></tr>
+  <tr><td>Composite</td><td>Queries filtering by multiple columns (WHERE user_id=? AND status=?)</td></tr>
+  <tr><td>Unique index</td><td>Enforce uniqueness + speed (email, username)</td></tr>
+  <tr><td>Partial index</td><td>Index only a subset (WHERE status = 'ACTIVE')</td></tr>
+</table>
+<div class="callout callout-warn">⚠️ Every index slows down INSERT/UPDATE/DELETE (DB must maintain the index). Don't index every column. Index columns used in WHERE, JOIN ON, ORDER BY.</div>`
+      },
+      {
+        title:"ACID Properties",tag:"concept",
+        body:`<div class="topic-intro">
+<p>ACID is what makes relational databases reliable for financial and critical data.</p>
+</div>
+<div class="concept-grid">
+  <div class="concept-cell"><div class="concept-cell-label">Atomicity</div><div class="concept-cell-val">All operations succeed, or ALL are rolled back. No partial updates. Transfer $100: debit + credit both succeed or neither does.</div></div>
+  <div class="concept-cell"><div class="concept-cell-label">Consistency</div><div class="concept-cell-val">DB always moves from one valid state to another. Constraints (NOT NULL, FK, CHECK) are never violated.</div></div>
+  <div class="concept-cell"><div class="concept-cell-label">Isolation</div><div class="concept-cell-val">Concurrent transactions don't see each other's intermediate state. Levels: READ UNCOMMITTED → READ COMMITTED → REPEATABLE READ → SERIALIZABLE</div></div>
+  <div class="concept-cell"><div class="concept-cell-label">Durability</div><div class="concept-cell-val">Once committed, data survives crashes. Written to disk (WAL log). Power off → data still there when DB restarts.</div></div>
+</div>`
+      }
+    ],
+    qa:[
+      {q:"What is the difference between INNER JOIN, LEFT JOIN, and RIGHT JOIN?",d:"medium",a:`INNER: only rows matching in both tables. LEFT: all left rows + matching right (null if no match). RIGHT: all right rows + matching left. Most common: INNER (matching data) and LEFT (all from one side, optional relation).`},
+      {q:"What is an index? Why does it speed up queries?",d:"medium",a:`B-tree structure for fast lookup. Without index: full table scan O(n). With index: B-tree lookup O(log n). Speeds up reads but slows writes (index must be maintained). Index columns used in WHERE, JOIN, ORDER BY.`},
+      {q:"What is GROUP BY and when would you use HAVING?",d:"medium",a:`GROUP BY aggregates rows with same column value. HAVING filters on aggregated results (WHERE can't filter aggregates). WHERE filters rows before grouping. HAVING filters groups after aggregation.`},
+      {q:"What are ACID properties?",d:"medium",a:`Atomicity (all or nothing), Consistency (valid state always), Isolation (concurrent tx don't interfere), Durability (committed data survives crashes). What makes RDBMS reliable for financial data.`},
+      {q:"What is a query execution plan and why does it matter?",d:"hard",a:`Shows how the DB processes a query — indexes used, join strategy, row estimates. EXPLAIN ANALYZE in PostgreSQL. Look for Seq Scan (bad on large tables) vs Index Scan (good). Run before adding an index blindly.`},
+      {q:"What is a Primary Key vs Foreign Key vs Unique constraint?",d:"easy",a:`PK: uniquely identifies row, not null, one per table. FK: references PK in another table, enforces referential integrity. Unique: like PK but allows nulls, table can have multiple unique constraints.`}
+    ]
+  },
+  {
+    day:10,title:"Microservices",
+    desc:"Architecture patterns, communication, service discovery, resilience.",
+    topics:[
+      {
+        title:"Monolith vs Microservices",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Understanding the real tradeoffs — not just the buzzwords — is what separates senior devs in interviews.</p>
+</div>
+<table class="cmp-table">
+  <tr><th>Aspect</th><th>Monolith</th><th>Microservices</th></tr>
+  <tr><td>Deployment</td><td>One unit — simple, fast initially</td><td>Many services — complex CI/CD</td></tr>
+  <tr><td>Scaling</td><td>Scale the whole app</td><td>Scale each service independently</td></tr>
+  <tr><td>Team</td><td>One team, one codebase</td><td>Each team owns their service</td></tr>
+  <tr><td>Data</td><td>One shared DB</td><td>Each service has its own DB</td></tr>
+  <tr><td>Failures</td><td>One service down = full outage</td><td>One service down = partial degradation</td></tr>
+  <tr><td>Testing</td><td>Easy integration tests</td><td>Complex distributed testing</td></tr>
+  <tr><td>Latency</td><td>In-process calls (fast)</td><td>Network calls (slower, can fail)</td></tr>
+</table>
+<div class="callout callout-tip">💡 Don't start with microservices. Start monolith → hit real scaling/team pain → extract services. Amazon, Netflix started as monoliths.</div>`
+      },
+      {
+        title:"Service Communication — Sync vs Async",tag:"concept",
+        body:`<div class="code-block">
+  <div class="code-label">Synchronous — REST (caller waits) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">OrderService  ──── REST call ───→  PaymentService
+              ←─── response ────
+
+✅ Simple, easy to debug
+✅ Immediate consistency
+❌ If PaymentService is down → OrderService request fails
+❌ Tight temporal coupling</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Asynchronous — Message Queue (fire and forget) <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">OrderService ──── message ───→  Queue (RabbitMQ/SQS)
+                                       └───→  PaymentService (processes when ready)
+
+✅ OrderService doesn't wait — highly available
+✅ Services are decoupled — PaymentService can be down momentarily
+❌ Harder to trace, debug
+❌ Eventual consistency (not immediate)</div>
+</div>
+<div class="callout callout-info">ℹ️ Use <b>sync (REST)</b> for user-facing real-time flows (checkout, login). Use <b>async (queues)</b> for background tasks, notifications, batch processing.</div>`
+      },
+      {
+        title:"Circuit Breaker Pattern",tag:"pattern",
+        body:`<div class="topic-intro">
+<p>Without a circuit breaker: Service A calls slow/down Service B → A's threads pile up waiting → A runs out of threads → A crashes. Cascading failure.</p>
+<p>The circuit breaker stops this by <b>failing fast</b> when a downstream service is unhealthy.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">Circuit Breaker States <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">CLOSED   → Normal. Requests flow through. Failure rate monitored.
+           If failure rate > threshold (e.g., 50%) → switch to OPEN
+
+OPEN     → Requests immediately rejected (fail fast). No calls to downstream.
+           After timeout (e.g., 30s) → switch to HALF-OPEN
+
+HALF-OPEN → Let one test request through.
+            If success → switch to CLOSED (service recovered)
+            If failure → switch back to OPEN</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Resilience4j — Spring Boot <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@CircuitBreaker</span>(name = <span class="st">"paymentService"</span>, fallbackMethod = <span class="st">"paymentFallback"</span>)
+<span class="kw">public</span> <span class="cl">PaymentResult</span> <span class="fn">processPayment</span>(<span class="cl">PaymentRequest</span> req) {
+    <span class="kw">return</span> paymentClient.process(req);
+}
+
+<span class="kw">public</span> <span class="cl">PaymentResult</span> <span class="fn">paymentFallback</span>(<span class="cl">PaymentRequest</span> req, <span class="cl">Throwable</span> t) {
+    <span class="cm">// Called when circuit is OPEN — return cached or default response</span>
+    <span class="kw">return</span> <span class="cl">PaymentResult</span>.pending();
+}</div>
+</div>`
+      }
+    ],
+    qa:[
+      {q:"Monolith vs Microservices — what are the real tradeoffs?",d:"medium",a:`Monolith: simple, fast to start, one deployment, hard to scale parts independently. Microservices: independent scaling/deployment, team autonomy, but network complexity, distributed data, harder testing/debugging. Don't start with microservices.`},
+      {q:"What is an API Gateway and what does it do?",d:"medium",a:`Single entry point. Handles routing, auth (JWT validation), rate limiting, SSL termination, load balancing, request aggregation. Spring Cloud Gateway is the Spring choice.`},
+      {q:"What is a Circuit Breaker pattern? Why is it needed?",d:"hard",a:`Prevents cascading failures. Without it: slow service B causes service A threads to pile up → A crashes. States: Closed (normal), Open (fail fast after threshold), Half-Open (test recovery). Resilience4j in Spring Boot.`},
+      {q:"How do microservices communicate — sync vs async?",d:"medium",a:`Sync (REST/gRPC): caller waits. Simple but tight coupling — if downstream is down, caller fails. Async (queues): fire and forget. Decoupled, resilient, but eventual consistency. Use sync for real-time user flows, async for background tasks.`},
+      {q:"What is Service Discovery? How does Eureka work?",d:"medium",a:`Dynamic IP lookup — services register themselves, clients query registry. Eureka: services heartbeat every 30s. Miss heartbeats → removed from registry. Clients get current address from Eureka, not hardcoded IPs.`},
+      {q:"What is the Saga pattern?",d:"hard",a:`Manages distributed transactions. Choreography: services emit events, react to others (decentralized). Orchestration: central coordinator tells each service what to do, handles compensation on failure. Example: order → reserve inventory → charge → if charge fails → undo reservation.`}
+    ]
+  },
+  {
+    day:11,title:"Security & Caching",
+    desc:"JWT, Spring Security filter chain, Redis caching, connection pooling.",
+    topics:[
+      {
+        title:"JWT Authentication — End to End",tag:"concept",
+        body:`<div class="topic-intro">
+<p>JWT (JSON Web Token) enables <b>stateless authentication</b> — no session stored on server. Each request carries its own proof of identity.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">JWT Structure — 3 parts separated by dots <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsInJvbGVzIjpbIlVTRVIiXSwiZXhwIjoxNzE5MDAwMDAwfQ.abc123
+
+HEADER (base64)   → { "alg": "HS256", "typ": "JWT" }
+PAYLOAD (base64)  → { "sub": "user1", "roles": ["USER"], "exp": 1719000000 }
+SIGNATURE         → HMAC( header + "." + payload, secretKey )
+
+The server validates signature to confirm token wasn't tampered with.
+No DB lookup needed — the token IS the identity.</div>
+</div>
+<div class="code-block">
+  <div class="code-label">JWT Auth Flow <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="nm">1</span>. Client: POST /auth/login { username, password }
+<span class="nm">2</span>. Server: validates credentials → generates JWT (exp: 15 min)
+<span class="nm">3</span>. Client: stores token, sends with every request:
+         Authorization: Bearer eyJhbGci...
+<span class="nm">4</span>. Server filter: extracts token → validates signature → sets SecurityContext
+<span class="nm">5</span>. Controller: @PreAuthorize("hasRole('ADMIN')") → checks SecurityContext</div>
+</div>
+<div class="callout callout-warn">⚠️ JWT payload is BASE64 encoded, NOT encrypted. Anyone can decode and read it. Never put passwords, credit card numbers, or sensitive PII in JWT payload.</div>`
+      },
+      {
+        title:"Spring Security Filter Chain",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Every HTTP request passes through a chain of security filters before reaching your controller. Each filter has a specific job.</p>
+</div>
+<div class="code-block">
+  <div class="code-label">Filter chain order <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">HTTP Request
+    │
+    ▼
+SecurityContextPersistenceFilter    → loads security context from session (or empty)
+    │
+    ▼
+YOUR JwtAuthenticationFilter        → extract token → validate → set SecurityContext
+    │
+    ▼
+UsernamePasswordAuthenticationFilter → handles /login form (if applicable)
+    │
+    ▼
+ExceptionTranslationFilter          → catches auth exceptions → 401/403 response
+    │
+    ▼
+FilterSecurityInterceptor           → checks @PreAuthorize / SecurityConfig rules
+    │
+    ▼
+Your Controller Method</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Security config — Spring Boot 3 <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@Configuration</span>
+<span class="kw">public class</span> <span class="cl">SecurityConfig</span> {
+
+    <span class="an">@Bean</span>
+    <span class="kw">public</span> <span class="cl">SecurityFilterChain</span> <span class="fn">filterChain</span>(<span class="cl">HttpSecurity</span> http) <span class="kw">throws</span> <span class="cl">Exception</span> {
+        <span class="kw">return</span> http
+            .csrf(csrf -&gt; csrf.disable())       <span class="cm">// stateless API — no CSRF needed</span>
+            .sessionManagement(s -&gt; s.sessionCreationPolicy(STATELESS))
+            .authorizeHttpRequests(auth -&gt; auth
+                .requestMatchers(<span class="st">"/auth/**"</span>).permitAll()    <span class="cm">// public endpoints</span>
+                .requestMatchers(<span class="st">"/admin/**"</span>).hasRole(<span class="st">"ADMIN"</span>)
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtFilter, <span class="cl">UsernamePasswordAuthenticationFilter</span>.<span class="kw">class</span>)
+            .build();
+    }
+}</div>
+</div>`
+      },
+      {
+        title:"Redis Caching — Cache-Aside Pattern",tag:"code",
+        body:`<div class="code-block">
+  <div class="code-label">Cache-Aside — how it works <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="nm">1</span>. App checks Redis for data (cache lookup)
+<span class="nm">2</span>. Cache HIT  → return data directly (fast, no DB hit)
+<span class="nm">3</span>. Cache MISS → fetch from DB → store in Redis with TTL → return data
+
+<span class="cm">// Spring makes this trivial with @Cacheable</span></div>
+</div>
+<div class="code-block">
+  <div class="code-label">Spring Cache annotations <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body"><span class="an">@Service</span>
+<span class="kw">public class</span> <span class="cl">ProductService</span> {
+
+    <span class="an">@Cacheable</span>(value = <span class="st">"products"</span>, key = <span class="st">"#id"</span>)
+    <span class="kw">public</span> <span class="cl">Product</span> <span class="fn">getProduct</span>(<span class="cl">Long</span> id) {
+        <span class="cm">// Only runs on cache MISS. On HIT, cached value returned.</span>
+        <span class="kw">return</span> productRepo.findById(id).orElseThrow();
+    }
+
+    <span class="an">@CacheEvict</span>(value = <span class="st">"products"</span>, key = <span class="st">"#id"</span>)
+    <span class="kw">public</span> <span class="cl">Product</span> <span class="fn">updateProduct</span>(<span class="cl">Long</span> id, <span class="cl">ProductRequest</span> req) {
+        <span class="cm">// Removes cached entry when product is updated</span>
+        <span class="kw">return</span> productRepo.save(req.toEntity());
+    }
+
+    <span class="an">@CachePut</span>(value = <span class="st">"products"</span>, key = <span class="st">"#result.id"</span>)
+    <span class="kw">public</span> <span class="cl">Product</span> <span class="fn">createProduct</span>(<span class="cl">ProductRequest</span> req) {
+        <span class="cm">// Always runs AND updates cache</span>
+        <span class="kw">return</span> productRepo.save(req.toEntity());
+    }
+}</div>
+</div>
+<div class="callout callout-tip">💡 Always set a TTL (time-to-live) on cached data. Stale data is a cache's worst enemy. For product catalog: TTL=1h. For user sessions: TTL=15m.</div>`
+      }
+    ],
+    qa:[
+      {q:"What is the difference between Authentication and Authorization?",d:"easy",a:`Authentication: who are you? (verify identity — login). Authorization: what can you do? (check permissions after identity verified). Authenticated but not authorized → 403 Forbidden.`},
+      {q:"How does JWT work? What are its 3 parts?",d:"medium",a:`Header (algorithm), Payload (claims: userId, roles, exp), Signature (HMAC of header+payload with secret). Server validates signature — no DB lookup needed. Stateless. Payload is base64 NOT encrypted — never put sensitive data in it.`},
+      {q:"What is the Spring Security filter chain?",d:"hard",a:`Every request passes through filters before reaching controller: load context → your JWT filter (validate token, set SecurityContext) → exception handler (401/403) → authorization check (@PreAuthorize). Add custom filters with addFilterBefore().`},
+      {q:"What is the cache-aside pattern in Redis?",d:"medium",a:`1. Check cache. 2. HIT → return. 3. MISS → fetch DB → store in Redis with TTL → return. Spring: @Cacheable on method. @CacheEvict on update/delete. Always set TTL to prevent stale data.`},
+      {q:"What is HikariCP and why does connection pool size matter?",d:"medium",a:`Default Spring Boot connection pool. Maintains pre-opened DB connections. Too small → threads wait for connections. Too large → DB overloaded. Rule of thumb: 2×CPU cores + effective spindle count. Default is 10.`}
+    ]
+  },
+
+  {
+    day:12,title:"System Design Basics",
+    desc:"How to approach design questions, scale, databases, load balancing.",
+    topics:[
+      {
+        title:"How to Approach a System Design Question",tag:"pattern",
+        body:`<div class="topic-intro">
+<p>System design interviews test your ability to think through building large-scale systems. They're open-ended — there's no single right answer. The goal is to show structured thinking.</p>
+<p><b>Framework — use this every time:</b></p>
+<ol>
+<li><b>Clarify (5 min)</b> — Ask about scale, users, read/write ratio, latency requirements, must-haves vs nice-to-haves</li>
+<li><b>Estimate scale (2 min)</b> — DAU, QPS, storage. This drives your architecture decisions.</li>
+<li><b>Define the API (3 min)</b> — What endpoints do we need? This anchors the design.</li>
+<li><b>Data model (5 min)</b> — What entities? What DB (SQL vs NoSQL)?</li>
+<li><b>High-level architecture (10 min)</b> — Draw boxes: client, API gateway, services, DB, cache, queue</li>
+<li><b>Deep dive (10 min)</b> — Bottlenecks, scaling strategies, trade-offs</li>
+</ol>
+</div>
+<div class="callout callout-tip">💡 <b>Talk out loud at every step.</b> Interviewers want to see your reasoning. "I'm choosing PostgreSQL here because the data is relational and we need ACID transactions" is better than just writing "PostgreSQL".</div>`
+      },
+      {
+        title:"URL Shortener — Full Design Walkthrough",tag:"pattern",
+        body:`<div class="code-block">
+  <div class="code-label">Step 1 — Clarify & Estimate <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">Scale: 100M URLs created/day, 10B redirects/day
+Read:write ratio = 100:1 (very read-heavy)
+Latency: redirect must be < 100ms
+Storage: 100M × 500 bytes avg = ~50GB/day</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Step 2 — API <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">POST /shorten  { originalUrl, expiresAt? }  → { shortCode, shortUrl }
+GET  /{code}                                 → 301 Redirect to originalUrl</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Step 3 — Data Model <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">urls table:
+  id          BIGINT PRIMARY KEY
+  short_code  VARCHAR(8)  INDEXED UNIQUE   ← lookup key
+  original_url TEXT       NOT NULL
+  created_at  TIMESTAMP
+  expires_at  TIMESTAMP</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Step 4 — Short Code Generation <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">Base62 encode a counter: chars = [a-z, A-Z, 0-9] = 62 chars
+6 chars = 62^6 = 56 billion unique codes
+
+Alternative: MD5(originalUrl) → take first 6 chars
+Risk: collisions → retry with different chars</div>
+</div>
+<div class="code-block">
+  <div class="code-label">Step 5 — Architecture <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">Client → CDN (cache hot redirects) → API Gateway → App Server
+                                                          │
+                                              ┌───────────┴──────────┐
+                                           Redis                PostgreSQL
+                                      (hot short codes)       (all codes + metadata)
+
+Redirect flow:
+1. Check Redis for short_code (cache hit → 80% of traffic)
+2. Miss → query PostgreSQL → store in Redis → redirect</div>
+</div>`
+      },
+      {
+        title:"SQL vs NoSQL — When to Use What",tag:"concept",
+        body:`<table class="cmp-table">
+  <tr><th>Scenario</th><th>Choice</th><th>Why</th></tr>
+  <tr><td>Financial data, orders, invoices</td><td>PostgreSQL (SQL)</td><td>ACID, relationships, complex queries</td></tr>
+  <tr><td>User profiles, product catalogs</td><td>MongoDB (NoSQL)</td><td>Flexible schema, document structure</td></tr>
+  <tr><td>Session storage, caching</td><td>Redis (NoSQL)</td><td>In-memory, key-value, TTL support</td></tr>
+  <tr><td>Time-series (metrics, logs)</td><td>InfluxDB / TimescaleDB</td><td>Optimized for time-based queries</td></tr>
+  <tr><td>Full-text search</td><td>Elasticsearch</td><td>Inverted index, relevance scoring</td></tr>
+  <tr><td>Social graph (who follows who)</td><td>Neo4j (Graph DB)</td><td>Graph traversal is native</td></tr>
+</table>
+<div class="callout callout-info">ℹ️ Most production systems use multiple: PostgreSQL for core business data, Redis for caching, maybe Elasticsearch for search. This is called <b>polyglot persistence</b>.</div>`
+      }
+    ],
+    qa:[
+      {q:"How do you approach a system design question?",d:"medium",a:`Clarify requirements → estimate scale (QPS, storage) → define API → design data model → high-level architecture (boxes: client, gateway, services, DB, cache) → deep dive bottlenecks. Talk out loud throughout — reasoning matters more than the answer.`},
+      {q:"Design a URL shortener. Walk me through your approach.",d:"hard",a:`API: POST /shorten → short code, GET /{code} → redirect. Data: urls table with short_code indexed. Code gen: Base62 counter (6 chars = 56B codes). Scale: Redis cache for hot codes, CDN for popular redirects, PostgreSQL for persistence.`},
+      {q:"What is the difference between vertical and horizontal scaling?",d:"easy",a:`Vertical (scale up): more CPU/RAM on one machine. Simple but limited and expensive. Horizontal (scale out): more instances behind a load balancer. Unlimited scale but requires stateless services.`},
+      {q:"When would you choose SQL vs NoSQL?",d:"medium",a:`SQL: structured data, relationships, ACID needed (financial). NoSQL: flexible schema, massive scale, specific patterns (key-value → Redis, document → MongoDB, graph → Neo4j). Most systems use both (polyglot persistence).`},
+      {q:"What is a load balancer and what algorithms can it use?",d:"medium",a:`Distributes traffic across multiple instances. Algorithms: Round Robin (sequential), Least Connections (send to least busy), IP Hash (same client → same server), Weighted Round Robin (more traffic to stronger instances).`}
+    ]
+  },
+  {
+    day:13,title:"Mock Interview Day",
+    desc:"Mixed deep-dive questions across all topics — simulate a real interview.",
+    topics:[
+      {
+        title:"How to Perform Well in Technical Interviews",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Technical knowledge is only 60% of the interview. The other 40% is how you communicate that knowledge.</p>
+<p><b>Before you answer any question:</b></p>
+<ol>
+<li>Pause 2–3 seconds. Collect your thoughts.</li>
+<li>Restate the question briefly to confirm understanding.</li>
+<li>Start with the simple case, then add depth.</li>
+<li>Use examples — abstract theory without examples sounds memorized.</li>
+<li>Acknowledge trade-offs — "This approach is better for X but worse for Y".</li>
+</ol>
+<p><b>If you don't know the answer:</b></p>
+<ul>
+<li>"I haven't worked with this directly, but based on what I know about X, I'd expect Y"</li>
+<li>"I know the concept but I'd need to double-check the exact syntax"</li>
+<li>Never bluff — experienced interviewers will probe deeper and expose it</li>
+</ul>
+</div>
+<div class="callout callout-tip">💡 With 7 YOE, interviewers expect you to think like an architect — not just know syntax. For every topic, be ready to say: "In production, I'd consider..."</div>`
+      }
+    ],
+    qa:[
+      {q:"Walk me through how a request flows from browser to DB in a Spring Boot REST app.",d:"hard",a:`Browser → HTTPS request → Server → DispatcherServlet → Security Filter Chain (JWT validated) → Handler Mapping → @RestController method → @Service → @Transactional boundary → @Repository → Hibernate SQL → HikariCP connection → DB → result → entity → DTO → JSON response.`},
+      {q:"How would you debug a Spring Boot app that's running slow?",d:"hard",a:`Check Actuator /metrics for response times. Enable SQL logging — N+1 problem? Check thread pool exhaustion (threads blocked waiting for DB). Check cache hit rates. EXPLAIN ANALYZE on slow queries. JVM profiler for hot methods. GC logs for excessive pauses.`},
+      {q:"Explain how you'd secure a REST API end-to-end.",d:"hard",a:`HTTPS (TLS 1.2+). JWT auth (short expiry 15min + refresh tokens). RBAC (@PreAuthorize). Input validation (Bean Validation + sanitize). Rate limiting (API Gateway). OWASP: parameterized queries (JPA — no SQL injection), no CSRF needed for stateless JWT. Secrets in env vars / Vault.`},
+      {q:"What's the difference between optimistic and pessimistic locking?",d:"hard",a:`Optimistic: no DB lock, uses @Version column — conflicts detected at commit (OptimisticLockException). For low-contention reads. Pessimistic: DB lock immediately, blocks other transactions. Use for high-contention writes (inventory, bank transfers).`},
+      {q:"How would you design a rate limiter for an API?",d:"hard",a:`Token Bucket or Sliding Window Counter. Redis implementation: INCR rate:{ip}:{minute}, EXPIRE 60s, reject if > 100. Production: Spring Cloud Gateway built-in rate limiting with Redis, or Kong/AWS API Gateway.`},
+      {q:"What causes a LazyInitializationException and how do you fix it?",d:"hard",a:`Accessing a lazy-loaded JPA association outside a transaction (session already closed). Fixes: 1. Open transaction (extend @Transactional scope). 2. JOIN FETCH in query. 3. @EntityGraph. 4. Use DTO projection — fetch only needed fields in one query. Avoid: never set everything to EAGER.`}
+    ]
+  },
+  {
+    day:14,title:"Behavioral & Final Revision",
+    desc:"STAR answers, project walkthroughs, interview day mindset.",
+    topics:[
+      {
+        title:"STAR Framework for Behavioral Questions",tag:"concept",
+        body:`<div class="topic-intro">
+<p>Behavioral questions test how you handle real situations. Use the STAR framework to structure every answer.</p>
+<ul>
+<li><b>S</b>ituation — Context: team size, project, time</li>
+<li><b>T</b>ask — What was your specific responsibility</li>
+<li><b>A</b>ction — What YOU did (not "we") — be specific</li>
+<li><b>R</b>esult — Measurable outcome: "reduced response time by 60%", "saved 4 hours/week"</li>
+</ul>
+<p><b>Prepare stories for these scenarios:</b></p>
+</div>
+<table class="cmp-table">
+  <tr><th>Question type</th><th>What they're testing</th></tr>
+  <tr><td>"Tell me about a technical challenge you solved"</td><td>Problem-solving depth, technical skill</td></tr>
+  <tr><td>"Tell me about a conflict with a teammate"</td><td>Collaboration, communication</td></tr>
+  <tr><td>"Tell me about a failure or mistake"</td><td>Self-awareness, learning mindset</td></tr>
+  <tr><td>"Tell me about leading a project"</td><td>Leadership, ownership</td></tr>
+  <tr><td>"Tell me about a time you disagreed with your manager"</td><td>Independence, diplomacy</td></tr>
+</table>
+<div class="callout callout-tip">💡 Write down 4–5 real stories from your 7 years. Each story can answer multiple question types depending on which aspect you emphasize.</div>`
+      },
+      {
+        title:"Tell Me About Yourself — Structure",tag:"concept",
+        body:`<div class="topic-intro">
+<p>This is the first question in most interviews. It sets the tone. Don't ramble. Use this formula:</p>
+<p><b>Present → Past → Future</b> (keep it under 2 minutes)</p>
+</div>
+<div class="code-block">
+  <div class="code-label">Template <button class="code-copy" onclick="copyCode(this)">Copy</button></div>
+  <div class="code-body">"I'm a Java backend developer with 7 years of experience,
+specializing in Spring Boot and microservices.
+
+Currently, I [your role + main responsibility].
+One thing I'm particularly proud of is [specific achievement with numbers].
+
+Before that, I [earlier experience — 1-2 sentences].
+
+I'm now looking for [what you want: senior role / tech lead / more scale / etc.]
+because [genuine reason: growth, interesting domain, architecture ownership].
+
+I'm excited about this role because [specific thing about the company/role]."</div>
+</div>
+<div class="callout callout-warn">⚠️ Always end with why you want THEIR role specifically. Shows genuine interest, not just job hunting.</div>`
+      }
+    ],
+    qa:[
+      {q:"Tell me about yourself (structure your answer).",d:"easy",a:`Present (current role + achievement) → Past (earlier experience) → Future (what you want + why here). Under 2 minutes. End with specific reason you want this role.`},
+      {q:"Describe a challenging technical problem you solved.",d:"medium",a:`STAR: Situation (context, team), Task (your responsibility), Action (what YOU specifically did — technical decisions, steps), Result (measurable outcome: reduced latency 60%, cut DB load by 40%). Probe: "What would you do differently?" shows growth mindset.`},
+      {q:"How do you handle disagreements with your team on technical decisions?",d:"medium",a:`Listen first, understand their reasoning. Present data/evidence for your position (not opinion). Propose time-boxed PoC if both sides have merit. Disagree and commit — execute team decision fully. Never say "I always convince them I'm right."`},
+      {q:"Where do you see yourself in 5 years?",d:"easy",a:`Growing into architecture/tech lead role. Deep backend expertise, leading design decisions, mentoring others, bridging business + technical. Tie it to the company's scale/growth if possible.`},
+      {q:"What questions should you ask the interviewer at the end?",d:"easy",a:`"What does the tech stack look like and what are plans to evolve it?" "Biggest technical challenges the team faces?" "How does the team handle incidents/on-call?" "What would success look like in first 6 months?" Never say "I have no questions."`},
+      {q:"What is your biggest weakness?",d:"medium",a:`Pick a real, non-core weakness. Show what you're actively doing about it. Example: "I over-engineer solutions. I've been practicing YAGNI — start simple, add complexity when justified. Code reviews help me course-correct early." Never say "I work too hard."`}
+    ]
+  }
+];
+
+const TOOLS = [
+  { icon:"💻", name:"IntelliJ IDEA", cat:"setup", catLabel:"Setup",
+    desc:"The industry-standard Java IDE. Community edition is free.",
+    why:"Powerful refactoring, built-in Spring support, debugger, database viewer, JVM profiler.",
+    link:"https://www.jetbrains.com/idea/download/" },
+  { icon:"🔧", name:"Postman", cat:"practice", catLabel:"Practice",
+    desc:"Test and explore REST APIs visually.",
+    why:"Essential for testing your Spring Boot APIs during practice.",
+    link:"https://www.postman.com/downloads/" },
+  { icon:"📦", name:"Docker Desktop", cat:"setup", catLabel:"Setup",
+    desc:"Run PostgreSQL, Redis, RabbitMQ locally without installing anything.",
+    why:"docker run -e POSTGRES_PASSWORD=pass -p 5432:5432 postgres — instant DB.",
+    link:"https://www.docker.com/products/docker-desktop/" },
+  { icon:"📝", name:"LeetCode", cat:"practice", catLabel:"Practice",
+    desc:"Coding challenge platform. Focus: Easy + Medium array/map/string problems.",
+    why:"For your level, do 10–15 problems max. Focus on patterns: sliding window, two pointer, hashmap.",
+    link:"https://leetcode.com/problemset/" },
+  { icon:"🗃️", name:"DBeaver", cat:"practice", catLabel:"Practice",
+    desc:"Free universal DB client — PostgreSQL, MySQL, H2, Oracle.",
+    why:"Write and run SQL queries against a real DB. Practice EXPLAIN ANALYZE on queries.",
+    link:"https://dbeaver.io/download/" },
+  { icon:"🍃", name:"Spring Initializr", cat:"setup", catLabel:"Setup",
+    desc:"Generate Spring Boot projects in seconds.",
+    why:"During interviews you may need to quickly set up a demo project.",
+    link:"https://start.spring.io" },
+  { icon:"📚", name:"Baeldung", cat:"learn", catLabel:"Learn",
+    desc:"The best Spring/Java tutorial site on the internet.",
+    why:"Deep, accurate, code-first articles. Every Spring Boot topic has a Baeldung article.",
+    link:"https://www.baeldung.com" },
+  { icon:"🔴", name:"Redis Insight", cat:"practice", catLabel:"Practice",
+    desc:"Visual Redis client to see what's in your cache.",
+    why:"Run Redis in Docker, use this to inspect cached keys, see TTL values.",
+    link:"https://redis.com/redis-enterprise/redis-insight/" },
+  { icon:"📊", name:"draw.io", cat:"practice", catLabel:"Practice",
+    desc:"Free diagramming tool for system design.",
+    why:"Practice drawing system architecture diagrams. In interviews you'll sketch these on a whiteboard.",
+    link:"https://app.diagrams.net" },
+  { icon:"🧪", name:"JUnit 5 + Mockito", cat:"setup", catLabel:"Setup",
+    desc:"Java testing frameworks included with Spring Boot starter-test.",
+    why:"Write a few unit tests for your practice code. Interviewers often ask about testing strategy.",
+    link:"https://junit.org/junit5/" },
+  { icon:"📖", name:"Spring Docs", cat:"learn", catLabel:"Learn",
+    desc:"Official Spring Framework & Spring Boot documentation.",
+    why:"Ground truth. When in doubt, go here. The Spring Boot reference guide is surprisingly readable.",
+    link:"https://docs.spring.io/spring-boot/docs/current/reference/html/" },
+  { icon:"🧠", name:"Anki Flashcards", cat:"practice", catLabel:"Practice",
+    desc:"Spaced-repetition flashcard app — free.",
+    why:"Create cards for concepts you keep forgetting. Review 10 min/day. Spaced repetition is scientifically the most efficient memorization technique.",
+    link:"https://apps.ankiweb.net" },
+];
+
+// ═══════════════════════════════════════════════════════════════
+// STATE & STORAGE
+// ═══════════════════════════════════════════════════════════════
+
+let currentDay = parseInt(localStorage.getItem('jp_currentDay')) || 0;
+let activeTab = localStorage.getItem('jp_activeTab') || 'learn';
+let flashcardMode = false;
+let flashcardIndex = 0;
+let flashcardItems = [];
+
+// Load saved progress
+function loadProgress() {
+  try {
+    const saved = localStorage.getItem('jp_progress');
+    return saved ? JSON.parse(saved) : {};
+  } catch { return {}; }
+}
+function saveProgress(p) {
+  localStorage.setItem('jp_progress', JSON.stringify(p));
+}
+let progress = loadProgress();
+
+// ═══════════════════════════════════════════════════════════════
+// SEARCH INDEX
+// ═══════════════════════════════════════════════════════════════
+
+const searchIndex = [];
+DAYS.forEach((d, di) => {
+  d.topics.forEach((t, ti) => {
+    searchIndex.push({
+      type: 'topic', day: di, dayNum: d.day, dayTitle: d.title,
+      title: t.title, text: t.title + ' ' + stripHtml(t.body).substring(0, 200),
+      id: `topic-${di}-${ti}`
+    });
+  });
+  d.qa.forEach((q, qi) => {
+    searchIndex.push({
+      type: 'qa', day: di, dayNum: d.day, dayTitle: d.title,
+      title: q.q, text: q.q + ' ' + stripHtml(q.a).substring(0, 200),
+      id: `qa-${di}-${qi}`, difficulty: q.d
+    });
+  });
+});
+
+function stripHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER SIDEBAR
+// ═══════════════════════════════════════════════════════════════
+
+function renderSidebar() {
+  const sb = document.getElementById('sidebar');
+  const completedCount = Object.keys(progress).filter(k => k.startsWith('day_') && progress[k] === 'done').length;
+  const totalDays = DAYS.length;
+  const pct = Math.round((completedCount / totalDays) * 100);
+
+  sb.innerHTML = `
+    <div class="sidebar-header">
+      <div class="sidebar-label">14-Day Plan</div>
+      <span class="progress-pill">${pct}%</span>
+    </div>
+    <div class="sidebar-scroll">
+      ${DAYS.map((d, i) => {
+        const isActive = i === currentDay;
+        const isCompleted = progress[`day_${d.day}`] === 'done';
+        return `
+          <div class="day-row ${isActive ? 'active' : ''} ${isCompleted ? 'completed' : ''}" onclick="goToDay(${i})">
+            <div class="day-progress"></div>
+            <span class="day-num">D${d.day}</span>
+            <div class="day-info">
+              <div class="day-title-row">${d.title}</div>
+              </div>
+            <div class="day-check ${isCompleted ? 'done' : ''}">${isCompleted ? '✓' : ''}</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div class="sidebar-footer">
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" style="width:${pct}%"></div>
+      </div>
+      <div style="margin-top:6px">${completedCount}/${totalDays} days completed</div>
+    </div>
+  `;
+}
+
+function goToDay(i) {
+  currentDay = i;
+  activeTab = 'learn';
+  flashcardMode = false;
+  localStorage.setItem('jp_currentDay', currentDay);
+  localStorage.setItem('jp_activeTab', activeTab);
+  renderSidebar();
+  renderMain();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER TABS
+// ═══════════════════════════════════════════════════════════════
+
+function renderLearnTab(d) {
+  return d.topics.map((t, ti) => `
+    <div class="topic-card" id="topic-${ti}">
+      <div class="topic-header" onclick="toggleTopic(${ti})">
+        <span class="topic-num">${ti+1}</span>
+        <span class="topic-title">${t.title}</span>
+        <span class="topic-tag tag-${t.tag}">${t.tag}</span>
+        <span class="topic-chevron">▶</span>
+      </div>
+      <div class="topic-body"><div class="topic-body-inner">${t.body}</div></div>
+    </div>
+  `).join('');
+}
+
+function renderQATab(d) {
+  const qaCards = d.qa.map((item, qi) => {
+    const key = `qa_${d.day}_${qi}`;
+    const status = progress[key] || '';
+    return `
+      <div class="qa-card ${status ? 'assessed-' + status : ''}" id="qa-${qi}">
+        <div class="qa-question" onclick="toggleQA(${qi})">
+          <span class="q-number">Q${qi+1}</span>
+          <span class="q-text">${item.q}</span>
+          <span class="difficulty ${item.d}">${item.d}</span>
+          <span class="q-chevron">▶</span>
+        </div>
+        <div class="qa-answer">${item.a}</div>
+        <div class="assess-bar">
+          <button class="assess-btn knew ${status === 'knew' ? 'active' : ''}" onclick="assessQA(event, ${d.day}, ${qi}, 'knew')">✓ Knew it</button>
+          <button class="assess-btn partial ${status === 'partial' ? 'active' : ''}" onclick="assessQA(event, ${d.day}, ${qi}, 'partial')">~ Partial</button>
+          <button class="assess-btn dont-know ${status === 'dont-know' ? 'active' : ''}" onclick="assessQA(event, ${d.day}, ${qi}, 'dont-know')">✗ Didn't know</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="qa-list">${qaCards}</div>
+    <hr class="divider">
+    <div class="ai-section">
+      <div class="ai-header">
+        <div class="ai-dot"></div>
+        <div class="ai-label">AI Evaluator</div>
+        <div class="ai-sublabel">Type your answer — get scored locally</div>
+      </div>
+      <div class="ai-body">
+        <select class="ai-select-q" id="ai-q-select">
+          ${d.qa.map((item, qi) => `<option value="${qi}">Q${qi+1}: ${item.q.substring(0,65)}...</option>`).join('')}
+        </select>
+        <textarea class="ai-textarea" id="ai-answer" placeholder="Type your answer in your own words..."></textarea>
+        <button class="ai-btn" id="ai-eval-btn" onclick="evaluateAnswer()">Evaluate My Answer</button>
+        <div class="ai-response" id="ai-response"></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderScheduleTab(d) {
+  const isWeek1 = d.day <= 7;
+  const rows = isWeek1 ? [
+    ['Study topic content (this Learn tab)', '1.5 hrs'],
+    ['Q&A tab — attempt before revealing', '45 min'],
+    ['AI Evaluator — 3–4 questions out loud', '30 min'],
+    ['Notes on weak points', '15 min'],
+  ] : [
+    ["Study today's topic", '1 hr'],
+    ['Q&A + AI Evaluator', '45 min'],
+    ['LeetCode / SQL practice (Days 8–9)', '45 min'],
+    ['System design sketching', '30 min'],
+  ];
+  return `
+    <div class="schedule-section">
+      <div class="schedule-card">
+        <div class="schedule-card-header">
+          <div class="schedule-card-title">Day ${d.day} · ${isWeek1 ? 'Week 1 Learning' : 'Week 2 Practice'} Schedule</div>
+          <span class="schedule-badge ${isWeek1?'badge-week1':'badge-week2'}">${isWeek1?'Week 1':'Week 2'}</span>
+        </div>
+        <table class="schedule-table">
+          ${rows.map(([a,t]) => `<tr><td>${a}</td><td>${t}</td></tr>`).join('')}
+          <tr class="total-row"><td>Total</td><td>~3 hours/day</td></tr>
+        </table>
+      </div>
+      <div class="schedule-card">
+        <div class="schedule-card-header"><div class="schedule-card-title">Weekday vs Weekend</div></div>
+        <div class="split-grid">
+          <div class="split-card">
+            <div class="split-label">Weekdays · Mon–Fri</div>
+            <div class="split-hours">1.5–2 hrs</div>
+            <div class="split-desc">45 min morning before work + 1 hr evening</div>
+          </div>
+          <div class="split-card">
+            <div class="split-label">Weekends · Sat–Sun</div>
+            <div class="split-hours">3–4 hrs</div>
+            <div class="split-desc">Heavy learning days — Days 1,2,8,9 are weekends intentionally</div>
+          </div>
+        </div>
+      </div>
+      <div class="schedule-card">
+        <div class="schedule-card-header">
+          <div class="schedule-card-title">Must-Follow Rules</div>
+          <span class="schedule-badge badge-rule">Important</span>
+        </div>
+        <div class="rule-box">
+          ${[
+            ['🗣️','Answer out loud, not in your head','Speaking exposes gaps reading never does. Use AI Evaluator every day.'],
+            ['🧠','Reveal AFTER you attempt, not before','Think 30 sec → say answer → reveal. Active recall is 3× more effective.'],
+            ['📖','Explain WHY not just WHAT','With 7 YOE, they probe depth. Always have the reason ready.'],
+            ['🔁','Review yesterday\'s weak answers first','10 min at start of each session revisiting previous struggles.'],
+            ['⏱️','30 min active recall > 2 hrs passive reading','Short on time? Skip reading. Do Q&A only.'],
+          ].map(([icon,title,sub]) => `
+            <div class="rule-item">
+              <div class="rule-icon">${icon}</div>
+              <div class="rule-text"><strong>${title}</strong><br><span>${sub}</span></div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderToolsTab() {
+  const cats = ['setup','practice','learn','ref'];
+  const catNames = {setup:'🛠 Setup First',practice:'🎯 Practice Tools',learn:'📚 Learning Resources',ref:'📋 Reference'};
+  const catColors = {setup:'cat-setup',practice:'cat-practice',learn:'cat-learn',ref:'cat-ref'};
+  return `
+    <div class="tools-section">
+      ${cats.map(cat => {
+        const tools = TOOLS.filter(t => t.cat === cat);
+        if (!tools.length) return '';
+        return `
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">${catNames[cat]}</div>
+            <div class="tools-grid">
+              ${tools.map(t => `
+                <div class="tool-card">
+                  <div class="tool-header">
+                    <div class="tool-icon">${t.icon}</div>
+                    <div class="tool-name">${t.name}</div>
+                    <span class="tool-cat ${catColors[cat]}">${t.catLabel}</span>
+                  </div>
+                  <div class="tool-desc">${t.desc}</div>
+                  <div class="tool-why">💡 ${t.why}</div>
+                  <a class="tool-link" href="${t.link}" target="_blank">Open ↗</a>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+function renderReviewTab() {
+  const weakItems = [];
+  DAYS.forEach((d, di) => {
+    d.qa.forEach((q, qi) => {
+      const key = `qa_${d.day}_${qi}`;
+      if (progress[key] === 'dont-know' || progress[key] === 'partial') {
+        weakItems.push({ day: d.day, dayIndex: di, dayTitle: d.title, qIndex: qi, question: q.q, difficulty: q.d, status: progress[key] });
+      }
+    });
+  });
+
+  if (weakItems.length === 0) {
+    return `
+      <div class="review-empty">
+        <div class="review-empty-icon">🎉</div>
+        <h3>All caught up!</h3>
+        <p>You haven't marked any questions as "Partial" or "Didn't know" yet. Go through the Q&A tabs and self-assess honestly — that's how this review queue gets populated.</p>
+      </div>
+    `;
+  }
+
+  return `
+    <div style="margin-bottom:16px">
+      <h2 style="font-size:18px;margin-bottom:4px">Review Queue</h2>
+      <p style="font-size:13px;color:var(--muted)">${weakItems.length} question${weakItems.length > 1 ? 's' : ''} need${weakItems.length === 1 ? 's' : ''} review</p>
+    </div>
+    <div class="review-list">
+      ${weakItems.map(item => `
+        <div class="review-card" onclick="goToDayAndQA(${item.dayIndex}, ${item.qIndex})">
+          <div class="review-status ${item.status}"></div>
+          <div class="review-info">
+            <div class="review-q">${item.question}</div>
+            <div class="review-meta">
+              <span class="review-day">Day ${item.day} · ${item.dayTitle}</span>
+              <span class="review-diff ${item.difficulty}">${item.difficulty}</span>
+            </div>
+          </div>
+          <button class="review-btn">Review →</button>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderFlashcardTab() {
+  if (flashcardItems.length === 0) {
+    // Build flashcard items from all Q&A
+    flashcardItems = [];
+    DAYS.forEach((d, di) => {
+      d.qa.forEach((q, qi) => {
+        flashcardItems.push({ dayIndex: di, qIndex: qi, question: q.q, answer: q.a, difficulty: q.d, day: d.day });
+      });
+    });
+    // Shuffle
+    for (let i = flashcardItems.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [flashcardItems[i], flashcardItems[j]] = [flashcardItems[j], flashcardItems[i]];
+    }
+    flashcardIndex = 0;
+  }
+
+  const item = flashcardItems[flashcardIndex];
+  if (!item) return '<div class="review-empty"><h3>No flashcards available</h3></div>';
+
+  return `
+    <div style="margin-bottom:16px;text-align:center">
+      <h2 style="font-size:18px;margin-bottom:4px">Flashcard Mode</h2>
+      <p style="font-size:13px;color:var(--muted)">Click the card to flip · Assess yourself honestly</p>
+    </div>
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard" onclick="toggleFlashcard()">
+        <div class="flash-front">
+          <div class="flash-difficulty ${item.difficulty}">${item.difficulty}</div>
+          <div class="flash-q">${item.question}</div>
+          <div class="flash-hint">Tap to reveal answer</div>
+        </div>
+        <div class="flash-back">
+          <div class="flash-difficulty ${item.difficulty}">${item.difficulty}</div>
+          <div class="flash-answer">${item.answer}</div>
+        </div>
+      </div>
+    </div>
+    <div class="flash-controls">
+      <button class="flash-btn flash-btn-wrong" onclick="flashcardRate('dont-know')">✗ Didn't know</button>
+      <button class="flash-btn flash-btn-partial" onclick="flashcardRate('partial')">~ Partial</button>
+      <button class="flash-btn flash-btn-correct" onclick="flashcardRate('knew')">✓ Knew it</button>
+    </div>
+    <div class="flash-nav">
+      <button class="flash-nav-btn" onclick="prevFlashcard()">←</button>
+      <span class="flash-counter">${flashcardIndex + 1} / ${flashcardItems.length}</span>
+      <button class="flash-nav-btn" onclick="nextFlashcard()">→</button>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDER MAIN
+// ═══════════════════════════════════════════════════════════════
+
+function renderMain() {
+  const d = DAYS[currentDay];
+  const tabs = [
+    {id:'learn',label:'📖 Learn'},
+    {id:'qa',label:'❓ Q&A'},
+    {id:'schedule',label:'⏱ Schedule'},
+    {id:'tools',label:'🛠 Tools'},
+    {id:'review',label:'🔄 Review', badge: getReviewCount()},
+    {id:'flashcards',label:'🃏 Flashcards'},
+  ];
+
+  const tabBar = tabs.map(t =>
+    `<button class="tab-btn${activeTab===t.id?' active':''}" onclick="switchTab('${t.id}')">${t.label}${t.badge ? `<span class="tab-badge">${t.badge}</span>` : ''}</button>`
+  ).join('');
+
+  let tabContent = '';
+  if (activeTab === 'learn') tabContent = renderLearnTab(d);
+  else if (activeTab === 'qa') tabContent = renderQATab(d);
+  else if (activeTab === 'schedule') tabContent = renderScheduleTab(d);
+  else if (activeTab === 'tools') tabContent = renderToolsTab();
+  else if (activeTab === 'review') tabContent = renderReviewTab();
+  else if (activeTab === 'flashcards') tabContent = renderFlashcardTab();
+
+  const isCompleted = progress[`day_${d.day}`] === 'done';
+
+  document.getElementById('main').innerHTML = `
+    <div class="main-scroll">
+      <div class="main-inner fade-in">
+        <div class="day-hero">
+          <div class="day-hero-top">
+            <span class="day-tag">Day ${d.day}</span>
+          </div>
+          <h1>${d.title}</h1>
+          <div class="day-hero-desc">${d.desc}</div>
+          <div class="day-hero-actions">
+            <button class="hero-btn ${isCompleted ? 'hero-btn-success' : 'hero-btn-primary'}" onclick="markDayComplete(${d.day})">
+              ${isCompleted ? '✓ Completed' : 'Mark Day Complete'}
+            </button>
+            <button class="hero-btn hero-btn-secondary" onclick="printDay()">🖨 Print</button>
+            <button class="hero-btn hero-btn-secondary" onclick="expandAll()">📖 Expand All</button>
+            <button class="hero-btn hero-btn-secondary" onclick="collapseAll()">📕 Collapse All</button>
+          </div>
+          <div class="stats-row">
+            <span class="stat-chip">${d.topics.length} topics</span>
+            <span class="stat-chip">${d.qa.length} questions</span>
+            <span class="stat-chip easy">Easy: ${d.qa.filter(q=>q.d==='easy').length}</span>
+            <span class="stat-chip medium">Med: ${d.qa.filter(q=>q.d==='medium').length}</span>
+            <span class="stat-chip hard">Hard: ${d.qa.filter(q=>q.d==='hard').length}</span>
+          </div>
+        </div>
+        <div class="tab-bar">${tabBar}</div>
+        <div class="tab-content">${tabContent}</div>
+      </div>
+    </div>
+  `;
+}
+
+function getReviewCount() {
+  let count = 0;
+  DAYS.forEach(d => {
+    d.qa.forEach((q, qi) => {
+      const key = `qa_${d.day}_${qi}`;
+      if (progress[key] === 'dont-know' || progress[key] === 'partial') count++;
+    });
+  });
+  return count > 0 ? count : '';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INTERACTIONS
+// ═══════════════════════════════════════════════════════════════
+
+function switchTab(tab) {
+  activeTab = tab;
+  localStorage.setItem('jp_activeTab', activeTab);
+  if (tab === 'flashcards') flashcardMode = true;
+  renderMain();
+}
+
+function toggleTopic(ti) {
+  document.getElementById(`topic-${ti}`).classList.toggle('open');
+}
+
+function toggleQA(qi) {
+  document.getElementById(`qa-${qi}`).classList.toggle('open');
+}
+
+function assessQA(event, day, qi, rating) {
+  event.stopPropagation();
+  const key = `qa_${day}_${qi}`;
+  progress[key] = rating;
+  saveProgress(progress);
+  renderMain();
+  renderSidebar();
+}
+
+function markDayComplete(day) {
+  const key = `day_${day}`;
+  if (progress[key] === 'done') {
+    delete progress[key];
+  } else {
+    progress[key] = 'done';
+  }
+  saveProgress(progress);
+  renderSidebar();
+  renderMain();
+}
+
+function expandAll() {
+  document.querySelectorAll('.topic-card').forEach(c => c.classList.add('open'));
+  document.querySelectorAll('.qa-card').forEach(c => c.classList.add('open'));
+}
+
+function collapseAll() {
+  document.querySelectorAll('.topic-card').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.qa-card').forEach(c => c.classList.remove('open'));
+}
+
+function printDay() {
+  window.print();
+}
+
+function goToDayAndQA(dayIndex, qIndex) {
+  currentDay = dayIndex;
+  activeTab = 'qa';
+  localStorage.setItem('jp_currentDay', currentDay);
+  localStorage.setItem('jp_activeTab', activeTab);
+  renderSidebar();
+  renderMain();
+  setTimeout(() => {
+    const el = document.getElementById(`qa-${qIndex}`);
+    if (el) {
+      el.classList.add('open');
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 100);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FLASHCARDS
+// ═══════════════════════════════════════════════════════════════
+
+function toggleFlashcard() {
+  document.getElementById('flashcard').classList.toggle('flipped');
+}
+
+function nextFlashcard() {
+  if (flashcardIndex < flashcardItems.length - 1) {
+    flashcardIndex++;
+    renderMain();
+  }
+}
+
+function prevFlashcard() {
+  if (flashcardIndex > 0) {
+    flashcardIndex--;
+    renderMain();
+  }
+}
+
+function flashcardRate(rating) {
+  const item = flashcardItems[flashcardIndex];
+  if (item) {
+    const key = `qa_${item.day}_${item.qIndex}`;
+    progress[key] = rating;
+    saveProgress(progress);
+  }
+  nextFlashcard();
+  renderSidebar();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// AI EVALUATOR (LOCAL — NO API KEY NEEDED)
+// ═══════════════════════════════════════════════════════════════
+
+function evaluateAnswer() {
+  const d = DAYS[currentDay];
+  const qIndex = parseInt(document.getElementById('ai-q-select').value);
+  const userAnswer = document.getElementById('ai-answer').value.trim();
+  const btn = document.getElementById('ai-eval-btn');
+  const responseDiv = document.getElementById('ai-response');
+
+  if (!userAnswer) { alert('Please type your answer first.'); return; }
+
+  btn.disabled = true;
+  btn.textContent = 'Evaluating...';
+  responseDiv.style.display = 'block';
+  responseDiv.textContent = 'Analyzing...';
+
+  // Simulate processing delay for UX
+  setTimeout(() => {
+    const question = d.qa[qIndex].q;
+    const refText = stripHtml(d.qa[qIndex].a).toLowerCase();
+    const userText = userAnswer.toLowerCase();
+
+    // Extract key terms from reference
+    const keyTerms = extractKeyTerms(refText);
+    const matchedTerms = keyTerms.filter(term => userText.includes(term));
+    const coverage = keyTerms.length > 0 ? matchedTerms.length / keyTerms.length : 0;
+
+    // Length check
+    const wordCount = userAnswer.split(/\s+/).length;
+    const lengthScore = Math.min(wordCount / 30, 1); // expect ~30+ words for a good answer
+
+    // Structure check
+    const hasStructure = /\n|\. |\d\./.test(userAnswer);
+    const structureBonus = hasStructure ? 0.5 : 0;
+
+    // Calculate score
+    let score = Math.round((coverage * 6 + lengthScore * 2 + structureBonus) * 10) / 10;
+    score = Math.min(Math.max(score, 1), 10);
+
+    // Generate feedback
+    let feedback = '';
+    let strengths = [];
+    let gaps = [];
+
+    if (coverage > 0.5) strengths.push('Good coverage of key concepts');
+    if (coverage > 0.3) strengths.push('You hit several important points');
+    if (wordCount > 20) strengths.push('Answer has sufficient depth');
+    if (hasStructure) strengths.push('Well-structured response');
+
+    if (coverage < 0.3) gaps.push('Missing most key concepts from the reference answer');
+    else if (coverage < 0.6) gaps.push('Missing some key concepts — review the reference answer');
+    if (wordCount < 15) gaps.push('Answer is too brief — aim for 2-3 sentences minimum');
+    if (!hasStructure) gaps.push('Consider structuring your answer with bullet points or clear sections');
+
+    // Missing specific terms
+    const missingTerms = keyTerms.filter(term => !userText.includes(term)).slice(0, 5);
+    if (missingTerms.length > 0 && coverage < 0.7) {
+      gaps.push(`Key terms to include: ${missingTerms.join(', ')}`);
+    }
+
+    if (strengths.length === 0) strengths.push('Attempted the question — good start!');
+
+    feedback = `Score: ${score}/10\n\n`;
+    feedback += 'Strengths:\n';
+    strengths.forEach(s => feedback += `  ✓ ${s}\n`);
+    feedback += '\nGaps / Missing:\n';
+    gaps.forEach(g => feedback += `  • ${g}\n`);
+    feedback += '\nOne tip:\n';
+    if (score >= 8) feedback += '  🌟 Strong answer! Practice saying this out loud to build fluency.';
+    else if (score >= 5) feedback += '  💡 Good foundation. Focus on the missing concepts and try again.';
+    else feedback += '  📚 Review the topic thoroughly, then attempt again with the reference answer hidden.';
+
+    responseDiv.textContent = feedback;
+    btn.disabled = false;
+    btn.textContent = 'Evaluate My Answer';
+
+    // Auto-mark based on score
+    const assessKey = `qa_${d.day}_${qIndex}`;
+    if (score >= 8) progress[assessKey] = 'knew';
+    else if (score >= 5) progress[assessKey] = 'partial';
+    else progress[assessKey] = 'dont-know';
+    saveProgress(progress);
+    renderSidebar();
+  }, 600);
+}
+
+function extractKeyTerms(text) {
+  // Extract meaningful technical terms (2+ chars, not common words)
+  const commonWords = new Set(['the','and','for','are','but','not','you','all','can','had','her','was','one','our','out','day','get','has','him','his','how','its','may','new','now','old','see','two','who','boy','did','she','use','her','way','many','oil','sit','set','run','eat','far','sea','eye','ago','off','too','any','say','man','try','ask','end','why','let','put','say','she','try','way','own','say','too','old','tell','very','when','come','here','just','like','long','make','over','such','take','than','them','well','were','with','have','from','they','know','want','been','good','much','some','time','very','when','come','here','just','like','long','make','over','such','take','than','them','well','were','with','have','from','they','know','want','been','good','much','some','time']);
+  const words = text.split(/[^a-z]+/).filter(w => w.length >= 3 && !commonWords.has(w));
+  const unique = [...new Set(words)];
+  return unique.slice(0, 15); // top 15 unique terms
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════════════════════
+
+function setupSearch() {
+  const input = document.getElementById('searchInput');
+  const results = document.getElementById('searchResults');
+
+  input.addEventListener('input', (e) => {
+    const query = e.target.value.trim().toLowerCase();
+    if (query.length < 2) {
+      results.classList.remove('active');
+      return;
+    }
+
+    const matches = searchIndex.filter(item =>
+      item.text.toLowerCase().includes(query) ||
+      item.title.toLowerCase().includes(query)
+    ).slice(0, 10);
+
+    if (matches.length === 0) {
+      results.innerHTML = '<div class="search-item"><div class="search-item-text" style="color:var(--muted)">No results found</div></div>';
+    } else {
+      results.innerHTML = matches.map(m => `
+        <div class="search-item" onclick="goToSearchResult(${m.day}, '${m.type}', ${m.id.split('-').pop()})">
+          <div class="search-item-day">Day ${m.dayNum} · ${m.dayTitle}</div>
+          <div class="search-item-text">${highlightQuery(m.title, query)}</div>
+          <div class="search-item-type">${m.type === 'topic' ? '📖 Topic' : '❓ Q&A'}</div>
+        </div>
+      `).join('');
+    }
+    results.classList.add('active');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.search-wrap')) {
+      results.classList.remove('active');
+    }
+  });
+}
+
+function highlightQuery(text, query) {
+  const regex = new RegExp(`(${query})`, 'gi');
+  return text.replace(regex, '<mark style="background:rgba(96,165,250,0.3);color:var(--accent);border-radius:2px;padding:0 2px">$1</mark>');
+}
+
+function goToSearchResult(dayIndex, type, itemIndex) {
+  currentDay = dayIndex;
+  activeTab = type === 'topic' ? 'learn' : 'qa';
+  localStorage.setItem('jp_currentDay', currentDay);
+  localStorage.setItem('jp_activeTab', activeTab);
+  renderSidebar();
+  renderMain();
+  setTimeout(() => {
+    const el = document.getElementById(`${type === 'topic' ? 'topic' : 'qa'}-${itemIndex}`);
+    if (el) {
+      el.classList.add('open');
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, 100);
+  document.getElementById('searchResults').classList.remove('active');
+  document.getElementById('searchInput').value = '';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════════
+
+function copyCode(btn) {
+  const block = btn.closest('.code-block').querySelector('.code-body');
+  const text = block.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const original = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = original, 1500);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// THEME TOGGLE
+// ═══════════════════════════════════════════════════════════════
+
+function initTheme() {
+  const saved = localStorage.getItem('jp_theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = saved || (prefersDark ? 'dark' : 'light');
+  applyTheme(theme);
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = theme === 'dark' ? '🌙' : '☀️';
+  localStorage.setItem('jp_theme', theme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+
+initTheme();
+renderSidebar();
+renderMain();
+setupSearch();
+</script>
+</body>
+</html>
   .logo::before{content:'◆';font-size:10px;opacity:0.7}
   .header-title{font-size:15px;font-weight:700;letter-spacing:-0.3px}
   .header-sub{font-size:12px;color:var(--muted);margin-left:auto;display:flex;align-items:center;gap:8px}
